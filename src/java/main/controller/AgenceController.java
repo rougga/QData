@@ -3,7 +3,10 @@ package main.controller;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -45,13 +48,17 @@ public class AgenceController {
             p.setString(7, a.getPassword());
             p.setInt(8, a.getStatus());
             p.execute();
+            p=con.getStatement().getConnection().prepareStatement("insert into lastupdate values(?,?);");
+            p.setString(1, a.getId().toString());
+            p.setDate(2, new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("1999-12-20 00:00:00").getTime()));
+            p.execute();
             con.closeConnection();
             return 1;
 
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
             return 0;
-        }
+        } 
     }
 
     public Agence getAgenceById(UUID id) {
@@ -87,6 +94,26 @@ public class AgenceController {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
             return 0;
+        }
+    }
+    
+    public Date getLastUpdate(UUID id){
+        try {
+            PgConnection con = new PgConnection();
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("select * from lastupdate where id_db=? ;");
+            p.setString(1, id.toString());
+            ResultSet r = p.executeQuery();
+            if (r.next()) {
+                Date d = r.getTimestamp("last_update");
+                con.closeConnection();
+                return d;
+            } else {
+                con.closeConnection();
+                return null;
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
 }

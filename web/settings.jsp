@@ -256,13 +256,15 @@
                                 <th scope="col">Base de donnée</th>
                                 <th scope="col">Utilisateur</th>
                                 <th scope="col">Mot de passe</th>
-                                <th></th>
+                                <th scope="col">Dernière mise à jour</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
 
                         <tbody class="font-weight-bold">
                             <%
-                              List<Agence> table=new AgenceController().getAllAgence();
+                               AgenceController ac =new AgenceController();
+                              List<Agence> table=ac.getAllAgence();
                               if(table!=null){
                                   for(int i =0;i<table.size();i++){
                             %>
@@ -272,9 +274,9 @@
                                 <td class="border-dark align-middle"><%=table.get(i).getDatabase() %></td>
                                 <td class="border-dark align-middle"><%=table.get(i).getUsername() %></td>
                                 <td class="border-dark align-middle"><%=table.get(i).getPassword() %></td>
+                                <td class="border-dark align-middle"><%= ac.getLastUpdate(table.get(i).getId()) %></td>
                                 <td class="border-dark align-middle">
                                     <a class="btn btn-danger m-0" id="dbDlt" href="./DeleteDatabase?id=<%= table.get(i).getId() %>"><img src="./img/icon/trash.png"></a>
-                                    
                                 </td>
                             </tr>
                             <%
