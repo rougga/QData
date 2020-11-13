@@ -22,7 +22,7 @@ public class AgenceController {
             PgConnection con = new PgConnection();
             ResultSet r = con.getStatement().executeQuery("select * from agence;");
             while (r.next()) {
-                agences.add(new Agence(UUID.fromString(r.getString("id")), r.getString("name"), r.getString("host"), r.getInt("port"), r.getString("database"), r.getString("username"), r.getString("password")));
+                agences.add(new Agence(UUID.fromString(r.getString("id")), r.getString("name"), r.getString("host"), r.getInt("port"), r.getString("database"), r.getString("username"), r.getString("password"),r.getInt("status")));
             }
             con.closeConnection();
             return agences;
@@ -35,7 +35,7 @@ public class AgenceController {
     public int addAgence(Agence a) {
         try {
             PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into agence values(?,?,?,?,?,?,?);");
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into agence values(?,?,?,?,?,?,?,?);");
             p.setString(1, a.getId().toString());
             p.setString(2, a.getName());
             p.setString(3, a.getHost());
@@ -43,6 +43,7 @@ public class AgenceController {
             p.setString(5, a.getDatabase());
             p.setString(6, a.getUsername());
             p.setString(7, a.getPassword());
+            p.setInt(8, a.getStatus());
             p.execute();
             con.closeConnection();
             return 1;
@@ -61,7 +62,7 @@ public class AgenceController {
             p.setString(1, id.toString());
             ResultSet r = p.executeQuery();
             if (r.next()) {
-                a = new Agence(id, r.getString("name"), r.getString("host"), r.getInt("port"), r.getString("database"), r.getString("username"), r.getString("password"));
+                a = new Agence(id, r.getString("name"), r.getString("host"), r.getInt("port"), r.getString("database"), r.getString("username"), r.getString("password"),r.getInt("status"));
                 con.closeConnection();
                 return a;
             } else {

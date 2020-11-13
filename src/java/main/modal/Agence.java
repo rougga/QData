@@ -11,8 +11,9 @@ public class Agence {
     private String database;
     private String username;
     private String password;
+    private int status;
 
-    public Agence(String name, String host, int port, String database, String username, String password) {
+    public Agence(String name, String host, int port, String database, String username, String password,int status) {
         this.id=UUID.randomUUID();
         this.name = name;
         this.host = host;
@@ -20,10 +21,11 @@ public class Agence {
         this.database = database;
         this.username = username;
         this.password = password;
+        this.status = status;
     }
 
     
-    public Agence(UUID id, String name, String host, int port, String database, String username, String password) {
+    public Agence(UUID id, String name, String host, int port, String database, String username, String password,int status) {
         this.id = id;
         this.name = name;
         this.host = host;
@@ -31,6 +33,7 @@ public class Agence {
         this.database = database;
         this.username = username;
         this.password = password;
+        this.status = status;
     }
     
 
@@ -88,6 +91,14 @@ public class Agence {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public int getStatus() {
+        return status;
     }
     
  }

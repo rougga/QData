@@ -23,8 +23,9 @@ public class AddDatabase extends HttpServlet {
             String database=request.getParameter("database");
             String username=request.getParameter("username");
             String password=request.getParameter("password");
+            int status=1;
             if(name!=null&&host!=null&&port!=null&&database!=null&&username!=null&&password!=null){
-                Agence a = new Agence(name, host, Integer.parseInt(port), database, username, password);
+                Agence a = new Agence(name, host, Integer.parseInt(port), database, username, password,status);
               if(new AgenceController().addAgence(a)==1){
                   response.sendRedirect("./settings.jsp?type=db&err=" + URLEncoder.encode("la base de données est ajoutée", "UTF-8"));
               } else{

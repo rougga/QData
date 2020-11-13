@@ -5,16 +5,7 @@
         <grade>adm</grade>
         <firstName/>
         <lastName/>
-        <date/>
-        <sponsor/>
-    </user>
-    <user>
-        <username>super</username>
-        <password>$31$16$3HyoGMKLc4EvcO0ljwLKNY8pclDUAmd7o_oAQUA7J20</password>
-        <grade>sv</grade>
-        <firstName/>
-        <lastName/>
-        <date/>
+        <date>2020-07-22</date>
         <sponsor/>
     </user>
     <user>
@@ -23,7 +14,7 @@
         <grade>user</grade>
         <firstName/>
         <lastName/>
-        <date/>
+        <date>2020-07-22</date>
         <sponsor/>
     </user>
     

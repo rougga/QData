@@ -1,3 +1,5 @@
+<%@page import="main.controller.UtilisateurController"%>
+<%@page import="main.modal.Utilisateur"%>
 <%@page import="main.controller.AgenceController"%>
 <%@page import="main.modal.Agence"%>
 <%@page import="main.handler.DbHandler"%>
@@ -58,11 +60,13 @@
                 </script>
             </div>
             <div class="body p-3">
-                <%                     if (request.getParameter("err") != "" && request.getParameter("err") != null) {
+                <%                     
+                    String err=request.getParameter("err");
+                    if (err != "" && err != null) {
 
                 %>
                 <%= "<div class='alert alert-danger alert-dismissible fade show' role='alert'><b>"
-                        + request.getParameter("err")
+                        + err
                         + "</b><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"%>
                 <%
                     }
@@ -147,26 +151,16 @@
 
 
                             <%
-                                String path3 = cfg.getUserFile();
-                                Document doc3 = cfg.getXml(path3);
-                                NodeList nList3 = doc3.getElementsByTagName("user");
-                                for (int i = 0;
-                                        i < nList3.getLength();
-                                        i++) {
-                                    Node nNode3 = nList3.item(i);
-                                    if (nNode3.getNodeType() == Node.ELEMENT_NODE) {
-                                        Element eElement3 = (Element) nNode3;
-
+                                List<Utilisateur> utilisateur = new UtilisateurController(request).getAllUtilisateur();
+                                if(utilisateur!=null){
+                                    for(int i=0;i<utilisateur.size();i++){
                             %><%="<tr class=' clickable-row3 '>"
-                                    + "<th scope='row' >" + eElement3.getElementsByTagName("username").item(0).getTextContent() + "</th>"
-                                    + "<td ><b>" + eElement3.getElementsByTagName("lastName").item(0).getTextContent() + " " + eElement3.getElementsByTagName("firstName").item(0).getTextContent() + "</b></td>"
-                                    + "<td data-grade='" + eElement3.getElementsByTagName("grade").item(0).getTextContent() + "'><b>" + getGrade(eElement3.getElementsByTagName("grade").item(0).getTextContent().toLowerCase().trim()) + "</b></td>"
+                                    + "<th scope='row' >" + utilisateur.get(i).getUsername() + "</th>"
+                                    + "<td ><b>" + utilisateur.get(i).getLastName() + " " + utilisateur.get(i).getFirstName() + "</b></td>"
+                                    + "<td data-grade='" + utilisateur.get(i).getGrade() + "'><b>" + getGrade(utilisateur.get(i).getGrade()) + "</b></td>"
                                     + "</tr>"%><%
-
                                             }
-                                        }
-
-
+                                    }
                             %>
 
                         </tbody>
@@ -285,7 +279,9 @@
                             </tr>
                             <%
                                  }
-                               }
+                               }else{
+                                %><%="<h4 class='text-center text-danger'>No database</h4>"%><%
+                                }
                                 
                             %>
 

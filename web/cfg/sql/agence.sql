@@ -7,6 +7,7 @@ CREATE TABLE public.agence
 	database character varying(32) DEFAULT 'postgres' not null,
 	username character varying(32) DEFAULT 'honyi' not null,
 	password character varying(32) DEFAULT 'honyi123' not null,
+    status int not null default 1,
     CONSTRAINT agence_pkey PRIMARY KEY (id)
 )
 ;
