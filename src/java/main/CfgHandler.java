@@ -26,7 +26,7 @@ public class CfgHandler {
     private final String cibleFile = "\\cfg\\db\\cible.xml";
     private final String extraFile = "\\cfg\\db\\extra.xml";
     private final String dbFile = "\\cfg\\db\\db.xml";
-    
+    private final String titleFile = "\\cfg\\db\\title.xml";
     
     private final String tempxls = "\\cfg\\excel\\temp.xls";
     private final String gblTempExcel = "\\cfg\\excel\\gbltemp.xlsx";
@@ -183,6 +183,10 @@ public class CfgHandler {
 
     public String getDbFile() {
         return  appPath + dbFile;
+    }
+
+    public String getTitleFile() {
+        return appPath + titleFile;
     }
 
 
