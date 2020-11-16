@@ -25,7 +25,7 @@ public class AgenceController {
             PgConnection con = new PgConnection();
             ResultSet r = con.getStatement().executeQuery("select * from agence;");
             while (r.next()) {
-                agences.add(new Agence(UUID.fromString(r.getString("id")), r.getString("name"), r.getString("host"), r.getInt("port"), r.getString("database"), r.getString("username"), r.getString("password"),r.getInt("status")));
+                agences.add(new Agence(UUID.fromString(r.getString("id")), r.getString("name"), r.getString("host"), r.getInt("port"), r.getString("database"), r.getString("username"), r.getString("password"), r.getInt("status")));
             }
             con.closeConnection();
             return agences;
@@ -48,7 +48,7 @@ public class AgenceController {
             p.setString(7, a.getPassword());
             p.setInt(8, a.getStatus());
             p.execute();
-            p=con.getStatement().getConnection().prepareStatement("insert into lastupdate values(?,?);");
+            p = con.getStatement().getConnection().prepareStatement("insert into lastupdate values(?,?);");
             p.setString(1, a.getId().toString());
             p.setDate(2, new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("1999-12-20 00:00:00").getTime()));
             p.execute();
@@ -58,7 +58,7 @@ public class AgenceController {
         } catch (Exception ex) {
             Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
             return 0;
-        } 
+        }
     }
 
     public Agence getAgenceById(UUID id) {
@@ -69,7 +69,7 @@ public class AgenceController {
             p.setString(1, id.toString());
             ResultSet r = p.executeQuery();
             if (r.next()) {
-                a = new Agence(id, r.getString("name"), r.getString("host"), r.getInt("port"), r.getString("database"), r.getString("username"), r.getString("password"),r.getInt("status"));
+                a = new Agence(id, r.getString("name"), r.getString("host"), r.getInt("port"), r.getString("database"), r.getString("username"), r.getString("password"), r.getInt("status"));
                 con.closeConnection();
                 return a;
             } else {
@@ -96,8 +96,24 @@ public class AgenceController {
             return 0;
         }
     }
-    
-    public Date getLastUpdate(UUID id){
+
+    public int updateName(UUID id, String name) {
+        try {
+            PgConnection con = new PgConnection();
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("update agence set name=? where id=?;");
+            p.setString(1, name);
+            p.setString(2, id.toString());
+            p.execute();
+            con.closeConnection();
+            return 1;
+
+        } catch (Exception ex) {
+            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
+        }
+    }
+
+    public Date getLastUpdate(UUID id) {
         try {
             PgConnection con = new PgConnection();
             PreparedStatement p = con.getStatement().getConnection().prepareStatement("select * from lastupdate where id_db=? ;");

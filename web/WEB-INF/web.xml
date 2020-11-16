@@ -86,6 +86,6 @@
         </session-timeout>
     </session-config>
     <listener>
-        <listener-class>main.Updater</listener-class>
+        <listener-class>main.Listener</listener-class>
     </listener>
 </web-app>

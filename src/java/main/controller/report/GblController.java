@@ -1,8 +1,6 @@
 package main.controller.report;
 
-import java.io.IOException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import main.CfgHandler;
-import main.PgConnection;
 import main.PgMultiConnection;
 import main.controller.AgenceController;
 import main.modal.Agence;
@@ -32,68 +29,72 @@ public class GblController {
         return gblCols;
     }
 
-    public List<GblRow> getTable(HttpServletRequest request, String d1, String d2, UUID id_db) {
+    public List<GblRow> getTable(HttpServletRequest request, String d1, String d2) {
+        String date1 = (d1 == null) ? format.format(new Date()) : d1;
+        String date2 = (d2 == null) ? format.format(new Date()) : d2;
         List<GblRow> table = new ArrayList<>();
-        Agence a = new AgenceController().getAgenceById(id_db);
-        if (a != null) {
-            try {
-                PgMultiConnection con = new PgMultiConnection(a.getHost(), String.valueOf(a.getPort()), a.getDatabase(), a.getUsername(), a.getPassword());
-                String date1 = (d1 == null) ? format.format(new Date()) : d1;
-                String date2 = (d2 == null) ? format.format(new Date()) : d2;
-                CfgHandler cfg = new CfgHandler(request);
-                String dateCon = " and to_date(to_char(t2.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') ";
+        List<Agence> agences = new AgenceController().getAllAgence();
+        if (agences.size() > 0) {
+            for (int i = 0; i < agences.size(); i++) {
+                try {
+                    Agence a = agences.get(i);
+                    PgMultiConnection con = new PgMultiConnection(a.getHost(), String.valueOf(a.getPort()), a.getDatabase(), a.getUsername(), a.getPassword());
 
-                String gblSQL = "";
+                    CfgHandler cfg = new CfgHandler(request);
+                    String dateCon = " and to_date(to_char(t2.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') ";
 
-                String subTotalSQL = "";
-                ResultSet r = con.getStatement().executeQuery(gblSQL);
-                while (r.next()) {
-                    GblRow row = new GblRow(a.getId(),
-                            r.getString("biz_type_id"),
-                            r.getString("name"),
-                            r.getLong("nb_t"),
-                            r.getLong("nb_tt"),
-                            r.getLong("nb_a"),
-                            r.getLong("nb_tl1"),
-                            r.getLong("nb_sa"),
-                            r.getFloat("perApT"),
-                            r.getFloat("PERTL1pt"),
-                            r.getFloat("perSApT"),
-                            r.getFloat("avgSec_A"),
-                            0,
-                            0,
-                            r.getFloat("avgSec_T"),
-                            0,
-                            0);
-                    table.add(row);
+                    String gblSQL = "";
+
+                    String subTotalSQL = "";
+                    ResultSet r = con.getStatement().executeQuery(gblSQL);
+                    while (r.next()) {
+                        GblRow row = new GblRow(a.getId(),
+                                r.getString("biz_type_id"),
+                                r.getString("name"),
+                                r.getLong("nb_t"),
+                                r.getLong("nb_tt"),
+                                r.getLong("nb_a"),
+                                r.getLong("nb_tl1"),
+                                r.getLong("nb_sa"),
+                                r.getFloat("perApT"),
+                                r.getFloat("PERTL1pt"),
+                                r.getFloat("perSApT"),
+                                r.getFloat("avgSec_A"),
+                                0,
+                                0,
+                                r.getFloat("avgSec_T"),
+                                0,
+                                0);
+                        table.add(row);
+                    }
+                    r = con.getStatement().executeQuery(subTotalSQL);
+                    while (r.next()) {
+                        GblRow row = new GblRow(a.getId(),
+                                null,
+                                "Sous-Totale",
+                                r.getLong("nb_t"),
+                                r.getLong("nb_tt"),
+                                r.getLong("nb_a"),
+                                r.getLong("nb_tl1"),
+                                r.getLong("nb_sa"),
+                                r.getFloat("perApT"),
+                                r.getFloat("PERTL1pt"),
+                                r.getFloat("perSApT"),
+                                r.getFloat("avgSec_A"),
+                                0,
+                                0,
+                                r.getFloat("avgSec_T"),
+                                0,
+                                0);
+                        table.add(row);
+                    }
+
+                    con.closeConnection();
+
+                } catch (Exception ex) {
+                    Logger.getLogger(GblController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                r = con.getStatement().executeQuery(subTotalSQL);
-                while (r.next()) {
-                     GblRow row = new GblRow(a.getId(),
-                            null,
-                            "Sous-Totale",
-                            r.getLong("nb_t"),
-                            r.getLong("nb_tt"),
-                            r.getLong("nb_a"),
-                            r.getLong("nb_tl1"),
-                            r.getLong("nb_sa"),
-                            r.getFloat("perApT"),
-                            r.getFloat("PERTL1pt"),
-                            r.getFloat("perSApT"),
-                            r.getFloat("avgSec_A"),
-                            0,
-                            0,
-                            r.getFloat("avgSec_T"),
-                            0,
-                            0);
-                    table.add(row);
-                }
-
-                con.closeConnection();
-
-            } catch (Exception ex) {
-                Logger.getLogger(GblController.class.getName()).log(Level.SEVERE, null, ex);
-            } 
+            }
         } else {
 
         }
