@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public class GblRow {
     private UUID id_db;
+    private String name_db;
     private String biz_type_id;
     private String service_name;
     private long nb_t;
@@ -24,8 +25,9 @@ public class GblRow {
     private  String[] gblCols = new String[]{"Site", "Service", "Nb. Tickets", "Nb. Traités", "Nb. Absents", "Nb. Traités <1mn", "Nb. Sans affectation", "Absents/Nb. Tickets(%)", "Traités<1mn/Nb. Tickets(%)", "Sans affect/Nb. Tickets(%)", "Moyenne d'attente", ">Cible", "%Cible", "Moyenne Traitement", ">Cible", "%Cible"};
 
     
-    public GblRow(UUID id_db,String biz_type_id, String service_name, long nb_t, long nb_tt, long nb_ta, long nb_ttl1, long nb_tsa, float perApt, float perTl1pt, float perSapt, float avgA, long gCibleA, float perCibleA, float avgT, long gCibleT, float perCibleT) {
+    public GblRow(UUID id_db,String name_db,String biz_type_id, String service_name, long nb_t, long nb_tt, long nb_ta, long nb_ttl1, long nb_tsa, float perApt, float perTl1pt, float perSapt, float avgA, long gCibleA, float perCibleA, float avgT, long gCibleT, float perCibleT) {
         this.id_db = id_db;
+        this.name_db=name_db;
         this.biz_type_id = biz_type_id;
         this.service_name = service_name;
         this.nb_t = nb_t;
@@ -174,6 +176,22 @@ public class GblRow {
 
     public String[] getGblCols() {
         return gblCols;
+    }
+
+    public String getName_db() {
+        return name_db;
+    }
+
+    public String getBiz_type_id() {
+        return biz_type_id;
+    }
+
+    public void setName_db(String name_db) {
+        this.name_db = name_db;
+    }
+
+    public void setBiz_type_id(String biz_type_id) {
+        this.biz_type_id = biz_type_id;
     }
     
 }

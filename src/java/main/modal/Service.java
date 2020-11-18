@@ -4,8 +4,7 @@ package main.modal;
 import java.util.UUID;
 
 public class Service {
-        private UUID id;
-        private String biz_type_id;
+        private String id;
         private String name;
         private String biz_prefix;
         private int status;
@@ -15,11 +14,10 @@ public class Service {
         private String biz_class_id;
         private int deal_time_warning;
         private int hidden;
-        private UUID id_db;
+        private UUID db_id;
 
-    public Service(String biz_type_id, String name, String biz_prefix, int status, String start_num, int sort, int call_delay, String biz_class_id, int deal_time_warning, int hidden, UUID id_db) {
-        this.id=UUID.randomUUID();
-        this.biz_type_id = biz_type_id;
+    public Service(String id, String name, String biz_prefix, int status, String start_num, int sort, int call_delay, String biz_class_id, int deal_time_warning, int hidden, UUID db_id) {
+        this.id = id;
         this.name = name;
         this.biz_prefix = biz_prefix;
         this.status = status;
@@ -29,78 +27,11 @@ public class Service {
         this.biz_class_id = biz_class_id;
         this.deal_time_warning = deal_time_warning;
         this.hidden = hidden;
-        this.id_db = id_db;
+        this.db_id = db_id;
     }
 
-    public Service(UUID id, String biz_type_id, String name, String biz_prefix, int status, String start_num, int sort, int call_delay, String biz_class_id, int deal_time_warning, int hidden, UUID id_db) {
+    public void setId(String id) {
         this.id = id;
-        this.biz_type_id = biz_type_id;
-        this.name = name;
-        this.biz_prefix = biz_prefix;
-        this.status = status;
-        this.start_num = start_num;
-        this.sort = sort;
-        this.call_delay = call_delay;
-        this.biz_class_id = biz_class_id;
-        this.deal_time_warning = deal_time_warning;
-        this.hidden = hidden;
-        this.id_db = id_db;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public String getBiz_type_id() {
-        return biz_type_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getBiz_prefix() {
-        return biz_prefix;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public String getStart_num() {
-        return start_num;
-    }
-
-    public int getSort() {
-        return sort;
-    }
-
-    public int getCall_delay() {
-        return call_delay;
-    }
-
-    public String getBiz_class_id() {
-        return biz_class_id;
-    }
-
-    public int getDeal_time_warning() {
-        return deal_time_warning;
-    }
-
-    public int getHidden() {
-        return hidden;
-    }
-
-    public UUID getId_db() {
-        return id_db;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public void setBiz_type_id(String biz_type_id) {
-        this.biz_type_id = biz_type_id;
     }
 
     public void setName(String name) {
@@ -139,8 +70,53 @@ public class Service {
         this.hidden = hidden;
     }
 
-    public void setId_db(UUID id_db) {
-        this.id_db = id_db;
+    public void setDb_id(UUID db_id) {
+        this.db_id = db_id;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getBiz_prefix() {
+        return biz_prefix;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public String getStart_num() {
+        return start_num;
+    }
+
+    public int getSort() {
+        return sort;
+    }
+
+    public int getCall_delay() {
+        return call_delay;
+    }
+
+    public String getBiz_class_id() {
+        return biz_class_id;
+    }
+
+    public int getDeal_time_warning() {
+        return deal_time_warning;
+    }
+
+    public int getHidden() {
+        return hidden;
+    }
+
+    public UUID getDb_id() {
+        return db_id;
+    }
+        
         
 }

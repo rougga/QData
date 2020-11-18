@@ -4,9 +4,10 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Ticket {
-    private UUID id;
-    private String ticket_id;
+
+    private String id;
     private String biz_type_id;
+    private String ticket_id;
     private String evaluation_id;
     private String ticket_num;
     private String ticket_type;
@@ -22,12 +23,12 @@ public class Ticket {
     private String call_type;
     private String branch_id;
     private String id_card_name;
-    private UUID id_db;
+    private UUID db_id;
 
-    public Ticket(UUID id, String ticket_id, String biz_type_id, String evaluation_id, String ticket_num, String ticket_type, int status, String deal_win, String transfer_win, String deal_user, String id_card_info_id, Date ticket_time, Date call_time, Date start_time, Date finish_time, String call_type, String branch_id, String id_card_name, UUID id_db) {
+    public Ticket(String id, String biz_type_id, String ticket_id, String evaluation_id, String ticket_num, String ticket_type, int status, String deal_win, String transfer_win, String deal_user, String id_card_info_id, Date ticket_time, Date call_time, Date start_time, Date finish_time, String call_type, String branch_id, String id_card_name, UUID db_id) {
         this.id = id;
-        this.ticket_id = ticket_id;
         this.biz_type_id = biz_type_id;
+        this.ticket_id = ticket_id;
         this.evaluation_id = evaluation_id;
         this.ticket_num = ticket_num;
         this.ticket_type = ticket_type;
@@ -43,116 +44,19 @@ public class Ticket {
         this.call_type = call_type;
         this.branch_id = branch_id;
         this.id_card_name = id_card_name;
-        this.id_db = id_db;
+        this.db_id = db_id;
     }
 
-    public Ticket(String ticket_id, String biz_type_id, String evaluation_id, String ticket_num, String ticket_type, int status, String transfer_win, String deal_user, String id_card_info_id, Date ticket_time, Date call_time, Date start_time, Date finish_time, String call_type, String branch_id, String id_card_name, UUID id_db) {
-        this.id=UUID.randomUUID();
-        this.ticket_id = ticket_id;
-        this.biz_type_id = biz_type_id;
-        this.evaluation_id = evaluation_id;
-        this.ticket_num = ticket_num;
-        this.ticket_type = ticket_type;
-        this.status = status;
-        this.transfer_win = transfer_win;
-        this.deal_user = deal_user;
-        this.id_card_info_id = id_card_info_id;
-        this.ticket_time = ticket_time;
-        this.call_time = call_time;
-        this.start_time = start_time;
-        this.finish_time = finish_time;
-        this.call_type = call_type;
-        this.branch_id = branch_id;
-        this.id_card_name = id_card_name;
-        this.id_db = id_db;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public String getTicket_id() {
-        return ticket_id;
-    }
-
-    public String getBiz_type_id() {
-        return biz_type_id;
-    }
-
-    public String getEvaluation_id() {
-        return evaluation_id;
-    }
-
-    public String getTicket_num() {
-        return ticket_num;
-    }
-
-    public String getTicket_type() {
-        return ticket_type;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public String getDeal_win() {
-        return deal_win;
-    }
-
-    public String getTransfer_win() {
-        return transfer_win;
-    }
-
-    public String getDeal_user() {
-        return deal_user;
-    }
-
-    public String getId_card_info_id() {
-        return id_card_info_id;
-    }
-
-    public Date getTicket_time() {
-        return ticket_time;
-    }
-
-    public Date getCall_time() {
-        return call_time;
-    }
-
-    public Date getStart_time() {
-        return start_time;
-    }
-
-    public Date getFinish_time() {
-        return finish_time;
-    }
-
-    public String getCall_type() {
-        return call_type;
-    }
-
-    public String getBranch_id() {
-        return branch_id;
-    }
-
-    public String getId_card_name() {
-        return id_card_name;
-    }
-
-    public UUID getId_db() {
-        return id_db;
-    }
-
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public void setTicket_id(String ticket_id) {
-        this.ticket_id = ticket_id;
     }
 
     public void setBiz_type_id(String biz_type_id) {
         this.biz_type_id = biz_type_id;
+    }
+
+    public void setTicket_id(String ticket_id) {
+        this.ticket_id = ticket_id;
     }
 
     public void setEvaluation_id(String evaluation_id) {
@@ -215,8 +119,84 @@ public class Ticket {
         this.id_card_name = id_card_name;
     }
 
-    public void setId_db(UUID id_db) {
-        this.id_db = id_db;
+    public void setDb_id(UUID db_id) {
+        this.db_id = db_id;
     }
-    
+
+    public String getId() {
+        return id;
+    }
+
+    public String getBiz_type_id() {
+        return biz_type_id;
+    }
+
+    public String getTicket_id() {
+        return ticket_id;
+    }
+
+    public String getEvaluation_id() {
+        return evaluation_id;
+    }
+
+    public String getTicket_num() {
+        return ticket_num;
+    }
+
+    public String getTicket_type() {
+        return ticket_type;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public String getDeal_win() {
+        return deal_win;
+    }
+
+    public String getTransfer_win() {
+        return transfer_win;
+    }
+
+    public String getDeal_user() {
+        return deal_user;
+    }
+
+    public String getId_card_info_id() {
+        return id_card_info_id;
+    }
+
+    public Date getTicket_time() {
+        return ticket_time;
+    }
+
+    public Date getCall_time() {
+        return call_time;
+    }
+
+    public Date getStart_time() {
+        return start_time;
+    }
+
+    public Date getFinish_time() {
+        return finish_time;
+    }
+
+    public String getCall_type() {
+        return call_type;
+    }
+
+    public String getBranch_id() {
+        return branch_id;
+    }
+
+    public String getId_card_name() {
+        return id_card_name;
+    }
+
+    public UUID getDb_id() {
+        return db_id;
+    }
+
 }

@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import main.PgConnection;
+import main.PgMultiConnection;
 import main.modal.Agence;
 
 public class AgenceController {
@@ -131,5 +132,26 @@ public class AgenceController {
             Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
+    }
+
+    public void updateAllAgenceName() {
+        List<Agence> agences = new AgenceController().getAllAgence();
+        if (agences != null) {
+            PgMultiConnection con;
+            for (int i = 0; i < agences.size(); i++) {
+                try {
+                    con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
+                    String SQL = "SELECT value FROM t_basic_par where name='BRANCH_NAME' ;";
+                    ResultSet r = con.getStatement().executeQuery(SQL);
+                    if (r.next()) {
+                        updateName(agences.get(i).getId(), r.getString("value"));
+                    }
+                    con.closeConnection();
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
     }
 }

@@ -49,11 +49,9 @@ public class Edit extends HttpServlet {
                     try {
                         CfgHandler cfg = new CfgHandler(request);
                        String path= cfg.getCibleFile();
-                        //String path = "C:\\Users\\bouga\\Desktop\\OffReport\\web\\cfg\\cible.xml";
                         Document doc = cfg.getXml(path);
                         Node cibles = doc.getFirstChild();
                         NodeList nList = cibles.getChildNodes();
-                        out.println("Deleted");
                         for (int i = 0; i < nList.getLength(); i++) {
                             Node nNode = nList.item(i);
                             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
