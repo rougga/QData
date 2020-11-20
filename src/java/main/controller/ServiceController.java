@@ -20,10 +20,11 @@ public class ServiceController {
     public int clearTable(UUID id) {
         try {
             PgConnection con = new PgConnection();
-            String SQL = "delete from t_biz_type where db_id=?";
+            String SQL = "delete from t_biz_type where db_id=? ;";
             PreparedStatement p = con.getStatement().getConnection().prepareStatement(SQL);
             p.setString(1, id.toString());
             p.execute();
+            con.closeConnection();
             return 1;
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(ServiceController.class.getName()).log(Level.SEVERE, null, ex);
@@ -36,7 +37,7 @@ public class ServiceController {
             PgConnection con = new PgConnection();
             String SQL = "insert into t_biz_type"
                     + "(id,name,biz_prefix,status,start_num,sort,call_delay,biz_class_id,deal_time_warning,hidden,db_id)"
-                    + " values (?,?,?,?,?,?,?,?,?,?,?)";
+                    + " values (?,?,?,?,?,?,?,?,?,?,?) ;";
             PreparedStatement r = con.getStatement().getConnection().prepareStatement(SQL);
             r.setString(1, s.getId());
             r.setString(2, s.getName());
@@ -50,6 +51,7 @@ public class ServiceController {
             r.setInt(10, s.getHidden());
             r.setString(11, s.getDb_id().toString());
             r.execute();
+            con.closeConnection();
             return 1;
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(ServiceController.class.getName()).log(Level.SEVERE, null, ex);
@@ -60,17 +62,18 @@ public class ServiceController {
     public void updateServices() {
         List<Agence> agences = new AgenceController().getAllAgence();
         if (agences != null) {
+            System.err.println("-- Updating t_biz_type.....");
             for (int i = 0; i < agences.size(); i++) {
                 try {
                     PgMultiConnection con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
-                    String SQL = "select * from t_biz_type";
-                    ResultSet r = con.getStatement().executeQuery(SQL);
+                    String SQL = "select * from t_biz_type;";
                     clearTable(agences.get(i).getId());
+                    ResultSet r = con.getStatement().executeQuery(SQL);
                     while (r.next()) {
                         addService(new Service(
                                 r.getString("id"),
                                 r.getString("name"),
-                                r.getString("prefix"),
+                                r.getString("biz_prefix"),
                                 r.getInt("status"),
                                 r.getString("start_num"),
                                 r.getInt("sort"),
@@ -84,8 +87,9 @@ public class ServiceController {
 
                 } catch (ClassNotFoundException | SQLException ex) {
                     Logger.getLogger(ServiceController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                } 
             }
+            System.err.println("-- t_biz_type updated.");
         }
     }
 }

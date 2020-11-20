@@ -1,4 +1,9 @@
 
+<%@page import="main.Updater"%>
+<%@page import="java.io.IOException"%>
+<%@page import="java.net.Socket"%>
+<%@page import="main.modal.Agence"%>
+<%@page import="main.controller.AgenceController"%>
 <%@page import="java.util.UUID"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="main.PgMultiConnection"%>
@@ -26,26 +31,10 @@
                 <%@include file="./addon/navbar.jsp" %>
             </div>
             <div class="body">
-                <h1>Agence names:</h1>
                 <%
-                    List<ArrayList> table = new DbHandler(request).getDatabases();
-                    for(int i=0;i<table.size();i++){
-                        try{
-                        PgMultiConnection con = new PgMultiConnection(table.get(i).get(2).toString(), table.get(i).get(3).toString(), table.get(i).get(4).toString(), table.get(i).get(5).toString(), table.get(i).get(6).toString());
-                        ResultSet r=con.getStatement().executeQuery("SELECT value FROM t_basic_par where name='BRANCH_NAME' ;");
-                        if(r.next()){
-                %><h6><%=  r.getString("value")  %></h6><%
-                        }
-                        con.closeConnection();
-                        }catch(Exception e){
-                        %><%= e.getMessage() %> <%
-                        }   
-                    }
+                   new Updater().updateDatabase();
                 %>
-            </div>
-            
-            
-                <h1 class="text-white"> <%= UUID.randomUUID() %></h1>
+            </div>  
         </div>
     </body>
 </html>

@@ -1,3 +1,4 @@
+$("#userTbl,#extraTbl,#goalTbl,#dbTbl").hide();
 $(document).ready(function () {
     //table show/hide
     $("#userTbl,#extraTbl,#goalTbl,#dbTbl").hide();

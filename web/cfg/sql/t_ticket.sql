@@ -38,6 +38,5 @@ CREATE TABLE public.t_ticket
     extend5 character varying(100) COLLATE pg_catalog."default",
     extend6 character varying(100) COLLATE pg_catalog."default",
     extend7 character varying(100) COLLATE pg_catalog."default",
-    db_id  character varying(40) not null references agence(id) ON DELETE CASCADE,
-    CONSTRAINT t_ticket_pkey PRIMARY KEY (id)
+    db_id  character varying(40) not null references agence(id) ON DELETE CASCADE
 )

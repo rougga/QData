@@ -1,5 +1,7 @@
 package main.controller;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -98,6 +100,22 @@ public class AgenceController {
         }
     }
 
+    public boolean isOnline(UUID id) {
+        Agence a = getAgenceById(id);
+        if (a != null) {
+            try {
+                Socket socket = new Socket(a.getHost(), a.getPort());
+                socket.close();
+                return true;
+            } catch (IOException e) {
+                return false;
+            }
+
+        } else {
+            return false;
+        }
+    }
+
     public int updateName(UUID id, String name) {
         try {
             PgConnection con = new PgConnection();
@@ -138,6 +156,7 @@ public class AgenceController {
         List<Agence> agences = new AgenceController().getAllAgence();
         if (agences != null) {
             PgMultiConnection con;
+            System.out.println("-- Updating Agence names....");
             for (int i = 0; i < agences.size(); i++) {
                 try {
                     con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
@@ -151,6 +170,7 @@ public class AgenceController {
                     Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            System.out.println("-- Agence names updated.");
         }
 
     }

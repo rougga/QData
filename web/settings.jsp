@@ -256,6 +256,7 @@
                                 <th scope="col">Base de donnée</th>
                                 <th scope="col">Utilisateur</th>
                                 <th scope="col">Mot de passe</th>
+                                <th scope="col">Statut</th>
                                 <th scope="col">Dernière mise à jour</th>
                                 <th scope="col"></th>
                             </tr>
@@ -274,6 +275,20 @@
                                 <td class="border-dark align-middle"><%=table.get(i).getDatabase() %></td>
                                 <td class="border-dark align-middle"><%=table.get(i).getUsername() %></td>
                                 <td class="border-dark align-middle"><%=table.get(i).getPassword() %></td>
+                                <td class="border-dark align-middle">
+                                    <%
+                                    if(ac.isOnline(table.get(i).getId()) ){
+                                        %>
+                                         <span class='text-center text-white bg-success p-1'>Online</span> 
+                                         <%
+                                    }else{
+                                         %>
+                                         <span class='text-center text-white bg-danger p-1'>Offline</span> 
+                                         <%
+                                    }
+
+                                    %>
+                                </td>
                                 <td class="border-dark align-middle"><%= ac.getLastUpdate(table.get(i).getId()) %></td>
                                 <td class="border-dark align-middle">
                                     <a class="btn btn-danger m-0" id="dbDlt" href="./DeleteDatabase?id=<%= table.get(i).getId() %>"><img src="./img/icon/trash.png"></a>
@@ -282,7 +297,7 @@
                             <%
                                  }
                                }else{
-                                %><%="<h4 class='text-center text-danger'>No database</h4>"%><%
+                            %><%="<h4 class='text-center text-danger'>No database</h4>"%><%
                                 }
                                 
                             %>
@@ -540,13 +555,13 @@
                 </div>
             </div>
         </div>
-                                    <script>
-                                        $(document).ready(function (){
-                                            $("#<%=request.getParameter("type") %>Btn").click();
-                                        });
+        <script>
+            $(document).ready(function (){
+                $("#<%=request.getParameter("type") %>Btn").click();
+            });
                                         
                                         
-                                    </script>
+        </script>
     </body>
 
 </html>

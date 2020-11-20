@@ -1,7 +1,7 @@
 <%@page import="java.util.Objects"%>
 <%
     if (Objects.equals(session.getAttribute("user"), null)) {
-        response.sendRedirect("./index.jsp");
+        response.sendRedirect("/OffReport_Global/index.jsp");
     }
 %>
 <nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #b83dba;">
@@ -23,7 +23,7 @@
                     <span class=""></span> Rapport
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownR" >
-                    <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=gbl">RAPPORT GLOBALE</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="./report/gbl.jsp">RAPPORT GLOBALE</a>
                     <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=emp">RAPPORT EMPLOYE</a>
                     <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=empser">RAPPORT EMPLOYE (service)</a>
                     <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=gch">RAPPORT GUICHET</a>
@@ -81,7 +81,7 @@
                     <b><%= session.getAttribute("user")%></b>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item font-weight-bold navHover" href="./settings.jsp" >Paramètres</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/OffReport_Global/settings.jsp" >Paramètres</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item font-weight-bold navHover" href="./Logoff">
                         Déconnexion</a>

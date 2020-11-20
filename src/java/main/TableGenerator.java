@@ -13,12 +13,15 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.ParserConfigurationException;
+import main.controller.report.GblController;
+import main.handler.TitleHandler;
 import org.xml.sax.SAXException;
 
 public class TableGenerator {
 
     private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     private final SimpleDateFormat format2 = new SimpleDateFormat("dd-MM-yyyy");
+     private final SimpleDateFormat format3 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     private String DB;
     private String date1;
     private String date2;
@@ -31,7 +34,7 @@ public class TableGenerator {
     private String[] cols;
     private String chartLables;
     private String chartData;
-    private String[] gblCols;
+     public String[] gblCols;
     private String[] empCols;
     private String[] empServiceCols;
     private String[] gchCols;
@@ -1749,7 +1752,7 @@ public class TableGenerator {
         data.put("bottom", getBottomHTML());
         return data;
     }
-
+    
     public String getDB() {
         return DB;
     }
@@ -2100,6 +2103,10 @@ public class TableGenerator {
                 + "});"
                 + "</script>"
                 + "</div>";
+    }
+
+    public SimpleDateFormat getFormat3() {
+        return format3;
     }
 
 }

@@ -9,7 +9,6 @@ public class Ticket {
     private String biz_type_id;
     private String ticket_id;
     private String evaluation_id;
-    private String ticket_num;
     private String ticket_type;
     private int status;
     private String deal_win;
@@ -25,12 +24,11 @@ public class Ticket {
     private String id_card_name;
     private UUID db_id;
 
-    public Ticket(String id, String biz_type_id, String ticket_id, String evaluation_id, String ticket_num, String ticket_type, int status, String deal_win, String transfer_win, String deal_user, String id_card_info_id, Date ticket_time, Date call_time, Date start_time, Date finish_time, String call_type, String branch_id, String id_card_name, UUID db_id) {
+    public Ticket(String id, String biz_type_id, String ticket_id, String evaluation_id, String ticket_type, int status, String deal_win, String transfer_win, String deal_user, String id_card_info_id, Date ticket_time, Date call_time, Date start_time, Date finish_time, String call_type, String branch_id, String id_card_name, UUID db_id) {
         this.id = id;
         this.biz_type_id = biz_type_id;
         this.ticket_id = ticket_id;
         this.evaluation_id = evaluation_id;
-        this.ticket_num = ticket_num;
         this.ticket_type = ticket_type;
         this.status = status;
         this.deal_win = deal_win;
@@ -61,10 +59,6 @@ public class Ticket {
 
     public void setEvaluation_id(String evaluation_id) {
         this.evaluation_id = evaluation_id;
-    }
-
-    public void setTicket_num(String ticket_num) {
-        this.ticket_num = ticket_num;
     }
 
     public void setTicket_type(String ticket_type) {
@@ -137,10 +131,6 @@ public class Ticket {
 
     public String getEvaluation_id() {
         return evaluation_id;
-    }
-
-    public String getTicket_num() {
-        return ticket_num;
     }
 
     public String getTicket_type() {

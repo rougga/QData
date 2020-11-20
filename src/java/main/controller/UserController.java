@@ -19,10 +19,11 @@ public class UserController {
     public int clearTable(UUID id) {
         try {
             PgConnection con = new PgConnection();
-            String SQL = "delete from t_user where db_id=?";
+            String SQL = "delete from t_user where db_id=? ;";
             PreparedStatement p = con.getStatement().getConnection().prepareStatement(SQL);
             p.setString(1, id.toString());
             p.execute();
+            con.closeConnection();
             return 1;
         } catch (Exception ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
@@ -35,7 +36,7 @@ public class UserController {
             PgConnection con = new PgConnection();
             String SQL = "insert into t_user"
                     + "(id,account,name,passwd,nike_name,limit_time,access_time,status,dept_id,usertype,work_num,work,db_id)"
-                    + " values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + " values (?,?,?,?,?,?,?,?,?,?,?,?,?);";
             PreparedStatement r = con.getStatement().getConnection().prepareStatement(SQL);
 
             r.setString(1, u.getId());
@@ -43,8 +44,8 @@ public class UserController {
             r.setString(3, u.getName());
             r.setString(4, u.getPasswd());
             r.setString(5, u.getNike_name());
-            r.setDate(6, new java.sql.Date(u.getLimit_time().getTime()));
-            r.setDate(7, new java.sql.Date(u.getAccess_time().getTime()));
+            r.setDate(6,null);
+            r.setDate(7,null);
             r.setInt(8, u.getStatus());
             r.setString(9, u.getDept_id());
             r.setInt(10, u.getUsertype());
@@ -52,6 +53,7 @@ public class UserController {
             r.setString(12, u.getWork());
             r.setString(13, u.getDb_id().toString());
             r.execute();
+            con.closeConnection();
             return 1;
         } catch (Exception ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
@@ -63,12 +65,13 @@ public class UserController {
 
         List<Agence> agences = new AgenceController().getAllAgence();
         if (agences != null) {
+            System.out.println("-- Updating t_user....");
             for (int i = 0; i < agences.size(); i++) {
                 try {
                     PgMultiConnection con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
-                    String SQL = "select * from t_user";
-                    ResultSet r = con.getStatement().executeQuery(SQL);
+                    String SQL = "select * from t_user;";
                     clearTable(agences.get(i).getId());
+                    ResultSet r = con.getStatement().executeQuery(SQL);
                     while (r.next()) {
                         addUser(
                                 new User(
@@ -81,7 +84,7 @@ public class UserController {
                                         r.getDate("access_time"),
                                         r.getInt("status"),
                                         r.getString("dept_id"),
-                                        r.getInt("user_type"),
+                                        r.getInt("usertype"),
                                         r.getString("work_num"),
                                         r.getString("work"),
                                         agences.get(i).getId()
@@ -94,6 +97,7 @@ public class UserController {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            System.out.println("-- t_user updated.");
             return 1;
         } else {
             return 0;

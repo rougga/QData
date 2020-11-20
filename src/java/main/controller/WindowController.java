@@ -16,10 +16,11 @@ public class WindowController {
     public int clearTable(UUID id) {
         try {
             PgConnection con = new PgConnection();
-            String SQL = "delete from t_window where db_id=?";
+            String SQL = "delete from t_window where db_id=? ;";
             PreparedStatement p = con.getStatement().getConnection().prepareStatement(SQL);
             p.setString(1, id.toString());
             p.execute();
+            con.closeConnection();
             return 1;
         } catch (Exception ex) {
             Logger.getLogger(WindowController.class.getName()).log(Level.SEVERE, null, ex);
@@ -33,7 +34,7 @@ public class WindowController {
             String SQL = "insert into t_window"
                     + "(id,win_number,name,status,win_group_id,default_user,branch_id,db_id,screen_type) "
                     + " values"
-                    + "(?,?,?,?,?,?,?,?,?)";
+                    + "(?,?,?,?,?,?,?,?,?);";
             PreparedStatement r = con.getStatement().getConnection().prepareStatement(SQL);
             r.setString(1, w.getId());
             r.setInt(2, w.getWin_number());
@@ -45,6 +46,7 @@ public class WindowController {
             r.setString(8, w.getDb_id().toString());
             r.setString(9, w.getScreen_type());
             r.execute();
+            con.closeConnection();
             return 1;
         } catch (Exception ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
@@ -55,12 +57,13 @@ public class WindowController {
     public int updateWindows() {
         List<Agence> agences = new AgenceController().getAllAgence();
         if (agences != null) {
+            System.out.println("-- Updating t_window....");
             for (int i = 0; i < agences.size(); i++) {
                 try {
                     PgMultiConnection con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
-                    String SQL = "select * from t_window";
-                    ResultSet r = con.getStatement().executeQuery(SQL);
+                    String SQL = "select * from t_window;";
                     clearTable(agences.get(i).getId());
+                    ResultSet r = con.getStatement().executeQuery(SQL);
                     while (r.next()) {
                         addWindow(
                                 new Window(
@@ -82,6 +85,7 @@ public class WindowController {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            System.out.println("-- t_window updated.");
             return 1;
         } else {
             return 0;
