@@ -21,7 +21,6 @@ $(document).ready(function () {
     var t;
     var showCols = function (type) {
         t = type;
-
         switch (type) {
             case "gbl":
                 $(colsToShow.gbl).show();
@@ -76,7 +75,6 @@ $(document).ready(function () {
                 break;
         }
         ;
-
         $(".db1 .0").hide();
         $(".db1 th:first").show().attr("rowspan", "20000");
     };
@@ -92,10 +90,9 @@ $(document).ready(function () {
         }
 
     };
-    $(".db1 td,thead tr th").hide();
-
-
-    $(".db1:last").addClass("bg-warning");
+    $("td").hide();
+    $("th").hide();
+    $(".Sous-Totale").parent("tr").addClass("bg-warning");
     $("#excel").on('click', function () {
         $("#format").val("excel");
         $("#printForm").submit();
@@ -110,17 +107,13 @@ $(document).ready(function () {
     });
     $("#plus").on('click', function () {
         if ($(this).text() === "PLUS >>") {
-            $(".db1,thead tr th,.db1 tr,.db1 td").show();
             $(this).text("MOIN <<");
-            $(".db1 th").hide();
-            hideCols(t);
-            $(".db1 th:first").show().attr("rowspan", "2000000");
-
+            $("td").show();
+            $("th").show();
         } else {
-            $(".db1 td,thead tr th").hide();
+            $("td").hide();
+            $("th").hide();
             showCols(t);
-            $(".db1 th").hide();
-            $(".db1 th:first").show().attr("rowspan", "2000000");
             $(this).text("PLUS >>");
         }
     });
@@ -136,5 +129,18 @@ $(document).ready(function () {
             $("#date2").val(new Date().toLocaleDateString('en-CA'));
         }
     });
-    showCols("<%= type%>");
+    var elements = $('.db');
+    var ids = [];
+    for (var i = 0; i < elements.length; i++) {
+        if (ids.indexOf($(elements[i]).attr("data-id")) === -1) {
+            ids.push($(elements[i]).attr("data-id"));
+        } else {
+            $(elements[i]).hide();
+        }
+    }
+    for (var i = 0; i < ids.length; i++) {
+        $('.db[data-id=' + ids[i] + ']:first').attr("rowspan", $('.db[data-id=' + ids[i] + ']').length);
+    }
 });
+
+

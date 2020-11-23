@@ -5,7 +5,7 @@
     }
 %>
 <nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #b83dba;">
-    <a class="navbar-brand" href="#">OffReport</a>
+    <a class="navbar-brand" href="#">QStates</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
@@ -23,7 +23,7 @@
                     <span class=""></span> Rapport
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownR" >
-                    <a class="dropdown-item font-weight-bold navHover" href="./report/gbl.jsp">RAPPORT GLOBALE</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=gbl">RAPPORT GLOBALE</a>
                     <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=emp">RAPPORT EMPLOYE</a>
                     <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=empser">RAPPORT EMPLOYE (service)</a>
                     <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=gch">RAPPORT GUICHET</a>
@@ -82,6 +82,8 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item font-weight-bold navHover" href="/OffReport_Global/settings.jsp" >Paramètres</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/OffReport_Global/setting/users.jsp" >Utilisateurs</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/OffReport_Global/setting/agences.jsp" >Agences</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item font-weight-bold navHover" href="./Logoff">
                         Déconnexion</a>

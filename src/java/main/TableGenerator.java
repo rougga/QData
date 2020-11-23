@@ -11,17 +11,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.ParserConfigurationException;
-import main.controller.report.GblController;
-import main.handler.TitleHandler;
+import main.controller.AgenceController;
+import main.modal.Agence;
 import org.xml.sax.SAXException;
 
 public class TableGenerator {
 
     private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     private final SimpleDateFormat format2 = new SimpleDateFormat("dd-MM-yyyy");
-     private final SimpleDateFormat format3 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    private final SimpleDateFormat format3 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     private String DB;
     private String date1;
     private String date2;
@@ -34,7 +36,7 @@ public class TableGenerator {
     private String[] cols;
     private String chartLables;
     private String chartData;
-     public String[] gblCols;
+    public String[] gblCols;
     private String[] empCols;
     private String[] empServiceCols;
     private String[] gchCols;
@@ -51,7 +53,7 @@ public class TableGenerator {
     public TableGenerator() {
 
         this.gblCols = new String[]{"Site", "Service", "Nb. Tickets", "Nb. Traités", "Nb. Absents", "Nb. Traités <1mn", "Nb. Sans affectation", "Absents/Nb. Tickets(%)", "Traités<1mn/Nb. Tickets(%)", "Sans affect/Nb. Tickets(%)", "Moyenne d'attente", ">Cible", "%Cible", "Moyenne Traitement", ">Cible", "%Cible"};
-        this.empCols = new String[]{"Site", "Employé", "Nb. Tickets", "Nb. Traités", "Nb. Absents", "Nb. Traités <1mn", "Nb. Sans affectation", "Absents/Nb. Tickets(%)", "Traités<1mn/Nb. Tickets(%)", "Sans affect/Nb. Tickets(%)", "Moyenne d'attente", ">Cible", "%Cible", "Moyenne Traitement", ">Cible", "%Cible"};
+        this.empCols = new String[]{"Site", "Employé", "Nb. Traités", "Nb. Absents", "Nb. Traités <1mn", "Nb. Sans affectation", "Absents/Nb. Tickets(%)", "Traités<1mn/Nb. Tickets(%)", "Sans affect/Nb. Tickets(%)", "Moyenne d'attente", ">Cible", "%Cible", "Moyenne Traitement", ">Cible", "%Cible"};
         this.empServiceCols = new String[]{"Site", "Employé", "Service", "Nb. Tickets", "Nb. Traités", "Nb. Absents", "Nb. Traités <1mn", "Nb. Sans affectation", "Absents/Nb. Tickets(%)", "Traités<1mn/Nb. Tickets(%)", "Sans affect/Nb. Tickets(%)", "Moyenne d'attente", ">Cible", "%Cible", "Moyenne Traitement", ">Cible", "%Cible"};
         this.gchCols = new String[]{"Site", "Guichet", "Nb. Tickets", "Nb. Traités", "Nb. Absents", "Nb. Traités <1mn", "Nb. Sans affectation", "Absents/Nb. Tickets(%)", "Traités<1mn/Nb. Tickets(%)", "Sans affect/Nb. Tickets(%)", "Moyenne d'attente", ">Cible", "%Cible", "Moyenne Traitement", ">Cible", "%Cible"};
         this.gchServiceCols = new String[]{"Site", "Guichet", "Service", "Nb. Tickets", "Nb. Traités", "Nb. Absents", "Nb. Traités <1mn", "Nb. Sans affectation", "Absents/Nb. Tickets(%)", "Traités<1mn/Nb. Tickets(%)", "Sans affect/Nb. Tickets(%)", "Moyenne d'attente", ">Cible", "%Cible", "Moyenne Traitement", ">Cible", "%Cible"};
@@ -75,360 +77,720 @@ public class TableGenerator {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
-    public List<ArrayList<String>> generateGblTable(HttpServletRequest request, String d1, String d2, String db) {
-        try{
+    public List<ArrayList> generateGblTable2(HttpServletRequest request, String d1, String d2) {
+
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.DB = db;
-        CfgHandler cfg = new CfgHandler(request);
-        String dateCon = " and to_date(to_char(t2.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') ";
+        List<ArrayList> table = new ArrayList<>();
+        List<Agence> agences = new AgenceController().getAllAgence();
+        if (agences != null) {
+            for (int i = 0; i < agences.size(); i++) {
+                try {
+                    Agence a = agences.get(i);
+                    PgConnection con = new PgConnection();
 
-        String gblSQL2 = "SELECT "
-                + " g1.BIZ_TYPE_ID,"
-                + " G1.NAME,"
-                + " G1.NB_T,"
-                + " G1.NB_TT, "
-                + "G1.NB_A,"
-                + " G1.NB_TL1,"
-                + " G1.NB_SA,"
-                + " CASE "
-                + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
-                + "ELSE CAST((G1.NB_A::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
-                + "END AS PERAPT,"
-                + " CASE"
-                + " WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric"
-                + " ELSE CAST((G1.NB_TL1::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
-                + "END AS PERTL1pt,"
-                + " CASE WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
-                + "ELSE CAST((G1.NB_SA::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
-                + "END AS PERSAPT , "
-                + "G1.AVGSEC_A, G1.avgsec_T "
-                + "from "
-                + "( select "
-                + "t1.biz_type_id,"
-                + " b.name, "
-                + "(SELECT COUNT(*) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID " + dateCon + " ) AS NB_T,"
-                + " (SELECT COUNT(*) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID AND T2.STATUS = 4 " + dateCon + " ) AS NB_TT,"
-                + " (SELECT COUNT(*) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID AND T2.STATUS = 2 " + dateCon + " ) AS NB_A,"
-                + " (SELECT COUNT(*) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID AND DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric / 60::numeric <= 1 AND T2.STATUS = 4 " + dateCon + " ) AS NB_TL1,"
-                + " (SELECT COUNT(*) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID AND T2.STATUS = 0 " + dateCon + " ) AS NB_SA,"
-                + " (SELECT AVG(DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID and T2.call_time is not null  " + dateCon + " ) AS AVGSEC_A, "
-                + " (SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID AND T2.STATUS = 4 " + dateCon + " ) AS AVGSEC_T FROM T_TICKET T1, T_BIZ_TYPE B WHERE T1.BIZ_TYPE_ID = B.ID AND TO_DATE(TO_CHAR(T1.TICKET_TIME,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') GROUP BY T1.BIZ_TYPE_ID, B.NAME ) G1 ;";
+                    String dateCon = " and to_date(to_char(t2.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') and t2.db_id='" + a.getId() + "'";
 
-        String subTotalSQL = "SELECT G1.NB_T, "
-                + "G1.NB_TT, "
-                + "G1.NB_A, "
-                + "G1.NB_TL1, "
-                + "G1.NB_SA, "
-                + "CASE "
-                + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
-                + "ELSE CAST((G1.NB_A::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
-                + "END AS PERAPT, "
-                + "CASE "
-                + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
-                + "ELSE CAST((G1.NB_TL1::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
-                + "END AS PERTL1PT, "
-                + "CASE "
-                + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
-                + "ELSE CAST((G1.NB_SA::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
-                + "END AS PERSAPT, "
-                + "G1.AVGSEC_A, "
-                + "G1.AVGSEC_T "
-                + "FROM "
-                + "(SELECT "
-                + "(SELECT COUNT(*) "
-                + "FROM T_TICKET T2 "
-                + "WHERE 1 = 1 "
-                + " " + dateCon + " ) AS NB_T, "
-                + " "
-                + "(SELECT COUNT(*) "
-                + "FROM T_TICKET T2 "
-                + "WHERE T2.STATUS = 4 "
-                + " " + dateCon + " ) AS NB_TT, "
-                + " "
-                + "(SELECT COUNT(*) "
-                + "FROM T_TICKET T2 "
-                + "WHERE T2.STATUS = 2 "
-                + " " + dateCon + " ) AS NB_A, "
-                + " "
-                + "(SELECT COUNT(*) "
-                + "FROM T_TICKET T2 "
-                + "WHERE DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric / 60::numeric <= 1 "
-                + "AND T2.STATUS = 4 "
-                + " " + dateCon + " ) AS NB_TL1, "
-                + " "
-                + "(SELECT COUNT(*) "
-                + "FROM T_TICKET T2 "
-                + "WHERE T2.STATUS = 0 "
-                + " " + dateCon + " ) AS NB_SA, "
-                + " "
-                + "(SELECT AVG(DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric) "
-                + "FROM T_TICKET T2 "
-                + "WHERE T2.call_time is not null "
-                + " " + dateCon + " ) AS AVGSEC_A, "
-                + " "
-                + "(SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) "
-                + "FROM T_TICKET T2 "
-                + "WHERE T2.STATUS = 4 "
-                + " " + dateCon + " ) AS AVGSEC_T "
-                + "FROM T_TICKET T1 "
-                + "WHERE TO_DATE(TO_CHAR(T1.TICKET_TIME,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') limit 1 ) G1 ;";
-        PgConnection con = new PgConnection();
-        ResultSet r = con.getStatement().executeQuery(gblSQL2);
-        table.clear();
-        while (r.next()) {
-            ArrayList<String> row = new ArrayList<>();
-            String id = r.getString("biz_type_id");
-            row.add(r.getString("name"));
-            row.add(r.getLong("nb_t") + "");
-            row.add(r.getLong("nb_tt") + "");
-            row.add(r.getLong("nb_a") + "");
-            row.add(r.getLong("nb_tl1") + "");
-            row.add(r.getLong("nb_sa") + "");
-            row.add(r.getFloat("perApT") + "%");
-            row.add(r.getFloat("PERTL1pt") + "%");
-            row.add(r.getFloat("perSApT") + "%");
-            row.add(getFormatedTime(r.getFloat("avgSec_A")));
+                    String SQL = "SELECT "
+                            + " g1.BIZ_TYPE_ID,"
+                            + " G1.NAME,"
+                            + " G1.NB_T,"
+                            + " G1.NB_TT, "
+                            + "G1.NB_A,"
+                            + " G1.NB_TL1,"
+                            + " G1.NB_SA,"
+                            + " CASE "
+                            + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                            + "ELSE CAST((G1.NB_A::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                            + "END AS PERAPT,"
+                            + " CASE"
+                            + " WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric"
+                            + " ELSE CAST((G1.NB_TL1::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                            + "END AS PERTL1pt,"
+                            + " CASE WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                            + "ELSE CAST((G1.NB_SA::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                            + "END AS PERSAPT , "
+                            + "G1.AVGSEC_A, G1.avgsec_T "
+                            + "from "
+                            + "( select "
+                            + "t1.biz_type_id,"
+                            + " b.name, "
+                            + "(SELECT COUNT(*) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID " + dateCon + " ) AS NB_T,"
+                            + " (SELECT COUNT(*) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID AND T2.STATUS = 4 " + dateCon + " ) AS NB_TT,"
+                            + " (SELECT COUNT(*) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID AND T2.STATUS = 2 " + dateCon + " ) AS NB_A,"
+                            + " (SELECT COUNT(*) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID AND DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric / 60::numeric <= 1 AND T2.STATUS = 4 " + dateCon + " ) AS NB_TL1,"
+                            + " (SELECT COUNT(*) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID AND T2.STATUS = 0 " + dateCon + " ) AS NB_SA,"
+                            + " (SELECT AVG(DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID and T2.call_time is not null  " + dateCon + " ) AS AVGSEC_A, "
+                            + " (SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID AND T2.STATUS = 4 " + dateCon + " ) AS AVGSEC_T FROM T_TICKET T1, T_BIZ_TYPE B WHERE T1.BIZ_TYPE_ID = B.ID  and b.db_id='" + a.getId() + "' AND TO_DATE(TO_CHAR(T1.TICKET_TIME,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') GROUP BY T1.BIZ_TYPE_ID, B.NAME ) G1 ;";
 
-            int cibleA = cfg.getCibleA(id);
-            int cibleT = cfg.getCibleT(id);
+                    String subSQL = "SELECT G1.NB_T, "
+                            + "G1.NB_TT, "
+                            + "G1.NB_A, "
+                            + "G1.NB_TL1, "
+                            + "G1.NB_SA, "
+                            + "CASE "
+                            + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                            + "ELSE CAST((G1.NB_A::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                            + "END AS PERAPT, "
+                            + "CASE "
+                            + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                            + "ELSE CAST((G1.NB_TL1::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                            + "END AS PERTL1PT, "
+                            + "CASE "
+                            + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                            + "ELSE CAST((G1.NB_SA::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                            + "END AS PERSAPT, "
+                            + "G1.AVGSEC_A, "
+                            + "G1.AVGSEC_T "
+                            + "FROM "
+                            + "(SELECT "
+                            + "(SELECT COUNT(*) "
+                            + "FROM T_TICKET T2 "
+                            + "WHERE 1 = 1 "
+                            + " " + dateCon + " ) AS NB_T, "
+                            + " "
+                            + "(SELECT COUNT(*) "
+                            + "FROM T_TICKET T2 "
+                            + "WHERE T2.STATUS = 4 "
+                            + " " + dateCon + " ) AS NB_TT, "
+                            + " "
+                            + "(SELECT COUNT(*) "
+                            + "FROM T_TICKET T2 "
+                            + "WHERE T2.STATUS = 2 "
+                            + " " + dateCon + " ) AS NB_A, "
+                            + " "
+                            + "(SELECT COUNT(*) "
+                            + "FROM T_TICKET T2 "
+                            + "WHERE DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric / 60::numeric <= 1 "
+                            + "AND T2.STATUS = 4 "
+                            + " " + dateCon + " ) AS NB_TL1, "
+                            + " "
+                            + "(SELECT COUNT(*) "
+                            + "FROM T_TICKET T2 "
+                            + "WHERE T2.STATUS = 0 "
+                            + " " + dateCon + " ) AS NB_SA, "
+                            + " "
+                            + "(SELECT AVG(DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric) "
+                            + "FROM T_TICKET T2 "
+                            + "WHERE T2.call_time is not null "
+                            + " " + dateCon + " ) AS AVGSEC_A, "
+                            + " "
+                            + "(SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) "
+                            + "FROM T_TICKET T2 "
+                            + "WHERE T2.STATUS = 4 "
+                            + " " + dateCon + " ) AS AVGSEC_T "
+                            + "FROM T_TICKET T1 "
+                            + "WHERE TO_DATE(TO_CHAR(T1.TICKET_TIME,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') and t1.db_id='" + a.getId() + "' limit 1 ) G1 ;";
 
-            String cibleSQL = "SELECT G1.BIZ_TYPE_ID, "
-                    + "G1.NAME, "
+                    ResultSet r = con.getStatement().executeQuery(SQL);
+                    while (r.next()) {
+                        ArrayList row = new ArrayList<>();
+                        row.add(a.getId().toString());
+                        row.add(r.getString("biz_type_id"));
+                        row.add(a.getName());
+                        row.add(r.getString("name"));
+                        row.add(r.getLong("nb_t"));
+                        row.add(r.getLong("nb_tt"));
+                        row.add(r.getLong("nb_a"));
+                        row.add(r.getLong("nb_tl1"));
+                        row.add(r.getLong("nb_sa"));
+                        row.add(r.getFloat("perApT"));
+                        row.add(r.getFloat("PERTL1pt"));
+                        row.add(r.getFloat("perSApT"));
+                        row.add(getFormatedTime(r.getFloat("avgSec_A")));
+                        row.add(0);
+                        row.add(0);
+                        row.add(getFormatedTime(r.getFloat("avgSec_T")));
+                        row.add(0);
+                        row.add(0);
+                        table.add(row);
+                    }
+                    r = con.getStatement().executeQuery(subSQL);
+                    while (r.next()) {
+                        ArrayList row = new ArrayList<>();
+                        row.add(a.getId().toString());
+                        row.add("");
+                        row.add(a.getName());
+                        row.add("Sous-Totale");
+                        row.add(r.getLong("nb_t"));
+                        row.add(r.getLong("nb_tt"));
+                        row.add(r.getLong("nb_a"));
+                        row.add(r.getLong("nb_tl1"));
+                        row.add(r.getLong("nb_sa"));
+                        row.add(r.getFloat("perApT"));
+                        row.add(r.getFloat("PERTL1pt"));
+                        row.add(r.getFloat("perSApT"));
+                        row.add(getFormatedTime(r.getFloat("avgSec_A")));
+                        row.add(0);
+                        row.add(0);
+                        row.add(getFormatedTime(r.getFloat("avgSec_T")));
+                        row.add(0);
+                        row.add(0);
+                        table.add(row);
+                    }
+
+                    con.closeConnection();
+
+                } catch (Exception ex) {
+                    Logger.getLogger(TableGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        }
+        try {
+            PgConnection con = new PgConnection();
+
+            String dateCon = " and to_date(to_char(t2.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') ";
+
+            String totalSQL = "SELECT G1.NB_T, "
                     + "G1.NB_TT, "
-                    + "G1.NB_CA, "
+                    + "G1.NB_A, "
+                    + "G1.NB_TL1, "
+                    + "G1.NB_SA, "
                     + "CASE "
-                    + "WHEN G1.NB_TT::numeric = 0 "
-                    + "OR G1.NB_CA::numeric = 0 THEN 0 "
-                    + "ELSE CAST((G1.NB_CA::numeric / G1.NB_TT::numeric) * 100::numeric AS DECIMAL(10,2)) "
-                    + "END AS PERCAPT, "
-                    + "G1.NB_CT, "
+                    + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                    + "ELSE CAST((G1.NB_A::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                    + "END AS PERAPT, "
                     + "CASE "
-                    + "WHEN G1.NB_TT::numeric = 0 "
-                    + "OR G1.NB_CT::numeric = 0 THEN 0 "
-                    + "ELSE CAST((G1.NB_CT::numeric / G1.NB_TT::numeric) * 100::numeric AS DECIMAL(10,2)) "
-                    + "END AS PERCTPT "
+                    + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                    + "ELSE CAST((G1.NB_TL1::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                    + "END AS PERTL1PT, "
+                    + "CASE "
+                    + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                    + "ELSE CAST((G1.NB_SA::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                    + "END AS PERSAPT, "
+                    + "G1.AVGSEC_A, "
+                    + "G1.AVGSEC_T "
                     + "FROM "
-                    + "(SELECT B.NAME, "
-                    + "T1.BIZ_TYPE_ID, "
+                    + "(SELECT "
                     + "(SELECT COUNT(*) "
                     + "FROM T_TICKET T2 "
-                    + "WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID "
-                    + "AND T2.STATUS = 4  " + dateCon + " ) AS NB_TT, "
+                    + "WHERE 1 = 1 "
+                    + " " + dateCon + " ) AS NB_T, "
                     + " "
                     + "(SELECT COUNT(*) "
                     + "FROM T_TICKET T2 "
-                    + "WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID "
-                    + "AND DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric >  " + cibleA + " "
-                    + "AND T2.STATUS = 4  " + dateCon + " ) AS NB_CA, "
+                    + "WHERE T2.STATUS = 4 "
+                    + " " + dateCon + " ) AS NB_TT, "
                     + " "
                     + "(SELECT COUNT(*) "
                     + "FROM T_TICKET T2 "
-                    + "WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID "
-                    + "AND DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric >  " + cibleT + " "
-                    + "AND T2.STATUS = 4  " + dateCon + ") AS NB_CT "
-                    + "FROM T_TICKET T1, "
-                    + "T_BIZ_TYPE B "
-                    + "WHERE T1.BIZ_TYPE_ID = B.ID "
-                    + " AND TO_DATE(TO_CHAR(T1.TICKET_TIME,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') "
-                    + "AND T1.BIZ_TYPE_ID = '" + id + "' "
-                    + "GROUP BY T1.BIZ_TYPE_ID, "
-                    + "B.NAME) G1 ; "
-                    + "";
-            ResultSet cib = con.getStatement().executeQuery(cibleSQL);
-            if (cib.next()) {
-                row.add(cib.getLong("nb_ca") + "");
-                row.add(cib.getFloat("percapt") + "%");
+                    + "WHERE T2.STATUS = 2 "
+                    + " " + dateCon + " ) AS NB_A, "
+                    + " "
+                    + "(SELECT COUNT(*) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric / 60::numeric <= 1 "
+                    + "AND T2.STATUS = 4 "
+                    + " " + dateCon + " ) AS NB_TL1, "
+                    + " "
+                    + "(SELECT COUNT(*) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE T2.STATUS = 0 "
+                    + " " + dateCon + " ) AS NB_SA, "
+                    + " "
+                    + "(SELECT AVG(DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE T2.call_time is not null "
+                    + " " + dateCon + " ) AS AVGSEC_A, "
+                    + " "
+                    + "(SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE T2.STATUS = 4 "
+                    + " " + dateCon + " ) AS AVGSEC_T "
+                    + "FROM T_TICKET T1 "
+                    + "WHERE TO_DATE(TO_CHAR(T1.TICKET_TIME,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') limit 1 ) G1 ;";
+
+            ResultSet r = con.getStatement().executeQuery(totalSQL);
+            while (r.next()) {
+                ArrayList row = new ArrayList<>();
+                row.add("Totale");
+                row.add("");
+                row.add("Totale");
+                row.add("Totale");
+                row.add(r.getLong("nb_t"));
+                row.add(r.getLong("nb_tt"));
+                row.add(r.getLong("nb_a"));
+                row.add(r.getLong("nb_tl1"));
+                row.add(r.getLong("nb_sa"));
+                row.add(r.getFloat("perApT"));
+                row.add(r.getFloat("PERTL1pt"));
+                row.add(r.getFloat("perSApT"));
+                row.add(getFormatedTime(r.getFloat("avgSec_A")));
+                row.add(0);
+                row.add(0);
                 row.add(getFormatedTime(r.getFloat("avgSec_T")));
-                row.add(cib.getLong("nb_ct") + "");
-                row.add(cib.getFloat("perctpt") + "%");
-            } else {
+                row.add(0);
+                row.add(0);
+                table.add(row);
+            }
+
+            con.closeConnection();
+
+        } catch (Exception ex) {
+            Logger.getLogger(TableGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return table;
+    }
+
+    public List<ArrayList<String>> generateGblTable(HttpServletRequest request, String d1, String d2, String db) {
+        try {
+            this.date1 = (d1 == null) ? format.format(new Date()) : d1;
+            this.date2 = (d2 == null) ? format.format(new Date()) : d2;
+            this.DB = db;
+            CfgHandler cfg = new CfgHandler(request);
+            String dateCon = " and to_date(to_char(t2.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') ";
+
+            String gblSQL2 = "SELECT "
+                    + " g1.BIZ_TYPE_ID,"
+                    + " G1.NAME,"
+                    + " G1.NB_T,"
+                    + " G1.NB_TT, "
+                    + "G1.NB_A,"
+                    + " G1.NB_TL1,"
+                    + " G1.NB_SA,"
+                    + " CASE "
+                    + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                    + "ELSE CAST((G1.NB_A::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                    + "END AS PERAPT,"
+                    + " CASE"
+                    + " WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric"
+                    + " ELSE CAST((G1.NB_TL1::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                    + "END AS PERTL1pt,"
+                    + " CASE WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                    + "ELSE CAST((G1.NB_SA::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                    + "END AS PERSAPT , "
+                    + "G1.AVGSEC_A, G1.avgsec_T "
+                    + "from "
+                    + "( select "
+                    + "t1.biz_type_id,"
+                    + " b.name, "
+                    + "(SELECT COUNT(*) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID " + dateCon + " ) AS NB_T,"
+                    + " (SELECT COUNT(*) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID AND T2.STATUS = 4 " + dateCon + " ) AS NB_TT,"
+                    + " (SELECT COUNT(*) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID AND T2.STATUS = 2 " + dateCon + " ) AS NB_A,"
+                    + " (SELECT COUNT(*) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID AND DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric / 60::numeric <= 1 AND T2.STATUS = 4 " + dateCon + " ) AS NB_TL1,"
+                    + " (SELECT COUNT(*) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID AND T2.STATUS = 0 " + dateCon + " ) AS NB_SA,"
+                    + " (SELECT AVG(DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID and T2.call_time is not null  " + dateCon + " ) AS AVGSEC_A, "
+                    + " (SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) FROM T_TICKET T2 WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID AND T2.STATUS = 4 " + dateCon + " ) AS AVGSEC_T FROM T_TICKET T1, T_BIZ_TYPE B WHERE T1.BIZ_TYPE_ID = B.ID AND TO_DATE(TO_CHAR(T1.TICKET_TIME,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') GROUP BY T1.BIZ_TYPE_ID, B.NAME ) G1 ;";
+
+            String subTotalSQL = "SELECT G1.NB_T, "
+                    + "G1.NB_TT, "
+                    + "G1.NB_A, "
+                    + "G1.NB_TL1, "
+                    + "G1.NB_SA, "
+                    + "CASE "
+                    + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                    + "ELSE CAST((G1.NB_A::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                    + "END AS PERAPT, "
+                    + "CASE "
+                    + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                    + "ELSE CAST((G1.NB_TL1::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                    + "END AS PERTL1PT, "
+                    + "CASE "
+                    + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                    + "ELSE CAST((G1.NB_SA::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                    + "END AS PERSAPT, "
+                    + "G1.AVGSEC_A, "
+                    + "G1.AVGSEC_T "
+                    + "FROM "
+                    + "(SELECT "
+                    + "(SELECT COUNT(*) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE 1 = 1 "
+                    + " " + dateCon + " ) AS NB_T, "
+                    + " "
+                    + "(SELECT COUNT(*) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE T2.STATUS = 4 "
+                    + " " + dateCon + " ) AS NB_TT, "
+                    + " "
+                    + "(SELECT COUNT(*) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE T2.STATUS = 2 "
+                    + " " + dateCon + " ) AS NB_A, "
+                    + " "
+                    + "(SELECT COUNT(*) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric / 60::numeric <= 1 "
+                    + "AND T2.STATUS = 4 "
+                    + " " + dateCon + " ) AS NB_TL1, "
+                    + " "
+                    + "(SELECT COUNT(*) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE T2.STATUS = 0 "
+                    + " " + dateCon + " ) AS NB_SA, "
+                    + " "
+                    + "(SELECT AVG(DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE T2.call_time is not null "
+                    + " " + dateCon + " ) AS AVGSEC_A, "
+                    + " "
+                    + "(SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE T2.STATUS = 4 "
+                    + " " + dateCon + " ) AS AVGSEC_T "
+                    + "FROM T_TICKET T1 "
+                    + "WHERE TO_DATE(TO_CHAR(T1.TICKET_TIME,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') limit 1 ) G1 ;";
+            PgConnection con = new PgConnection();
+            ResultSet r = con.getStatement().executeQuery(gblSQL2);
+            table.clear();
+            while (r.next()) {
+                ArrayList<String> row = new ArrayList<>();
+                String id = r.getString("biz_type_id");
+                row.add(r.getString("name"));
+                row.add(r.getLong("nb_t") + "");
+                row.add(r.getLong("nb_tt") + "");
+                row.add(r.getLong("nb_a") + "");
+                row.add(r.getLong("nb_tl1") + "");
+                row.add(r.getLong("nb_sa") + "");
+                row.add(r.getFloat("perApT") + "%");
+                row.add(r.getFloat("PERTL1pt") + "%");
+                row.add(r.getFloat("perSApT") + "%");
+                row.add(getFormatedTime(r.getFloat("avgSec_A")));
+
+                int cibleA = cfg.getCibleA(id);
+                int cibleT = cfg.getCibleT(id);
+
+                String cibleSQL = "SELECT G1.BIZ_TYPE_ID, "
+                        + "G1.NAME, "
+                        + "G1.NB_TT, "
+                        + "G1.NB_CA, "
+                        + "CASE "
+                        + "WHEN G1.NB_TT::numeric = 0 "
+                        + "OR G1.NB_CA::numeric = 0 THEN 0 "
+                        + "ELSE CAST((G1.NB_CA::numeric / G1.NB_TT::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                        + "END AS PERCAPT, "
+                        + "G1.NB_CT, "
+                        + "CASE "
+                        + "WHEN G1.NB_TT::numeric = 0 "
+                        + "OR G1.NB_CT::numeric = 0 THEN 0 "
+                        + "ELSE CAST((G1.NB_CT::numeric / G1.NB_TT::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                        + "END AS PERCTPT "
+                        + "FROM "
+                        + "(SELECT B.NAME, "
+                        + "T1.BIZ_TYPE_ID, "
+                        + "(SELECT COUNT(*) "
+                        + "FROM T_TICKET T2 "
+                        + "WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID "
+                        + "AND T2.STATUS = 4  " + dateCon + " ) AS NB_TT, "
+                        + " "
+                        + "(SELECT COUNT(*) "
+                        + "FROM T_TICKET T2 "
+                        + "WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID "
+                        + "AND DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric >  " + cibleA + " "
+                        + "AND T2.STATUS = 4  " + dateCon + " ) AS NB_CA, "
+                        + " "
+                        + "(SELECT COUNT(*) "
+                        + "FROM T_TICKET T2 "
+                        + "WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID "
+                        + "AND DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric >  " + cibleT + " "
+                        + "AND T2.STATUS = 4  " + dateCon + ") AS NB_CT "
+                        + "FROM T_TICKET T1, "
+                        + "T_BIZ_TYPE B "
+                        + "WHERE T1.BIZ_TYPE_ID = B.ID "
+                        + " AND TO_DATE(TO_CHAR(T1.TICKET_TIME,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') "
+                        + "AND T1.BIZ_TYPE_ID = '" + id + "' "
+                        + "GROUP BY T1.BIZ_TYPE_ID, "
+                        + "B.NAME) G1 ; "
+                        + "";
+                ResultSet cib = con.getStatement().executeQuery(cibleSQL);
+                if (cib.next()) {
+                    row.add(cib.getLong("nb_ca") + "");
+                    row.add(cib.getFloat("percapt") + "%");
+                    row.add(getFormatedTime(r.getFloat("avgSec_T")));
+                    row.add(cib.getLong("nb_ct") + "");
+                    row.add(cib.getFloat("perctpt") + "%");
+                } else {
+                    row.add("--");
+                    row.add("--%");
+                    row.add(getFormatedTime(r.getFloat("avgSec_T")));
+                    row.add("--");
+                    row.add("-%");
+                }
+
+                table.add(row);
+            }
+            r = con.getStatement().executeQuery(subTotalSQL);
+            while (r.next()) {
+                ArrayList<String> row = new ArrayList<>();
+                row.add("Sous-Total");
+                row.add(r.getLong("nb_t") + "");
+                row.add(r.getLong("nb_tt") + "");
+                row.add(r.getLong("nb_a") + "");
+                row.add(r.getLong("nb_tl1") + "");
+                row.add(r.getLong("nb_sa") + "");
+                row.add(r.getFloat("perApT") + "%");
+                row.add(r.getFloat("PERTL1pt") + "%");
+                row.add(r.getFloat("perSApT") + "%");
+                row.add(getFormatedTime(r.getFloat("avgSec_A")));
                 row.add("--");
                 row.add("--%");
                 row.add(getFormatedTime(r.getFloat("avgSec_T")));
                 row.add("--");
                 row.add("-%");
+                table.add(row);
             }
 
-            table.add(row);
-        }
-        r = con.getStatement().executeQuery(subTotalSQL);
-        while (r.next()) {
-            ArrayList<String> row = new ArrayList<>();
-            row.add("Sous-Total");
-            row.add(r.getLong("nb_t") + "");
-            row.add(r.getLong("nb_tt") + "");
-            row.add(r.getLong("nb_a") + "");
-            row.add(r.getLong("nb_tl1") + "");
-            row.add(r.getLong("nb_sa") + "");
-            row.add(r.getFloat("perApT") + "%");
-            row.add(r.getFloat("PERTL1pt") + "%");
-            row.add(r.getFloat("perSApT") + "%");
-            row.add(getFormatedTime(r.getFloat("avgSec_A")));
-            row.add("--");
-            row.add("--%");
-            row.add(getFormatedTime(r.getFloat("avgSec_T")));
-            row.add("--");
-            row.add("-%");
-            table.add(row);
-        }
-
-        con.closeConnection();
-        return table;
-        }catch(Exception e){
+            con.closeConnection();
+            return table;
+        } catch (Exception e) {
             return null;
         }
     }
 
-    public List<ArrayList<String>> generateEmpTable(HttpServletRequest request, String d1, String d2, String db) throws SQLException, IOException, ClassNotFoundException, FileNotFoundException, ParserConfigurationException, SAXException, Exception {
+    public List<ArrayList> generateEmpTable2(HttpServletRequest request, String d1, String d2) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.DB = db;
-        table.clear();
-        CfgHandler cfg = new CfgHandler(request);
-        String dateCon = " and to_date(to_char(t2.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') ";
-        String empSQL = "select  "
-                + "g1.deal_user, "
-                + "g1.name, "
-                + "g1.nb_t, "
-                + "g1.nb_tt, "
-                + "g1.nb_ta, "
-                + "g1.nb_ttl1, "
-                + "g1.nb_tsa, "
-                + "g1.avgsec_a, "
-                + "g1.avgsec_t, "
-                + "CASE  "
-                + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric  "
-                + " else  CAST((G1.NB_tA::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2))  "
-                + "END AS PERAPT,  "
-                + "   CASE  "
-                + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric  "
-                + " else  CAST((G1.NB_tTL1::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2))  "
-                + "END AS PERTL1PT,  "
-                + "CASE  "
-                + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric  "
-                + " else  CAST((G1.NB_tSA::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2))  "
-                + "END AS PERSAPT "
-                + " "
-                + "from "
-                + " "
-                + "(select  "
-                + "t1.deal_user, "
-                + "u.name,  "
-                + "(select count(*) from t_ticket t2 where t2.deal_user = t1.deal_user " + dateCon + ") as nb_t, "
-                + "(select count(*) from t_ticket t2 where t2.deal_user = t1.deal_user and t2.status=4 " + dateCon + ") as nb_tt, "
-                + "(select count(*) from t_ticket t2 where t2.deal_user = t1.deal_user and t2.status=2 " + dateCon + ") as nb_ta, "
-                + "(select count(*) from t_ticket t2 where t2.deal_user = t1.deal_user and DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric / 60::numeric <= 1 and t2.status=4 " + dateCon + ") as nb_ttl1, "
-                + "(select count(*) from t_ticket t2 where t2.deal_user = t1.deal_user and t2.status=0 " + dateCon + ") as nb_tsa, "
-                + "(SELECT AVG(DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric) FROM T_TICKET T2 WHERE t2.deal_user = t1.deal_user and T2.call_time is not null  " + dateCon + ") AS AVGSEC_A, "
-                + "(SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) FROM T_TICKET T2 WHERE t2.deal_user = t1.deal_user and T2.STATUS = 4  " + dateCon + ") AS AVGSEC_T  "
-                + "from t_ticket t1, t_user u "
-                + "where t1.deal_user= u.id and to_date(to_char(t1.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD')"
-                + "group by u.name,t1.deal_user) g1;";
-        PgConnection con = new PgConnection();
-        ResultSet r = con.getStatement().executeQuery(empSQL);
-        table.clear();
-        while (r.next()) {
-            ArrayList<String> row = new ArrayList<>();
-            String id = r.getString("deal_user");
-            row.add(r.getString("name"));
-            row.add(r.getLong("nb_t") + "");
-            row.add(r.getLong("nb_tt") + "");
-            row.add(r.getLong("nb_ta") + "");
-            row.add(r.getLong("nb_ttl1") + "");
-            row.add(r.getLong("nb_tsa") + "");
-            row.add(r.getFloat("perApT") + "%");
-            row.add(r.getFloat("PERTL1pt") + "%");
-            row.add(r.getFloat("perSApT") + "%");
-            row.add(getFormatedTime(r.getFloat("avgSec_A")));
-            row.add("--");
-            row.add("--%");
-            row.add(getFormatedTime(r.getFloat("avgSec_T")));
-            row.add("--");
-            row.add("-%");
+        List<ArrayList> table = new ArrayList<>();
+        List<Agence> agences = new AgenceController().getAllAgence();
+        if (agences != null) {
+            for (int i = 0; i < agences.size(); i++) {
+                try {
+                    Agence a = agences.get(i);
+                    PgConnection con = new PgConnection();
 
-            table.add(row);
-        }
-        String subTotalSQL = "SELECT G1.NB_T, "
-                + "G1.NB_TT, "
-                + "G1.NB_A, "
-                + "G1.NB_TL1, "
-                + "G1.NB_SA, "
-                + "CASE "
-                + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
-                + " else  CAST((G1.NB_A::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
-                + "END AS PERAPT, "
-                + "CASE "
-                + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
-                + " else  CAST((G1.NB_TL1::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
-                + "END AS PERTL1PT, "
-                + "CASE "
-                + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
-                + " else  CAST((G1.NB_SA::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
-                + "END AS PERSAPT, "
-                + "G1.AVGSEC_A, "
-                + "G1.AVGSEC_T "
-                + "FROM "
-                + "(SELECT "
-                + "(SELECT COUNT(*) "
-                + "FROM T_TICKET T2 "
-                + "WHERE 1 = 1 "
-                + " " + dateCon + " and t2.deal_user is not null) AS NB_T, "
-                + " "
-                + "(SELECT COUNT(*) "
-                + "FROM T_TICKET T2 "
-                + "WHERE T2.STATUS = 4 "
-                + " " + dateCon + "  and t2.deal_user is not null) AS NB_TT, "
-                + " "
-                + "(SELECT COUNT(*) "
-                + "FROM T_TICKET T2 "
-                + "WHERE T2.STATUS = 2 "
-                + " " + dateCon + "  and t2.deal_user is not null) AS NB_A, "
-                + " "
-                + "(SELECT COUNT(*) "
-                + "FROM T_TICKET T2 "
-                + "WHERE DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric / 60::numeric <= 1 "
-                + "AND T2.STATUS = 4 "
-                + " " + dateCon + "  and t2.deal_user is not null) AS NB_TL1, "
-                + " "
-                + "(SELECT COUNT(*) "
-                + "FROM T_TICKET T2 "
-                + "WHERE T2.STATUS = 0 "
-                + " " + dateCon + "  and t2.deal_user is not null) AS NB_SA, "
-                + " "
-                + "(SELECT AVG(DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric) "
-                + "FROM T_TICKET T2 "
-                + "WHERE T2.call_time is not null "
-                + " " + dateCon + "  and t2.deal_user is not null) AS AVGSEC_A, "
-                + " "
-                + "(SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) "
-                + "FROM T_TICKET T2 "
-                + "WHERE T2.STATUS = 4 "
-                + " " + dateCon + "  and t2.deal_user is not null) AS AVGSEC_T "
-                + "FROM T_TICKET T1 "
-                + "WHERE t1.deal_user is not null and TO_DATE(TO_CHAR(T1.TICKET_TIME,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') limit 1 ) G1 ;";
-        r = con.getStatement().executeQuery(subTotalSQL);
-        while (r.next()) {
-            ArrayList<String> row = new ArrayList<>();
-            row.add("Sous-Total");
-            row.add(r.getLong("nb_t") + "");
-            row.add(r.getLong("nb_tt") + "");
-            row.add(r.getLong("nb_a") + "");
-            row.add(r.getLong("nb_tl1") + "");
-            row.add(r.getLong("nb_sa") + "");
-            row.add(r.getFloat("perApT") + "%");
-            row.add(r.getFloat("PERTL1pt") + "%");
-            row.add(r.getFloat("perSApT") + "%");
-            row.add(getFormatedTime(r.getFloat("avgSec_A")));
-            row.add("--");
-            row.add("--%");
-            row.add(getFormatedTime(r.getFloat("avgSec_T")));
-            row.add("--");
-            row.add("-%");
-            table.add(row);
-        }
+                    String dateCon = " and to_date(to_char(t2.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') and t2.db_id='" + a.getId() + "'";
 
-        con.closeConnection();
+                    String SQL = "select  "
+                            + "g1.deal_user, "
+                            + "g1.name, "
+                            + "g1.nb_t, "
+                            + "g1.nb_tt, "
+                            + "g1.nb_ta, "
+                            + "g1.nb_ttl1, "
+                            + "g1.nb_tsa, "
+                            + "g1.avgsec_a, "
+                            + "g1.avgsec_t, "
+                            + "CASE  "
+                            + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric  "
+                            + " else  CAST((G1.NB_tA::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2))  "
+                            + "END AS PERAPT,  "
+                            + "   CASE  "
+                            + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric  "
+                            + " else  CAST((G1.NB_tTL1::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2))  "
+                            + "END AS PERTL1PT,  "
+                            + "CASE  "
+                            + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric  "
+                            + " else  CAST((G1.NB_tSA::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2))  "
+                            + "END AS PERSAPT "
+                            + " "
+                            + "from "
+                            + " "
+                            + "(select  "
+                            + "t1.deal_user, "
+                            + "u.name,  "
+                            + "(select count(*) from t_ticket t2 where t2.deal_user = t1.deal_user " + dateCon + ") as nb_t, "
+                            + "(select count(*) from t_ticket t2 where t2.deal_user = t1.deal_user and t2.status=4 " + dateCon + ") as nb_tt, "
+                            + "(select count(*) from t_ticket t2 where t2.deal_user = t1.deal_user and t2.status=2 " + dateCon + ") as nb_ta, "
+                            + "(select count(*) from t_ticket t2 where t2.deal_user = t1.deal_user and DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric / 60::numeric <= 1 and t2.status=4 " + dateCon + ") as nb_ttl1, "
+                            + "(select count(*) from t_ticket t2 where t2.deal_user = t1.deal_user and t2.status=0 " + dateCon + ") as nb_tsa, "
+                            + "(SELECT AVG(DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric) FROM T_TICKET T2 WHERE t2.deal_user = t1.deal_user and T2.call_time is not null  " + dateCon + ") AS AVGSEC_A, "
+                            + "(SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) FROM T_TICKET T2 WHERE t2.deal_user = t1.deal_user and T2.STATUS = 4  " + dateCon + ") AS AVGSEC_T  "
+                            + "from t_ticket t1, t_user u "
+                            + "where t1.deal_user= u.id and to_date(to_char(t1.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD')  and t1.db_id='" + a.getId() + "' "
+                            + "group by u.name,t1.deal_user) g1;";
+                    String subSQL = "SELECT G1.NB_T, "
+                            + "G1.NB_TT, "
+                            + "G1.NB_A, "
+                            + "G1.NB_TL1, "
+                            + "G1.NB_SA, "
+                            + "CASE "
+                            + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                            + " else  CAST((G1.NB_A::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                            + "END AS PERAPT, "
+                            + "CASE "
+                            + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                            + " else  CAST((G1.NB_TL1::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                            + "END AS PERTL1PT, "
+                            + "CASE "
+                            + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                            + " else  CAST((G1.NB_SA::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                            + "END AS PERSAPT, "
+                            + "G1.AVGSEC_A, "
+                            + "G1.AVGSEC_T "
+                            + "FROM "
+                            + "(SELECT "
+                            + "(SELECT COUNT(*) "
+                            + "FROM T_TICKET T2 "
+                            + "WHERE 1 = 1 "
+                            + " " + dateCon + " and t2.deal_user is not null) AS NB_T, "
+                            + " "
+                            + "(SELECT COUNT(*) "
+                            + "FROM T_TICKET T2 "
+                            + "WHERE T2.STATUS = 4 "
+                            + " " + dateCon + "  and t2.deal_user is not null) AS NB_TT, "
+                            + " "
+                            + "(SELECT COUNT(*) "
+                            + "FROM T_TICKET T2 "
+                            + "WHERE T2.STATUS = 2 "
+                            + " " + dateCon + "  and t2.deal_user is not null) AS NB_A, "
+                            + " "
+                            + "(SELECT COUNT(*) "
+                            + "FROM T_TICKET T2 "
+                            + "WHERE DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric / 60::numeric <= 1 "
+                            + "AND T2.STATUS = 4 "
+                            + " " + dateCon + "  and t2.deal_user is not null) AS NB_TL1, "
+                            + " "
+                            + "(SELECT COUNT(*) "
+                            + "FROM T_TICKET T2 "
+                            + "WHERE T2.STATUS = 0 "
+                            + " " + dateCon + "  and t2.deal_user is not null) AS NB_SA, "
+                            + " "
+                            + "(SELECT AVG(DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric) "
+                            + "FROM T_TICKET T2 "
+                            + "WHERE T2.call_time is not null "
+                            + " " + dateCon + "  and t2.deal_user is not null) AS AVGSEC_A, "
+                            + " "
+                            + "(SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) "
+                            + "FROM T_TICKET T2 "
+                            + "WHERE T2.STATUS = 4 "
+                            + " " + dateCon + "  and t2.deal_user is not null) AS AVGSEC_T "
+                            + "FROM T_TICKET T1 "
+                            + "WHERE t1.deal_user is not null and TO_DATE(TO_CHAR(T1.TICKET_TIME,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD')  and t1.db_id='" + a.getId() + "'  limit 1 ) G1 ;";
+
+                    ResultSet r = con.getStatement().executeQuery(SQL);
+                    while (r.next()) {
+                        ArrayList row = new ArrayList<>();
+                        row.add(a.getId().toString());
+                        row.add(r.getString("deal_user"));
+                        row.add(a.getName());
+                        row.add(r.getString("name"));
+                        row.add(r.getLong("nb_tt") + "");
+                        row.add(r.getLong("nb_ta"));
+                        row.add(r.getLong("nb_ttl1") + "");
+                        row.add(r.getLong("nb_tsa") + "");
+                        row.add(r.getFloat("perApT") + "%");
+                        row.add(r.getFloat("PERTL1pt") + "%");
+                        row.add(r.getFloat("perSApT") + "%");
+                        row.add(getFormatedTime(r.getFloat("avgSec_A")));
+                        row.add("--");
+                        row.add("--%");
+                        row.add(getFormatedTime(r.getFloat("avgSec_T")));
+                        row.add("--");
+                        row.add("-%");
+                        table.add(row);
+                    }
+                    r = con.getStatement().executeQuery(subSQL);
+                    while (r.next()) {
+                        ArrayList row = new ArrayList<>();
+                        row.add(a.getId().toString());
+                        row.add("");
+                        row.add(a.getName());
+                        row.add("Sous-Totale");
+                        row.add(r.getLong("nb_tt"));
+                        row.add(r.getLong("nb_a"));
+                        row.add(r.getLong("nb_tl1"));
+                        row.add(r.getLong("nb_sa"));
+                        row.add(r.getFloat("perApT") + "%");
+                        row.add(r.getFloat("PERTL1pt") + "%");
+                        row.add(r.getFloat("perSApT") + "%");
+                        row.add(getFormatedTime(r.getFloat("avgSec_A")));
+                        row.add("--");
+                        row.add("--%");
+                        row.add(getFormatedTime(r.getFloat("avgSec_T")));
+                        row.add("--");
+                        row.add("-%");
+                        table.add(row);
+                    }
+
+                    con.closeConnection();
+
+                } catch (Exception ex) {
+                    Logger.getLogger(TableGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        }
+        try {
+            PgConnection con = new PgConnection();
+            String dateCon = " and to_date(to_char(t2.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') ";
+            String totalSQL = "SELECT G1.NB_T, "
+                    + "G1.NB_TT, "
+                    + "G1.NB_A, "
+                    + "G1.NB_TL1, "
+                    + "G1.NB_SA, "
+                    + "CASE "
+                    + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                    + " else  CAST((G1.NB_A::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                    + "END AS PERAPT, "
+                    + "CASE "
+                    + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                    + " else  CAST((G1.NB_TL1::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                    + "END AS PERTL1PT, "
+                    + "CASE "
+                    + "WHEN G1.NB_T::numeric = 0::numeric THEN 0::numeric "
+                    + " else  CAST((G1.NB_SA::numeric / G1.NB_T::numeric) * 100::numeric AS DECIMAL(10,2)) "
+                    + "END AS PERSAPT, "
+                    + "G1.AVGSEC_A, "
+                    + "G1.AVGSEC_T "
+                    + "FROM "
+                    + "(SELECT "
+                    + "(SELECT COUNT(*) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE 1 = 1 "
+                    + " " + dateCon + " and t2.deal_user is not null) AS NB_T, "
+                    + " "
+                    + "(SELECT COUNT(*) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE T2.STATUS = 4 "
+                    + " " + dateCon + "  and t2.deal_user is not null) AS NB_TT, "
+                    + " "
+                    + "(SELECT COUNT(*) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE T2.STATUS = 2 "
+                    + " " + dateCon + "  and t2.deal_user is not null) AS NB_A, "
+                    + " "
+                    + "(SELECT COUNT(*) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric / 60::numeric <= 1 "
+                    + "AND T2.STATUS = 4 "
+                    + " " + dateCon + "  and t2.deal_user is not null) AS NB_TL1, "
+                    + " "
+                    + "(SELECT COUNT(*) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE T2.STATUS = 0 "
+                    + " " + dateCon + "  and t2.deal_user is not null) AS NB_SA, "
+                    + " "
+                    + "(SELECT AVG(DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE T2.call_time is not null "
+                    + " " + dateCon + "  and t2.deal_user is not null) AS AVGSEC_A, "
+                    + " "
+                    + "(SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) "
+                    + "FROM T_TICKET T2 "
+                    + "WHERE T2.STATUS = 4 "
+                    + " " + dateCon + "  and t2.deal_user is not null) AS AVGSEC_T "
+                    + "FROM T_TICKET T1 "
+                    + "WHERE t1.deal_user is not null and TO_DATE(TO_CHAR(T1.TICKET_TIME,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') limit 1 ) G1 ;";
+
+            ResultSet r = con.getStatement().executeQuery(totalSQL);
+            while (r.next()) {
+                ArrayList row = new ArrayList<>();
+                row.add("Totale");
+                row.add("");
+                row.add("Totale");
+                row.add("Totale");
+                row.add(r.getLong("nb_tt"));
+                row.add(r.getLong("nb_a"));
+                row.add(r.getLong("nb_tl1"));
+                row.add(r.getLong("nb_sa"));
+                row.add(r.getFloat("perApT") + "%");
+                row.add(r.getFloat("PERTL1pt") + "%");
+                row.add(r.getFloat("perSApT") + "%");
+                row.add(getFormatedTime(r.getFloat("avgSec_A")));
+                row.add("--");
+                row.add("--%");
+                row.add(getFormatedTime(r.getFloat("avgSec_T")));
+                row.add("--");
+                row.add("-%");
+                table.add(row);
+            }
+
+            con.closeConnection();
+
+        } catch (Exception ex) {
+            Logger.getLogger(TableGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return table;
     }
 
@@ -1624,17 +1986,18 @@ public class TableGenerator {
     public Map getTable(HttpServletRequest request, String d1, String d2, String db, String type) throws IOException, ClassNotFoundException, FileNotFoundException, ParserConfigurationException, SAXException, Exception {
         type = (type == null) ? "gbl" : type.toLowerCase().trim();
         Map data = new HashMap();
-        List<ArrayList<String>> T;
+        List<ArrayList<String>> T = null;
+        List<ArrayList> T2 = null;
         switch (type) {
             case "gbl":
-                T = generateGblTable(request, request.getParameter("date1"), request.getParameter("date2"), request.getSession().getAttribute("db") + "");
+                T2 = generateGblTable2(request, request.getParameter("date1"), request.getParameter("date2"));
                 setTitle("Rapport Globale");
                 setCols(getGblCols());
                 setType(type);
                 setDefaultHTML();
                 break;
             case "emp":
-                T = generateEmpTable(request, request.getParameter("date1"), request.getParameter("date2"), request.getSession().getAttribute("db") + "");
+                T2 = generateEmpTable2(request, request.getParameter("date1"), request.getParameter("date2"));
                 setTitle("Rapport Employé");
                 setCols(getEmpCols());
                 setType(type);
@@ -1697,7 +2060,7 @@ public class TableGenerator {
                 setDefaultHTML();
                 break;
             case "remp":
-                T = generateEmpTable(request, request.getParameter("date1"), request.getParameter("date2"), request.getSession().getAttribute("db") + "");
+                T2 = generateEmpTable2(request, request.getParameter("date1"), request.getParameter("date2"));
                 setTitle("Rendement Employés");
                 setCols(getEmpCols());
                 setType(type);
@@ -1745,14 +2108,15 @@ public class TableGenerator {
                 setType(type);
                 setDefaultHTML();
         }
-        data.put("table", T);
+        data.put("table", T2);
+        data.put("table2", T);
         data.put("title", getTitle());
         data.put("cols", getCols());
         data.put("top", getTopHTML());
         data.put("bottom", getBottomHTML());
         return data;
     }
-    
+
     public String getDB() {
         return DB;
     }
@@ -1938,8 +2302,25 @@ public class TableGenerator {
                 + "<label class='m-1' for='date2'>Au: </label>"
                 + "<input type='date' class='form-control mb-2 mr-sm-2' id='date2' name='date2' value='" + getDate2() + "' >"
                 + "<input type='hidden' value='" + getType() + "' name='type'>"
-                + "<button type='submit' class='btn btn-success mb-2'>Actualiser</button>"
+                + "<div class='btn-group dropright mb-2 mr-2'>"
+                + "  <button type='button' class='btn btn-secondary dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"
+                + "    Intervalle"
+                + "  </button>"
+                + "  <div class='dropdown-menu '>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='today'>Aujourd'hui</a>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='yesterday'>Hier</a>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='cWeek'>Semaine en cours</a>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='lWeek'>Dernier semaine</a>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='cMonth'>Mois en cours</a>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='lMonth'>Mois dernier</a>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='cYear'>Année en cours</a>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='lYear'>Année dernier</a>"
+                + "  </div>"
+                + "</div>"
+                + "<button type='submit' class='btn btn-primary mb-2'><img src='./img/icon/reload.png'/> Actualiser</button>"
                 + "</form>"
+                + "<script>"
+                + "</script>"
                 + "</div>";
         this.bottomHTML = "<div class='div-wrapper d-flex justify-content-center align-items-center p-2'>"
                 + "<form class='' id='printForm' action='./Print' method='GET'>"
@@ -2086,9 +2467,9 @@ public class TableGenerator {
                 + "</div>";
         this.bottomHTML = "<div class='div-wrapper d-flex justify-content-center align-items-center p-2'>"
                 + "<h6 id='timer' class='text-danger p-0 m-0'>"
-                + "<div class='spinner-border text-danger' role='status'>" 
-                +"<span class='sr-only'>Loading...</span>" 
-                +"</div>"
+                + "<div class='spinner-border text-danger' role='status'>"
+                + "<span class='sr-only'>Loading...</span>"
+                + "</div>"
                 + " Auto-Refresh 5sec"
                 + "</h6> "
                 + "<a class='btn btn-light p-1 ml-2' href='#' id='PauseTimer'>STOP</a>"

@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>OffReport (Global)</title>
+        <title>QStates (Global)</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="./img/favicon-32x32.png">
         <script src="js/jquery.js"></script>
