@@ -1,7 +1,7 @@
-$("#userTbl,#extraTbl,#goalTbl,#dbTbl").hide();
+//$("#userTbl,#extraTbl,#goalTbl,#dbTbl").hide();
 $(document).ready(function () {
     //table show/hide
-    $("#userTbl,#extraTbl,#goalTbl,#dbTbl").hide();
+   // $("#userTbl,#extraTbl,#goalTbl,#dbTbl").hide();
     $("#cibleBtn").on('click', function () {
         $("#cibleTbl").slideDown("slow");
         $("#userTbl,#extraTbl,#goalTbl,#dbTbl").slideUp("slow");

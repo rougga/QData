@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>QStates (Global)</title>
+        <title>QData</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="./img/favicon-32x32.png">
         <script src="js/jquery.js"></script>
@@ -50,7 +50,7 @@
                     <span class="state">Connexion</span>
                 </button>
             </form>
-            <footer><a target="_blank" href="#">CopyRight &COPY; 2020 NST-Maroc</a></footer>
+            <footer><a target="_blank" href="#">CopyRight &COPY; 2020 Maroc-NST</a></footer>
 
         </div>
     </body>

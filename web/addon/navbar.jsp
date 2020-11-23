@@ -1,11 +1,11 @@
 <%@page import="java.util.Objects"%>
 <%
     if (Objects.equals(session.getAttribute("user"), null)) {
-        response.sendRedirect("/OffReport_Global/index.jsp");
+        response.sendRedirect("/QData/index.jsp");
     }
 %>
 <nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #b83dba;">
-    <a class="navbar-brand" href="#">QStates</a>
+    <a class="navbar-brand" href="#">QData</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
@@ -14,7 +14,7 @@
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active" id="home">
-                <a class="nav-link font-weight-bold" href="./home.jsp">
+                <a class="nav-link font-weight-bold" href="/QData/home.jsp">
                     <span class="fas fa-home font-weight-bold"></span> Accueil
                 </a>
             </li>
@@ -23,16 +23,16 @@
                     <span class=""></span> Rapport
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownR" >
-                    <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=gbl">RAPPORT GLOBALE</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=emp">RAPPORT EMPLOYE</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=empser">RAPPORT EMPLOYE (service)</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=gch">RAPPORT GUICHET</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=gchserv">RAPPORT GUICHET (service)</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=gbl">RAPPORT GLOBALE</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=emp">RAPPORT EMPLOYE</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=empser">RAPPORT EMPLOYE (service)</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=gch">RAPPORT GUICHET</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=gchserv">RAPPORT GUICHET (service)</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=gla">Grille attente</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=glt">Grille traitement</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=gla">Grille attente</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=glt">Grille traitement</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=apl">Détail des appels</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=apl">Détail des appels</a>
                 </div>
             </li> 
             <li class="nav-item dropdown" id="tranche">
@@ -40,10 +40,10 @@
                     <span class=""></span> Tranche horaire
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownRe" >
-                    <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=ndt">Nombre de tickets edités</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=ndtt">Nombre de tickets traités</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=ndta">Nombre de tickets absents</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="./report.jsp?type=ndtsa">Nombre de tickets sans affectation</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=ndt">Nombre de tickets edités</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=ndtt">Nombre de tickets traités</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=ndta">Nombre de tickets absents</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=ndtsa">Nombre de tickets sans affectation</a>
                 </div>
             </li>
             <li class="nav-item dropdown" id="topics">
@@ -51,9 +51,9 @@
                     <span class="far fa-file-alt"></span> Rendement
                 </a>
                 <div class="dropdown-menu" aria-labelledby="rend" >
-                    <a class="dropdown-item  font-weight-bold navHover" href="./report.jsp?type=cnx">Connexions</a>
-                    <a class="dropdown-item  font-weight-bold navHover" href="./report.jsp?type=gbl">Pauses</a>
-                    <a class="dropdown-item  font-weight-bold navHover" href="./report.jsp?type=remp">Employés</a>
+                    <a class="dropdown-item  font-weight-bold navHover" href="/QData/report.jsp?type=cnx">Connexions</a>
+                    <a class="dropdown-item  font-weight-bold navHover" href="/QData/report.jsp?type=gbl">Pauses</a>
+                    <a class="dropdown-item  font-weight-bold navHover" href="/QData/report.jsp?type=remp">Employés</a>
                 </div>
             </li> 
             <li class="nav-item dropdown" id="topics">
@@ -61,10 +61,10 @@
                     <span class="far"></span> Supervision
                 </a>
                 <div class="dropdown-menu" aria-labelledby="superV" >
-                    <a class="dropdown-item  font-weight-bold navHover" href="./home.jsp">Flash journée</a>
-                    <a class="dropdown-item  font-weight-bold navHover" href="./report.jsp?type=sgch">Employés</a>
-                    <a class="dropdown-item  font-weight-bold navHover" href="./report.jsp?type=sgch">Guichets</a>
-                    <a class="dropdown-item  font-weight-bold navHover" href="./report.jsp?type=ser">Services</a>
+                    <a class="dropdown-item  font-weight-bold navHover" href="/QData/home.jsp">Flash journée</a>
+                    <a class="dropdown-item  font-weight-bold navHover" href="/QData/report.jsp?type=sgch">Employés</a>
+                    <a class="dropdown-item  font-weight-bold navHover" href="/QData/report.jsp?type=sgch">Guichets</a>
+                    <a class="dropdown-item  font-weight-bold navHover" href="/QData/report.jsp?type=ser">Services</a>
                 </div>
             </li>  
             <li class="nav-item" id="topics">
@@ -81,11 +81,11 @@
                     <b><%= session.getAttribute("user")%></b>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item font-weight-bold navHover" href="/OffReport_Global/settings.jsp" >Paramètres</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="/OffReport_Global/setting/users.jsp" >Utilisateurs</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="/OffReport_Global/setting/agences.jsp" >Agences</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/settings.jsp" >Paramètres</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/users.jsp" >Utilisateurs</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/agences.jsp" >Agences</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item font-weight-bold navHover" href="./Logoff">
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/Logoff">
                         Déconnexion</a>
                 </div>
             </li>

@@ -1,4 +1,6 @@
 
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="main.controller.TicketController"%>
 <%@page import="main.Updater"%>
 <%@page import="java.io.IOException"%>
 <%@page import="java.net.Socket"%>
@@ -32,8 +34,8 @@
             </div>
             <div class="body">
                 <%
-                   new Updater().updateDatabase();
-                %>
+                    new TicketController().updateAllTickets();
+                    %>
             </div>  
         </div>
     </body>

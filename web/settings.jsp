@@ -36,7 +36,7 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>QStates</title>
+        <title>QData</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="./img/favicon-32x32.png">
         <script src="./js/jquery.js"></script>
@@ -74,10 +74,8 @@
                 <div class="row">
                     <div class="btn-group btn-group-lg p-4 mx-auto" role="group" aria-label="Basic example">
                         <a class="btn btn-primary" id="cibleBtn">Cible</a>
-                        <a class="btn btn-secondary" id="userBtn">Utilisateurs</a>
                         <a class="btn btn-secondary" id="extraBtn">Extra</a>
                         <a class="btn btn-secondary" id="goalBtn">Objectif</a>
-                        <a class="btn btn-secondary" id="dbBtn">Agences</a>
                     </div>
                 </div>
                 <div class="" id="cibleTbl">
@@ -129,43 +127,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="" id="userTbl">
-                    <h1>
-                        Utilisateurs : 
-                        <span class="  float-right">
-                            <a class="btn btn-success" id="userAdd" data-toggle="modal" data-target="#userModal"><img src="./img/icon/plus.png"> Ajouter</a>
-                            <a class="btn btn-info disabled" id="userEdit"><img src="./img/icon/pencil.png"> Editer</a>
-                            <a class="btn btn-danger" id="userDlt" href="#"><img src="./img/icon/trash.png"> Supprimer</a>
-                        </span>
-                    </h1>
-                    <table class="table table-bordered table-light   table-responsive-sm " id="userTable">
-                        <thead class="appColor ">
-                            <tr>
-                                <th scope="col">Nom D'utilisateur</th>
-                                <th scope="col">Nom Complet</th>
-                                <th scope="col">Grade</th>
-                            </tr>
-                        </thead>
-
-                        <tbody class="">
-
-
-                            <%
-                                List<Utilisateur> utilisateur = new UtilisateurController(request).getAllUtilisateur();
-                                if(utilisateur!=null){
-                                    for(int i=0;i<utilisateur.size();i++){
-                            %><%="<tr class=' clickable-row3 '>"
-                                    + "<th scope='row' >" + utilisateur.get(i).getUsername() + "</th>"
-                                    + "<td ><b>" + utilisateur.get(i).getLastName() + " " + utilisateur.get(i).getFirstName() + "</b></td>"
-                                    + "<td data-grade='" + utilisateur.get(i).getGrade() + "'><b>" + getGrade(utilisateur.get(i).getGrade()) + "</b></td>"
-                                    + "</tr>"%><%
-                                            }
-                                    }
-                            %>
-
-                        </tbody>
-                    </table>
-                </div>
+                
                 <div class="w-100" id="extraTbl">
                     <h1>
                         Extra : 
@@ -240,71 +202,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="w-100" id="dbTbl">
-                    <h1>
-                        Les bases de données  : 
-                        <span class=" float-right">
-                            <a class="btn btn-success" id="dbAdd" data-toggle="modal" data-target="#dbModal"><img src="./img/icon/plus.png"> Ajouter</a>
-
-                        </span>
-                    </h1>
-                    <table class="table table-bordered table-light   table-responsive-sm border-dark" id="dbTable">
-                        <thead class="appColor border-dark">
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Host:port</th>
-                                <th scope="col">Base de donnée</th>
-                                <th scope="col">Utilisateur</th>
-                                <th scope="col">Mot de passe</th>
-                                <th scope="col">Statut</th>
-                                <th scope="col">Dernière mise à jour</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-
-                        <tbody class="font-weight-bold">
-                            <%
-                               AgenceController ac =new AgenceController();
-                              List<Agence> table=ac.getAllAgence();
-                              if(table!=null){
-                                  for(int i =0;i<table.size();i++){
-                            %>
-                            <tr class="clickable-row5 border-dark">
-                                <td class="border-dark align-middle"><%=table.get(i).getName() %></td>
-                                <td class="border-dark align-middle"><%=table.get(i).getHost()+":"+table.get(i).getPort() %></td>
-                                <td class="border-dark align-middle"><%=table.get(i).getDatabase() %></td>
-                                <td class="border-dark align-middle"><%=table.get(i).getUsername() %></td>
-                                <td class="border-dark align-middle"><%=table.get(i).getPassword() %></td>
-                                <td class="border-dark align-middle">
-                                    <%
-                                    if(ac.isOnline(table.get(i).getId()) ){
-                                        %>
-                                         <span class='text-center text-white bg-success p-1'>Online</span> 
-                                         <%
-                                    }else{
-                                         %>
-                                         <span class='text-center text-white bg-danger p-1'>Offline</span> 
-                                         <%
-                                    }
-
-                                    %>
-                                </td>
-                                <td class="border-dark align-middle"><%= ac.getLastUpdate(table.get(i).getId()) %></td>
-                                <td class="border-dark align-middle">
-                                    <a class="btn btn-danger m-0" id="dbDlt" href="./DeleteDatabase?id=<%= table.get(i).getId() %>"><img src="./img/icon/trash.png"></a>
-                                </td>
-                            </tr>
-                            <%
-                                 }
-                               }else{
-                            %><%="<h4 class='text-center text-danger'>No database</h4>"%><%
-                                }
-                                
-                            %>
-
-                        </tbody>
-                    </table>
-                </div>
+                
             </div>
             <div class="footer">
                 <div class="modal fade text-dark" id="cibleModal" tabindex="-1" aria-labelledby="cibleModalaria" aria-hidden="true">
@@ -366,62 +264,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal fade text-dark" id="userModal" tabindex="-1" aria-labelledby="userModalaria" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <form id="userForm" action="./Add" method="POST">
-                                <div class="modal-header">
-                                    <h5 class="modal-title "  id="userModalLabel">Modal title</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-
-                                    <div class="form-group">
-                                        <label for="username">Nom D'utilisateur:*</label>
-                                        <input type="text" class="form-control" id="username" name="username" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="password">Mot de passe:*</label>
-                                        <input type="password" class="form-control" id="password" name="password" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="password">Mot de passe:*</label>
-                                        <input type="password" class="form-control" id="password2" name="password2" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="grade">Grade:*</label>
-                                        <select class="form-control" id="grade" name="grade" required>
-                                            <option value="0" selected  disabled> Selectioner Grade:</option>
-                                            <option value="adm">ADMINISTATEUR</option>
-                                            <option value="sv">SUPERVISEUR</option>
-                                            <option value="user">UTILISATEUR</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="firstName">Nom:</label>
-                                        <input type="text" class="form-control" id="firstName" name="firstName">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="lastName">Prenom:</label>
-                                        <input type="text" class="form-control" id="lastName" name="lastName">
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="hidden" class="form-control" id="type" name="type" value="user">
-                                    </div>
-
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
-                                    <button type="submit" class="btn btn-success" id="userSubmit">Ajouter</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                
                 <div class="modal fade text-dark" id="extraModal" tabindex="-1" aria-labelledby="extraModalaria" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -503,56 +346,7 @@
                     </div>
                 </div>
 
-                <div class="modal fade text-dark" id="dbModal" tabindex="-1" aria-labelledby="dbModalaria" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <form id="dbForm" action="./AddDatabase" method="POST">
-                                <div class="modal-header">
-                                    <h5 class="modal-title "  id="exampleModalLabel">Ajouter base de donnée:</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-
-                                    <div class="form-group">
-                                        <label for="db">Agence:</label>
-                                        <input type="text" class="form-control" id="" name="name" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="db">Hôte:</label>
-                                        <input type="text" class="form-control" id="" name="host" placeholder="0.0.0.0" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="db">Port:</label>
-                                        <input type="number" class="form-control" id="" name="port" required min="1">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="db">Database:</label>
-                                        <input type="text" class="form-control" id="" name="database"  required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="db">Utilisateur:</label>
-                                        <input type="text" class="form-control" id="" name="username"  required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="db">Mot de passe:</label>
-                                        <input type="text" class="form-control" id="" name="password"  required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input type="hidden" class="form-control" id="type" name="type" value="db">
-                                    </div>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
-                                    <button type="submit" class="btn appBg text-white hover">Ajouter</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
         <script>

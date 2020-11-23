@@ -51,9 +51,9 @@ public class AgenceController {
             p.setString(7, a.getPassword());
             p.setInt(8, a.getStatus());
             p.execute();
-            p = con.getStatement().getConnection().prepareStatement("insert into lastupdate values(?,?);");
+            p = con.getStatement().getConnection().prepareStatement("insert into lastupdate values(?,to_timestamp(?,'YYYY-MM-DD HH24:MI:SS'));");
             p.setString(1, a.getId().toString());
-            p.setDate(2, new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("1999-12-20 00:00:00").getTime()));
+            p.setString(2, getFormatedDateAsString(getFormatedDateAsDate("1999-12-20 00:00:00")));
             p.execute();
             con.closeConnection();
             return 1;
@@ -152,6 +152,20 @@ public class AgenceController {
         }
     }
 
+    public void setLastUpdate(UUID id) {
+        try {
+            PgConnection con = new PgConnection();
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("update lastupdate set  last_update=to_timestamp(?,'YYYY-MM-DD HH24:MI:SS') where id_db=?;");
+            p.setString(1, getFormatedDateAsString(new Date()));
+            p.setString(2, id.toString());
+            p.execute();
+            con.closeConnection();
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public void updateAllAgenceName() {
         List<Agence> agences = new AgenceController().getAllAgence();
         if (agences != null) {
@@ -164,6 +178,7 @@ public class AgenceController {
                     ResultSet r = con.getStatement().executeQuery(SQL);
                     if (r.next()) {
                         updateName(agences.get(i).getId(), r.getString("value"));
+                        setLastUpdate(agences.get(i).getId());
                     }
                     con.closeConnection();
                 } catch (ClassNotFoundException | SQLException ex) {
@@ -173,5 +188,28 @@ public class AgenceController {
             System.out.println("-- Agence names updated.");
         }
 
+    }
+
+    public String getFormatedDateAsString(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (date != null) {
+            return format.format(date);
+        } else {
+            return null;
+        }
+    }
+
+    public Date getFormatedDateAsDate(String date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (date != null) {
+            try {
+                return format.parse(date);
+            } catch (ParseException ex) {
+                Logger.getLogger(TicketController.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 }
