@@ -32,7 +32,7 @@
                     <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=gla">Grille attente</a>
                     <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=glt">Grille traitement</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=apl">Détail des appels</a>
+                    <a class="dropdown-item font-weight-bold navHover disabled" href="/QData/report.jsp?type=apl">Détail des appels</a>
                 </div>
             </li> 
             <li class="nav-item dropdown" id="tranche">
@@ -81,9 +81,12 @@
                     <b><%= session.getAttribute("user")%></b>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/settings.jsp" >Paramètres</a>
+                    <a class="dropdown-item font-weight-bold navHover disabled" href="/QData/settings.jsp" >Paramètres</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/cibles.jsp" >Cibles</a>
                     <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/users.jsp" >Utilisateurs</a>
                     <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/agences.jsp" >Agences</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/titles.jsp" >Titres</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/maj.jsp" >MaJ GBL</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item font-weight-bold navHover" href="/QData/Logoff">
                         Déconnexion</a>

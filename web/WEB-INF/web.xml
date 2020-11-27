@@ -17,6 +17,10 @@
         <servlet-class>main.servlets.Delete</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>GetTables</servlet-name>
+        <servlet-class>main.api.GetTables</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>Add</servlet-name>
         <servlet-class>main.servlets.Add</servlet-class>
     </servlet>
@@ -40,9 +44,21 @@
         <servlet-name>database</servlet-name>
         <servlet-class>main.api.database</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditTitles</servlet-name>
+        <servlet-class>main.servlets.EditTitles</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteCible</servlet-name>
+        <servlet-class>main.servlets.DeleteCible</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Settings</servlet-name>
         <url-pattern>/Settings</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetTables</servlet-name>
+        <url-pattern>/api/gettables</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
@@ -79,6 +95,14 @@
     <servlet-mapping>
         <servlet-name>database</servlet-name>
         <url-pattern>/database</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditTitles</servlet-name>
+        <url-pattern>/EditTitles</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteCible</servlet-name>
+        <url-pattern>/DeleteCible</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

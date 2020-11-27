@@ -1,4 +1,6 @@
 
+<%@page import="main.controller.LoginLogController"%>
+<%@page import="main.handler.TitleHandler"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="main.controller.TicketController"%>
 <%@page import="main.Updater"%>
@@ -34,7 +36,7 @@
             </div>
             <div class="body">
                 <%
-                    new TicketController().updateAllTickets();
+                    new LoginLogController().updateAllLoginLogs();
                     %>
             </div>  
         </div>

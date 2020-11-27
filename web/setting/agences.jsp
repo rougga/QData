@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="main.modal.Agence"%>
 <%@page import="java.util.List"%>
 <%@page import="main.controller.AgenceController"%>
@@ -6,7 +7,7 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>QStates</title>
+        <title>QData</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="../img/favicon-32x32.png">
         <script src="../js/jquery.js"></script>
@@ -86,7 +87,7 @@
 
                                     %>
                                 </td>
-                                <td class="border-dark align-middle"><%= ac.getLastUpdate(table.get(i).getId()) %></td>
+                                <td class="border-dark align-middle"><%= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(ac.getLastUpdate(table.get(i).getId()))%></td>
                                 <td class="border-dark align-middle">
                                     <a class="btn btn-danger m-0" id="dbDlt" href="/QData/DeleteDatabase?id=<%= table.get(i).getId() %>"><img src="/QData/img/icon/trash.png"></a>
                                 </td>
@@ -126,19 +127,19 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="port">Port:</label>
-                                        <input type="number" class="form-control" id="port" name="port" required min="1">
+                                        <input type="number" class="form-control" id="port" name="port" value="8888" required min="1">
                                     </div>
                                     <div class="form-group">
                                         <label for="db">Database:</label>
-                                        <input type="text" class="form-control" id="db" name="database"  required>
+                                        <input type="text" class="form-control" id="db" name="database" value="postgres" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="user">Utilisateur:</label>
-                                        <input type="text" class="form-control" id="user" name="username"  required>
+                                        <input type="text" class="form-control" id="user" name="username" value="honyi" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="pass">Mot de passe:</label>
-                                        <input type="text" class="form-control" id="pass" name="password"  required>
+                                        <input type="text" class="form-control" id="pass" name="password" value="honyi123" required>
                                     </div>
 
                                     <div class="form-group">

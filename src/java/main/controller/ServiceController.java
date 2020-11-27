@@ -3,6 +3,7 @@ package main.controller;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -15,6 +16,68 @@ import main.modal.Service;
 public class ServiceController {
 
     public ServiceController() {
+    }
+
+    public List<Service> getAll() {
+        try {
+            List<Service> services = new ArrayList();
+            PgConnection con = new PgConnection();
+            ResultSet r = con.getStatement().executeQuery("select * from t_biz_type;");
+            while (r.next()) {
+                services.add(
+                        new Service(
+                                r.getString("id"),
+                                r.getString("name"),
+                                r.getString("biz_prefix"),
+                                r.getInt("status"),
+                                r.getString("start_num"),
+                                r.getInt("sort"),
+                                r.getInt("call_delay"),
+                                r.getString("biz_class_id"),
+                                r.getInt("deal_time_warning"),
+                                r.getInt("hidden"),
+                                UUID.fromString(r.getString("db_id")))
+                );
+            }
+            con.closeConnection();
+            return services;
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(ServiceController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    public Service getById(String id, UUID db_id) {
+        try {
+
+            PgConnection con = new PgConnection();
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("select * from t_biz_type where id=? and db_id=? ;");
+            p.setString(1, id);
+            p.setString(2, db_id.toString());
+            ResultSet r = p.executeQuery();
+            if (r.next()) {
+                con.closeConnection();
+                Service s = (new Service(
+                        r.getString("id"),
+                        r.getString("name"),
+                        r.getString("biz_prefix"),
+                        r.getInt("status"),
+                        r.getString("start_num"),
+                        r.getInt("sort"),
+                        r.getInt("call_delay"),
+                        r.getString("biz_class_id"),
+                        r.getInt("deal_time_warning"),
+                        r.getInt("hidden"),
+                        db_id));
+                return s;
+            } else {
+                con.closeConnection();
+                return null;
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(ServiceController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     public int clearTable(UUID id) {
@@ -87,7 +150,7 @@ public class ServiceController {
 
                 } catch (ClassNotFoundException | SQLException ex) {
                     Logger.getLogger(ServiceController.class.getName()).log(Level.SEVERE, null, ex);
-                } 
+                }
             }
             System.err.println("-- t_biz_type updated.");
         }

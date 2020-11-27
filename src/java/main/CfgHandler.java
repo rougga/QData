@@ -19,7 +19,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class CfgHandler {
-
+    public static int APP_PORT=8989;
+    public static String NODE_APP_NAME="QStates";
+    public static String APP_NAME="QData";
     private Properties prop = null;
     private final String cfgFile = "\\cfg\\cfg.properties";
     private final String userFile = "\\cfg\\db\\users.xml";

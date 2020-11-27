@@ -32,6 +32,7 @@ public class Edit extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             if (Objects.equals(request.getSession().getAttribute("user"), null)) {
                 response.sendRedirect("./index.jsp");

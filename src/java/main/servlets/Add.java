@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,9 @@ import javax.xml.transform.stream.StreamResult;
 import main.CfgHandler;
 import main.PasswordAuthentication;
 import main.PgConnection;
+import main.controller.CibleController;
+import main.modal.Cible;
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -39,206 +43,179 @@ public class Add extends HttpServlet {
             if (Objects.equals(request.getSession().getAttribute("user"), null)) {
                 response.sendRedirect("./index.jsp");
             } else {
-                String type = request.getParameter("type").trim();
+                if (Objects.equals(request.getSession().getAttribute("grade"), "adm")) {
+                    String type = request.getParameter("type").trim();
 
-                if (Objects.equals(type, "cible")) {
-                    String id = request.getParameter("service");
-                    String cibleAH = request.getParameter("cibleAH");
-                    String cibleAM = request.getParameter("cibleAM");
-                    String cibleAS = request.getParameter("cibleAS");
-                    String cibleTH = request.getParameter("cibleTH");
-                    String cibleTM = request.getParameter("cibleTM");
-                    String cibleTS = request.getParameter("cibleTS");
-                    String cibleD = request.getParameter("cibleD");
-                    if (id != null && cibleAH != null && cibleAM != null && cibleAS != null && cibleTH != null && cibleTM != null && cibleTS != null && cibleD != null) {
+                    if (Objects.equals(type, "cible")) {
+                        String db_id = request.getParameter("site");
+                        String id = request.getParameter("service");
+                        String cibleAH = request.getParameter("cibleAH");
+                        String cibleAM = request.getParameter("cibleAM");
+                        String cibleAS = request.getParameter("cibleAS");
+                        String cibleTH = request.getParameter("cibleTH");
+                        String cibleTM = request.getParameter("cibleTM");
+                        String cibleTS = request.getParameter("cibleTS");
+                        String cibleD = request.getParameter("cibleD");
+                        if (StringUtils.isNoneBlank(db_id, id, cibleAH, cibleAM, cibleAS, cibleTH, cibleTM, cibleTS, cibleD)) {
 
-                        if (!Objects.equals(id, "0")) {
-                            int cibleA = (Integer.parseInt(cibleAH) * 3600) + (Integer.parseInt(cibleAM) * 60) + Integer.parseInt(cibleAS);
-                            int cibleT = (Integer.parseInt(cibleTH) * 3600) + (Integer.parseInt(cibleTM) * 60) + Integer.parseInt(cibleTS);
+                            if (!Objects.equals(id, "0")) {
+                                double cibleA = (Integer.parseInt(cibleAH) * 3600) + (Integer.parseInt(cibleAM) * 60) + Integer.parseInt(cibleAS);
+                                double cibleT = (Integer.parseInt(cibleTH) * 3600) + (Integer.parseInt(cibleTM) * 60) + Integer.parseInt(cibleTS);
+                                float dCible = Float.parseFloat(cibleD);
+                                try {
+                                    CibleController cc = new CibleController();
+                                    if (cc.isUnique(id, db_id)) {
+                                        Cible c = new Cible(id, UUID.fromString(db_id), cibleA, cibleT, dCible);
+                                        cc.addCible(c);
+                                        //cc.addCibleXml(c);
+                                        response.sendRedirect("./setting/cibles.jsp?err=Cible%20ajoute.");
+                                    } else {
+                                        response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode("Le cible existe déjà", "UTF-8"));
+                                    }
 
+                                } catch (Exception e) {
+                                    response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
+                                }
+
+                            }
+
+                        }
+
+                    }
+                    if (Objects.equals(type, "user")) {
+                        String username = request.getParameter("username");
+                        String password = request.getParameter("password");
+                        String password2 = request.getParameter("password2");
+                        String grade = request.getParameter("grade");
+                        String firstName = request.getParameter("firstName");
+                        String lastName = request.getParameter("lastName");
+                        if (Objects.equals(password, password2)) {
                             try {
                                 CfgHandler cfg = new CfgHandler(request);
-                                String path = cfg.getCibleFile();
+                                String path = cfg.getUserFile();
 
                                 Document doc = cfg.getXml(path);
-                                Node cibles = doc.getFirstChild();
+                                Node users = doc.getFirstChild();
 
-                                Element service = doc.createElement("service");
-                                cibles.appendChild(service);
+                                Element user = doc.createElement("user");
+                                users.appendChild(user);
 
-                                Element idE = doc.createElement("id");
-                                idE.appendChild(doc.createTextNode(id));
-                                service.appendChild(idE);
+                                Element usernameE = doc.createElement("username");
+                                usernameE.appendChild(doc.createTextNode(username));
+                                user.appendChild(usernameE);
 
-                                Element nameE = doc.createElement("name");
-                                ResultSet r = new PgConnection().getStatement().executeQuery("SELECT name FROM t_biz_type where id ='" + id + "';");
-                                if (r.next()) {
+                                PasswordAuthentication pa = new PasswordAuthentication();
+                                Element passwordE = doc.createElement("password");
+                                passwordE.appendChild(doc.createTextNode(pa.hash(password.toCharArray())));
+                                user.appendChild(passwordE);
 
-                                    nameE.appendChild(doc.createTextNode(r.getString("name")));
+                                Element gradeE = doc.createElement("grade");
+                                gradeE.appendChild(doc.createTextNode(grade));
+                                user.appendChild(gradeE);
 
-                                } else {
-                                    nameE.appendChild(doc.createTextNode("ERREUR"));
-                                }
-                                service.appendChild(nameE);
+                                Element firstNameE = doc.createElement("firstName");
+                                firstNameE.appendChild(doc.createTextNode(firstName));
+                                user.appendChild(firstNameE);
 
-                                Element cibleAE = doc.createElement("cibleA");
-                                cibleAE.appendChild(doc.createTextNode(cibleA + ""));
-                                service.appendChild(cibleAE);
+                                Element lastNameE = doc.createElement("lastName");
+                                lastNameE.appendChild(doc.createTextNode(lastName));
+                                user.appendChild(lastNameE);
 
-                                Element cibleTE = doc.createElement("cibleT");
-                                cibleTE.appendChild(doc.createTextNode(cibleT + ""));
-                                service.appendChild(cibleTE);
+                                Element dateAdded = doc.createElement("date");
+                                dateAdded.appendChild(doc.createTextNode(new Date().toString()));
+                                user.appendChild(dateAdded);
 
-                                Element cibleDE = doc.createElement("dcible");
-                                cibleDE.appendChild(doc.createTextNode(cibleD + ""));
-                                service.appendChild(cibleDE);
+                                Element sponsor = doc.createElement("sponsor");
+                                sponsor.appendChild(doc.createTextNode(request.getSession().getAttribute("user").toString()));
+                                user.appendChild(sponsor);
 
                                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
                                 Transformer transformer = transformerFactory.newTransformer();
                                 DOMSource source = new DOMSource(doc);
                                 StreamResult result = new StreamResult(new File(path));
                                 transformer.transform(source, result);
-                                response.sendRedirect("./settings.jsp?type=cible&err=Cible%20ajoute.");
+                                response.sendRedirect("./settings.jsp?err=Utilisateur%20ajoute.#userBtn");
 
-                            } catch (IOException | ClassNotFoundException | SQLException | ParserConfigurationException | DOMException | SAXException | TransformerException e) {
-                                response.sendRedirect("./settings.jsp?type=cible&err=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
+                            } catch (IOException | ParserConfigurationException | DOMException | SAXException | TransformerException e) {
+                                response.sendRedirect("./settings.jsp?err=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
                             }
 
+                        } else {
+                            response.sendRedirect("./settings.jsp?err=les%20mots%20de%20passe%20ne%20sont%20pas%20les%20memes.");
                         }
 
                     }
+                    if (Objects.equals(type, "extra")) {
+                        String id = request.getParameter("serviceNameExtra");
+                        String extraH = request.getParameter("extraH");
+                        String extraM = request.getParameter("extraM");
+                        String extraS = request.getParameter("extraS");
 
-                }
-                if (Objects.equals(type, "user")) {
-                    String username = request.getParameter("username");
-                    String password = request.getParameter("password");
-                    String password2 = request.getParameter("password2");
-                    String grade = request.getParameter("grade");
-                    String firstName = request.getParameter("firstName");
-                    String lastName = request.getParameter("lastName");
-                    if (Objects.equals(password, password2)) {
-                        try {
-                            CfgHandler cfg = new CfgHandler(request);
-                            String path = cfg.getUserFile();
+                        if (id != null && extraH != null && extraM != null && extraS != null) {
+                            if (!Objects.equals(id, "0")) {
+                                int extra = (Integer.parseInt(extraH) * 3600) + (Integer.parseInt(extraM) * 60) + Integer.parseInt(extraS);
+                                try {
+                                    CfgHandler cfg = new CfgHandler(request);
+                                    String path = cfg.getExtraFile();
 
-                            Document doc = cfg.getXml(path);
-                            Node users = doc.getFirstChild();
+                                    Document doc = cfg.getXml(path);
+                                    Node extras = doc.getFirstChild();
 
-                            Element user = doc.createElement("user");
-                            users.appendChild(user);
+                                    Element service = doc.createElement("service");
+                                    extras.appendChild(service);
 
-                            Element usernameE = doc.createElement("username");
-                            usernameE.appendChild(doc.createTextNode(username));
-                            user.appendChild(usernameE);
+                                    Element idE = doc.createElement("id");
+                                    idE.appendChild(doc.createTextNode(id));
+                                    service.appendChild(idE);
 
-                            PasswordAuthentication pa = new PasswordAuthentication();
-                            Element passwordE = doc.createElement("password");
-                            passwordE.appendChild(doc.createTextNode(pa.hash(password.toCharArray())));
-                            user.appendChild(passwordE);
+                                    Element nameE = doc.createElement("name");
+                                    ResultSet r = new PgConnection().getStatement().executeQuery("SELECT name FROM t_biz_type where id ='" + id + "';");
+                                    if (r.next()) {
 
-                            Element gradeE = doc.createElement("grade");
-                            gradeE.appendChild(doc.createTextNode(grade));
-                            user.appendChild(gradeE);
+                                        nameE.appendChild(doc.createTextNode(r.getString("name")));
 
-                            Element firstNameE = doc.createElement("firstName");
-                            firstNameE.appendChild(doc.createTextNode(firstName));
-                            user.appendChild(firstNameE);
+                                    } else {
+                                        nameE.appendChild(doc.createTextNode("ERREUR"));
+                                    }
+                                    service.appendChild(nameE);
 
-                            Element lastNameE = doc.createElement("lastName");
-                            lastNameE.appendChild(doc.createTextNode(lastName));
-                            user.appendChild(lastNameE);
+                                    Element extraE = doc.createElement("extra");
+                                    extraE.appendChild(doc.createTextNode(extra + ""));
+                                    service.appendChild(extraE);
 
-                            Element dateAdded = doc.createElement("date");
-                            dateAdded.appendChild(doc.createTextNode(new Date().toString()));
-                            user.appendChild(dateAdded);
+                                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                                    Transformer transformer = transformerFactory.newTransformer();
+                                    DOMSource source = new DOMSource(doc);
+                                    StreamResult result = new StreamResult(new File(path));
+                                    transformer.transform(source, result);
+                                    response.sendRedirect("./settings.jsp?err=Extra%20ajoute.");
 
-                            Element sponsor = doc.createElement("sponsor");
-                            sponsor.appendChild(doc.createTextNode(request.getSession().getAttribute("user").toString()));
-                            user.appendChild(sponsor);
-
-                            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                            Transformer transformer = transformerFactory.newTransformer();
-                            DOMSource source = new DOMSource(doc);
-                            StreamResult result = new StreamResult(new File(path));
-                            transformer.transform(source, result);
-                            response.sendRedirect("./settings.jsp?type=user&err=Utilisateur%20ajoute.#userBtn");
-
-                        } catch (IOException | ParserConfigurationException | DOMException | SAXException | TransformerException e) {
-                            response.sendRedirect("./settings.jsp?type=user&err=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
-                        }
-
-                    } else {
-                        response.sendRedirect("./settings.jsp?err=les%20mots%20de%20passe%20ne%20sont%20pas%20les%20memes.");
-                    }
-
-                }
-                if (Objects.equals(type, "extra")) {
-                    String id = request.getParameter("serviceNameExtra");
-                    String extraH = request.getParameter("extraH");
-                    String extraM = request.getParameter("extraM");
-                    String extraS = request.getParameter("extraS");
-
-                    if (id != null && extraH != null && extraM != null && extraS != null) {
-                        if (!Objects.equals(id, "0")) {
-                            int extra = (Integer.parseInt(extraH) * 3600) + (Integer.parseInt(extraM) * 60) + Integer.parseInt(extraS);
-                            try {
-                                CfgHandler cfg = new CfgHandler(request);
-                                String path = cfg.getExtraFile();
-
-                                Document doc = cfg.getXml(path);
-                                Node extras = doc.getFirstChild();
-
-                                Element service = doc.createElement("service");
-                                extras.appendChild(service);
-
-                                Element idE = doc.createElement("id");
-                                idE.appendChild(doc.createTextNode(id));
-                                service.appendChild(idE);
-
-                                Element nameE = doc.createElement("name");
-                                ResultSet r = new PgConnection().getStatement().executeQuery("SELECT name FROM t_biz_type where id ='" + id + "';");
-                                if (r.next()) {
-
-                                    nameE.appendChild(doc.createTextNode(r.getString("name")));
-
-                                } else {
-                                    nameE.appendChild(doc.createTextNode("ERREUR"));
+                                } catch (IOException | ClassNotFoundException | SQLException | ParserConfigurationException | DOMException | SAXException | TransformerException e) {
+                                    response.sendRedirect("./settings.jsp?err=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
                                 }
-                                service.appendChild(nameE);
 
-                                Element extraE = doc.createElement("extra");
-                                extraE.appendChild(doc.createTextNode(extra + ""));
-                                service.appendChild(extraE);
-
-                                TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                                Transformer transformer = transformerFactory.newTransformer();
-                                DOMSource source = new DOMSource(doc);
-                                StreamResult result = new StreamResult(new File(path));
-                                transformer.transform(source, result);
-                                response.sendRedirect("./settings.jsp?type=extra&err=Extra%20ajoute.");
-
-                            } catch (IOException | ClassNotFoundException | SQLException | ParserConfigurationException | DOMException | SAXException | TransformerException e) {
-                                response.sendRedirect("./settings.jsp?type=extra&err=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
                             }
 
                         }
 
                     }
+                    if (Objects.equals(type, "goal")) {
+                        String maxA = request.getParameter("maxA");
+                        String goalT = request.getParameter("goalT");
+                        CfgHandler cfg = new CfgHandler(request);
+                        Properties p = new Properties();
+                        p.setProperty("maxA", maxA);
+                        p.setProperty("goalT", goalT);
+                        FileOutputStream f = new FileOutputStream(cfg.getCfgFile());
+                        p.store(f, "daasdasd");
+                        f.close();
+                        p.clear();
+                        response.sendRedirect("./settings.jsp?err=" + URLEncoder.encode("L'objectif est modifiée", "UTF-8"));
+                    }
+                } else {
+                    response.sendRedirect("./home.jsp");
+                }
 
-                }
-                if (Objects.equals(type, "goal")) {
-                    String maxA = request.getParameter("maxA");
-                    String goalT = request.getParameter("goalT");
-                    CfgHandler cfg = new CfgHandler(request);
-                    Properties p = new Properties();
-                    p.setProperty("maxA", maxA);
-                    p.setProperty("goalT", goalT);
-                    FileOutputStream f = new FileOutputStream(cfg.getCfgFile());
-                    p.store(f, "daasdasd");
-                    f.close();
-                    p.clear();
-                    response.sendRedirect("./settings.jsp?type=goal&err=" + URLEncoder.encode("L'objectif est modifiée", "UTF-8"));
-                }
             }
         }
     }

@@ -33,96 +33,97 @@ public class Delete extends HttpServlet {
             if (Objects.equals(request.getSession().getAttribute("user"), null)) {
                 response.sendRedirect("./index.jsp");
             } else {
-                String type = request.getParameter("type").trim();
-                if (Objects.equals(type, "cible")) {
-                    String id = request.getParameter("id").trim();
+                if (Objects.equals(request.getSession().getAttribute("grade"), "adm")) {
+                    String type = request.getParameter("type").trim();
+                    if (Objects.equals(type, "cible")) {
+                        String id = request.getParameter("id").trim();
 
-                    try {
-                        CfgHandler cfg = new CfgHandler(request);
-                        String path= cfg.getCibleFile();
-                        Document doc = cfg.getXml(path);
-                        Node cibles = doc.getFirstChild();
-                        NodeList nList = cibles.getChildNodes();
-                        for (int i = 0; i < nList.getLength(); i++) {
-                            Node nNode = nList.item(i);
-                            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                                Element eElement = (Element) nNode;
-                                if (Objects.equals(eElement.getElementsByTagName("id").item(0).getTextContent(), id)) {
-                                    cibles.removeChild(nNode);
+                        try {
+                            CfgHandler cfg = new CfgHandler(request);
+                            String path = cfg.getCibleFile();
+                            Document doc = cfg.getXml(path);
+                            Node cibles = doc.getFirstChild();
+                            NodeList nList = cibles.getChildNodes();
+                            for (int i = 0; i < nList.getLength(); i++) {
+                                Node nNode = nList.item(i);
+                                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                                    Element eElement = (Element) nNode;
+                                    if (Objects.equals(eElement.getElementsByTagName("id").item(0).getTextContent(), id)) {
+                                        cibles.removeChild(nNode);
+                                    }
                                 }
+
                             }
-
+                            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                            Transformer transformer = transformerFactory.newTransformer();
+                            DOMSource source = new DOMSource(doc);
+                            StreamResult result = new StreamResult(new File(path));
+                            transformer.transform(source, result);
+                            response.sendRedirect("./settings.jsp?type=cible&err=Cible%20supprime.");
+                        } catch (IOException | ParserConfigurationException | TransformerException | DOMException | SAXException e) {
+                            response.sendRedirect("./settings.jsp?type=cible&err=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
                         }
-                        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                        Transformer transformer = transformerFactory.newTransformer();
-                        DOMSource source = new DOMSource(doc);
-                        StreamResult result = new StreamResult(new File(path));
-                        transformer.transform(source, result);
-                        response.sendRedirect("./settings.jsp?type=cible&err=Cible%20supprime.");
-                    } catch (IOException | ParserConfigurationException | TransformerException | DOMException | SAXException e) {
-                        response.sendRedirect("./settings.jsp?type=cible&err=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
-                    }
 
-                }
-                if (Objects.equals(type, "user")) {
-                    String username = request.getParameter("username").trim();
-                    try {
-                        CfgHandler cfg = new CfgHandler(request);
-                       String path= cfg.getUserFile();
-                        //String path = "C:\\Users\\bouga\\Desktop\\OffReport\\web\\cfg\\users.xml";
-                        Document doc = cfg.getXml(path);
-                        Node users = doc.getFirstChild();
-                        NodeList nList = users.getChildNodes();
-                        for (int i = 0; i < nList.getLength(); i++) {
-                            Node nNode = nList.item(i);
-                            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                                Element eElement = (Element) nNode;
-                                if (Objects.equals(eElement.getElementsByTagName("username").item(0).getTextContent(), username)) {
-                                    users.removeChild(nNode);
+                    }
+                    if (Objects.equals(type, "user")) {
+                        String username = request.getParameter("username").trim();
+                        try {
+                            CfgHandler cfg = new CfgHandler(request);
+                            String path = cfg.getUserFile();
+                            //String path = "C:\\Users\\bouga\\Desktop\\OffReport\\web\\cfg\\users.xml";
+                            Document doc = cfg.getXml(path);
+                            Node users = doc.getFirstChild();
+                            NodeList nList = users.getChildNodes();
+                            for (int i = 0; i < nList.getLength(); i++) {
+                                Node nNode = nList.item(i);
+                                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                                    Element eElement = (Element) nNode;
+                                    if (Objects.equals(eElement.getElementsByTagName("username").item(0).getTextContent(), username)) {
+                                        users.removeChild(nNode);
+                                    }
                                 }
-                            }
 
+                            }
+                            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                            Transformer transformer = transformerFactory.newTransformer();
+                            DOMSource source = new DOMSource(doc);
+                            StreamResult result = new StreamResult(new File(path));
+                            transformer.transform(source, result);
+                            response.sendRedirect("./settings.jsp?type=user&err=Utilisateur%20supprime.#userBtn");
+                        } catch (IOException | ParserConfigurationException | TransformerException | DOMException | SAXException e) {
+                            response.sendRedirect("./settings.jsp?type=user&err=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
                         }
-                        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                        Transformer transformer = transformerFactory.newTransformer();
-                        DOMSource source = new DOMSource(doc);
-                        StreamResult result = new StreamResult(new File(path));
-                        transformer.transform(source, result);
-                        response.sendRedirect("./settings.jsp?type=user&err=Utilisateur%20supprime.#userBtn");
-                    } catch (IOException | ParserConfigurationException | TransformerException | DOMException | SAXException e) {
-                        response.sendRedirect("./settings.jsp?type=user&err=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
                     }
-                }
-                if (Objects.equals(type, "extra")) {
-                    String id = request.getParameter("id").trim();
-                    try {
-                        CfgHandler cfg = new CfgHandler(request);
-                        String path= cfg.getExtraFile();
-                        //String path = "C:\\Users\\bouga\\Desktop\\OffReport\\web\\cfg\\extra.xml";
-                        Document doc = cfg.getXml(path);
-                        Node extras = doc.getFirstChild();
-                        NodeList nList = extras.getChildNodes();
-                        for (int i = 0; i < nList.getLength(); i++) {
-                            Node nNode = nList.item(i);
-                            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                                Element eElement = (Element) nNode;
-                                if (Objects.equals(eElement.getElementsByTagName("id").item(0).getTextContent(), id)) {
-                                    extras.removeChild(nNode);
+                    if (Objects.equals(type, "extra")) {
+                        String id = request.getParameter("id").trim();
+                        try {
+                            CfgHandler cfg = new CfgHandler(request);
+                            String path = cfg.getExtraFile();
+                            //String path = "C:\\Users\\bouga\\Desktop\\OffReport\\web\\cfg\\extra.xml";
+                            Document doc = cfg.getXml(path);
+                            Node extras = doc.getFirstChild();
+                            NodeList nList = extras.getChildNodes();
+                            for (int i = 0; i < nList.getLength(); i++) {
+                                Node nNode = nList.item(i);
+                                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                                    Element eElement = (Element) nNode;
+                                    if (Objects.equals(eElement.getElementsByTagName("id").item(0).getTextContent(), id)) {
+                                        extras.removeChild(nNode);
+                                    }
                                 }
-                            }
 
+                            }
+                            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                            Transformer transformer = transformerFactory.newTransformer();
+                            DOMSource source = new DOMSource(doc);
+                            StreamResult result = new StreamResult(new File(path));
+                            transformer.transform(source, result);
+                            response.sendRedirect("./settings.jsp?type=extra&err=Extra%20supprime.#userBtn");
+                        } catch (IOException | ParserConfigurationException | TransformerException | DOMException | SAXException e) {
+                            response.sendRedirect("./settings.jsp?type=extra&err=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
                         }
-                        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                        Transformer transformer = transformerFactory.newTransformer();
-                        DOMSource source = new DOMSource(doc);
-                        StreamResult result = new StreamResult(new File(path));
-                        transformer.transform(source, result);
-                        response.sendRedirect("./settings.jsp?type=extra&err=Extra%20supprime.#userBtn");
-                    } catch (IOException | ParserConfigurationException | TransformerException | DOMException | SAXException e) {
-                        response.sendRedirect("./settings.jsp?type=extra&err=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
                     }
                 }
-
             }
         }
     }

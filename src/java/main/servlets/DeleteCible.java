@@ -1,43 +1,44 @@
-
 package main.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.Objects;
+import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import main.controller.AgenceController;
-import main.modal.Agence;
+import main.controller.CibleController;
+import org.apache.commons.lang3.StringUtils;
 
-public class AddDatabase extends HttpServlet {
+public class DeleteCible extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            request.setCharacterEncoding("UTF-8");
-            String name=request.getParameter("name");
-            String host=request.getParameter("host");
-            String port=request.getParameter("port");
-            String database=request.getParameter("database");
-            String username=request.getParameter("username");
-            String password=request.getParameter("password");
-            int status=1;
-            if(name!=null&&host!=null&&port!=null&&database!=null&&username!=null&&password!=null){
-                Agence a = new Agence(name, host, Integer.parseInt(port), database, username, password,status);
-              if(new AgenceController().addAgence(a)==1){
-                  response.sendRedirect("./settings.jsp?type=db&err=" + URLEncoder.encode("la base de données est ajoutée", "UTF-8"));
-              } else{
-                 response.sendRedirect("./settings.jsp?type=db&err=" + URLEncoder.encode("la base de données n'est pas ajoutée", "UTF-8"));
-              }
-            }else{
-                response.sendRedirect("./settings.jsp?type=db&err=" + URLEncoder.encode("un champ est vide", "UTF-8"));
+            if (Objects.equals(request.getSession().getAttribute("user"), null)) {
+                response.sendRedirect("./index.jsp");
+            } else {
+                if (Objects.equals(request.getSession().getAttribute("grade"), "adm")) {
+                    String id = request.getParameter("id");
+                    String db_id = request.getParameter("db_id");
+                    if (StringUtils.isNoneBlank(id,db_id)) {
+                        if (new CibleController().deleteById(id,UUID.fromString(db_id))) {
+                            response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode("Cible est supprimé", "UTF-8"));
+                        } else {
+                            response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode("Cible n'est pas supprimé", "UTF-8"));
+                        }
+                    } else {
+                        response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode("un champ est vide", "UTF-8"));
+                    }
+                } else {
+                    response.sendRedirect("./home.jsp");
+                }
             }
-            
-            
+
         }
     }
 

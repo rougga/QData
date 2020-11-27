@@ -45,7 +45,7 @@
                 <p class="title">Connexion:</p>
                 <input type="text" placeholder="Nom D'utilisateur" name="username" autofocus required/>
                 <input type="password" name="password" placeholder="Mot de passe" required/>
-                <a href="#">Mot de passe oublié ?</a>
+                <a href="https://www.marocnst.ma/contacts">Mot de passe oublié ?</a>
                 <button type="submit">
                     <span class="state">Connexion</span>
                 </button>

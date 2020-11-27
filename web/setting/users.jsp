@@ -25,7 +25,7 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>QStates</title>
+        <title>QData</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="../img/favicon-32x32.png">
         <script src="../js/jquery.js"></script>
@@ -43,14 +43,12 @@
                     $("#home").removeClass("active");
                 </script>
             </div>
-                <div class="pt-4 mt-4">
+            <div class="pt-4 mt-4">
                 <div class="" id="userTbl">
                     <h1 class="text-white">
                         Utilisateurs : 
                         <span class="  float-right">
                             <a class="btn btn-success" id="userAdd" data-toggle="modal" data-target="#userModal"><img src="/QData/img/icon/plus.png"> Ajouter</a>
-                            <a class="btn btn-info disabled" id="userEdit"><img src="/QData/img/icon/pencil.png"> Editer</a>
-                            <a class="btn btn-danger" id="userDlt" href="#"><img src="/QData/img/icon/trash.png"> Supprimer</a>
                         </span>
                     </h1>
                     <table class="table table-bordered table-light   table-responsive-sm " id="userTable">
@@ -59,6 +57,7 @@
                                 <th scope="col">Nom D'utilisateur</th>
                                 <th scope="col">Nom Complet</th>
                                 <th scope="col">Grade</th>
+                                <th></th>
                             </tr>
                         </thead>
 
@@ -69,13 +68,18 @@
                                 List<Utilisateur> utilisateur = new UtilisateurController(request).getAllUtilisateur();
                                 if(utilisateur!=null){
                                     for(int i=0;i<utilisateur.size();i++){
-                            %><%="<tr class=' clickable-row3 '>"
-                                    + "<th scope='row' >" + utilisateur.get(i).getUsername() + "</th>"
-                                    + "<td ><b>" + utilisateur.get(i).getLastName() + " " + utilisateur.get(i).getFirstName() + "</b></td>"
-                                    + "<td data-grade='" + utilisateur.get(i).getGrade() + "'><b>" + getGrade(utilisateur.get(i).getGrade()) + "</b></td>"
-                                    + "</tr>"%><%
-                                            }
+                            %>
+                            <tr class=' clickable-row3 '>
+                                <th scope='row'  class="border-dark align-middle"> <%=utilisateur.get(i).getUsername() %></th>
+                                <td class="border-dark align-middle" ><b><%=utilisateur.get(i).getLastName() + " " + utilisateur.get(i).getFirstName() %></b></td>
+                                <td class="border-dark align-middle" data-grade="<%=utilisateur.get(i).getGrade() %>"><b> <%=getGrade(utilisateur.get(i).getGrade()) %></b></td>
+                                <td class="border-dark align-middle">
+                                    <a class="btn btn-danger m-0" href="/QData/Delete?type=user&username=<%=utilisateur.get(i).getUsername()%>"><img src="/QData/img/icon/trash.png"></a>
+                                </td>
+                            </tr>
+                            <%
                                     }
+                            }
                             %>
 
                         </tbody>

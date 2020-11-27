@@ -101,7 +101,7 @@ public class TicketController {
     public void updateTodayTickets() {
         List<Agence> agences = new AgenceController().getAllAgence();
         if (agences != null) {
-            System.out.println("-- Updating t_ticket ....");
+            System.out.println("-- Updating Today t_ticket ....");
             for (int i = 0; i < agences.size(); i++) {
                 try {
                     PgMultiConnection con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
@@ -140,7 +140,7 @@ public class TicketController {
                     Logger.getLogger(TicketController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            System.out.println("-- t_ticket updated.");
+            System.out.println("-- Today t_ticket updated.");
         }
     }
     public void updateAllTickets() {

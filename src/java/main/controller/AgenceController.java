@@ -139,7 +139,7 @@ public class AgenceController {
             p.setString(1, id.toString());
             ResultSet r = p.executeQuery();
             if (r.next()) {
-                Date d = r.getTimestamp("last_update");
+                Date d = getFormatedDateAsDate(r.getString("last_update"));
                 con.closeConnection();
                 return d;
             } else {
