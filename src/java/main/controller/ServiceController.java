@@ -149,7 +149,7 @@ public class ServiceController {
                     con.closeConnection();
 
                 } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(ServiceController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ServiceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
                 }
             }
             System.err.println("-- t_biz_type updated.");

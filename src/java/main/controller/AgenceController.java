@@ -33,7 +33,7 @@ public class AgenceController {
             con.closeConnection();
             return agences;
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             return null;
         }
     }
@@ -162,7 +162,7 @@ public class AgenceController {
             con.closeConnection();
 
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
 
@@ -182,7 +182,7 @@ public class AgenceController {
                     }
                     con.closeConnection();
                 } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
                 }
             }
             System.out.println("-- Agence names updated.");

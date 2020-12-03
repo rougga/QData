@@ -35,9 +35,7 @@
                 <%@include file="./addon/navbar.jsp" %>
             </div>
             <div class="body">
-                <%
-                    new LoginLogController().updateAllLoginLogs();
-                    %>
+                ${agences}
             </div>  
         </div>
     </body>

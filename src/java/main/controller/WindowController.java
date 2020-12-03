@@ -82,7 +82,7 @@ public class WindowController {
                     con.closeConnection();
 
                 } catch (Exception ex) {
-                    Logger.getLogger(WindowController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(WindowController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
                 }
             }
             System.out.println("-- t_window updated.");

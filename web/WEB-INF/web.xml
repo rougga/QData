@@ -41,8 +41,8 @@
         <servlet-class>main.servlets.DeleteDatabase</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>database</servlet-name>
-        <servlet-class>main.api.database</servlet-class>
+        <servlet-name>GetAgences</servlet-name>
+        <servlet-class>main.api.GetAgences</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>EditTitles</servlet-name>
@@ -51,6 +51,18 @@
     <servlet>
         <servlet-name>DeleteCible</servlet-name>
         <servlet-class>main.servlets.DeleteCible</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateNow</servlet-name>
+        <servlet-class>main.api.UpdateNow</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateAllTickets</servlet-name>
+        <servlet-class>main.api.UpdateAllTickets</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateAllLoginLog</servlet-name>
+        <servlet-class>main.api.UpdateAllLoginLog</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Settings</servlet-name>
@@ -93,8 +105,20 @@
         <url-pattern>/DeleteDatabase</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>database</servlet-name>
-        <url-pattern>/database</url-pattern>
+        <servlet-name>GetAgences</servlet-name>
+        <url-pattern>/api/getagences</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateNow</servlet-name>
+        <url-pattern>/api/updatenow</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateAllTickets</servlet-name>
+        <url-pattern>/api/updatealltickets</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateAllLoginLog</servlet-name>
+        <url-pattern>/api/updateallloginlog</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>EditTitles</servlet-name>
@@ -104,6 +128,31 @@
         <servlet-name>DeleteCible</servlet-name>
         <url-pattern>/DeleteCible</url-pattern>
     </servlet-mapping>
+    <error-page>
+        <!-- Missing login -->
+        <error-code>401</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <!-- Forbidden directory listing -->
+        <error-code>403</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <!-- Missing resource -->
+        <error-code>404</error-code>
+        <location>/addon/error/error404.jsp</location>
+    </error-page>
+    <error-page>
+        <!-- Uncaught exception -->
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <!-- Unsupported servlet method -->
+        <error-code>503</error-code>
+        <location>/error.jsp</location>
+    </error-page>
     <session-config>
         <session-timeout>
             30

@@ -42,15 +42,34 @@
                         Mise a jour globale :
                     </h1>
 
-                    <span class="w-50 mx-auto ">
-                        <a class="btn btn-secondary mx-auto m-4" id="majTBtn" ><img src="/QData/img/icon/maj.png"> Mise à jour tous les tickets</a><br>
-                        <a class="btn btn-secondary mx-auto" id="majLBtn"><img src="/QData/img/icon/maj.png"> Mise à jour tout le journal de connexion</a>
-                    </span>
+                    <div class="w-50 mx-auto ">
+                        <form action="" method="POST">
+                            <a class="btn btn-secondary mx-auto" id="majNowBtn"><img src="/QData/img/icon/maj.png"> Mise à jour maintenant</a>
+                            <a class="btn btn-secondary mx-auto m-4" id="majTBtn" ><img src="/QData/img/icon/maj.png"> Mise à jour tous les tickets</a><br>
+                            <a class="btn btn-secondary mx-auto" id="majLBtn"><img src="/QData/img/icon/maj.png"> Mise à jour tout le journal de connexion</a>
+
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="footer">
-
+                <script>
+                    $(document).ready(function() {
+                        $("#majTBtn").on('click',function() {
+                            $("form").attr("action","/QData/api/updatealltickets");
+                            $("form").submit();
+                        });
+                        $("#majLBtn").on('click',function() {
+                            $("form").attr("action","/QData/api/updateallloginlog");
+                            $("form").submit();
+                        });
+                        $("#majNowBtn").on('click',function() {
+                            $("form").attr("action","/QData/api/updatenow");
+                            $("form").submit();
+                        });
+                    });
+                    
+                </script>
             </div>
-        </div>
     </body>
 </html>

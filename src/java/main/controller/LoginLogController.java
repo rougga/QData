@@ -143,7 +143,7 @@ public class LoginLogController {
                     con.closeConnection();
 
                 } catch (Exception ex) {
-                    Logger.getLogger(LoginLogController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(LoginLogController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
                 }
             }
             System.out.println("-- Today t_login_log updated.");

@@ -1,32 +1,30 @@
+
 package main.api;
 
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import main.JsonGenerator;
 import main.TableGenerator;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
-public class GetTables extends HttpServlet {
+public class GetAgences extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse response) {
-
-        try {
+    protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+       try {
             PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            out.print(new JsonGenerator().generateSimpleGblTable(null, null));
+            out.print(new JsonGenerator().getAgencesJson());
             
         } catch (Exception ex) {
 
         }
-
     }
+    
+    
 
 }

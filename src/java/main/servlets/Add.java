@@ -67,7 +67,7 @@ public class Add extends HttpServlet {
                                     if (cc.isUnique(id, db_id)) {
                                         Cible c = new Cible(id, UUID.fromString(db_id), cibleA, cibleT, dCible);
                                         cc.addCible(c);
-                                        //cc.addCibleXml(c);
+                                        cc.addCibleXml(c);
                                         response.sendRedirect("./setting/cibles.jsp?err=Cible%20ajoute.");
                                     } else {
                                         response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode("Le cible existe déjà", "UTF-8"));

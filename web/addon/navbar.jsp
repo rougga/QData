@@ -62,8 +62,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="superV" >
                     <a class="dropdown-item  font-weight-bold navHover" href="/QData/home.jsp">Flash journée</a>
-                    <a class="dropdown-item  font-weight-bold navHover" href="/QData/report.jsp?type=sgch">Employés</a>
-                    <a class="dropdown-item  font-weight-bold navHover" href="/QData/report.jsp?type=sgch">Guichets</a>
+                    <a class="dropdown-item  font-weight-bold navHover" href="/QData/report.jsp?type=sgch">Guichets - Employés</a>
                     <a class="dropdown-item  font-weight-bold navHover" href="/QData/report.jsp?type=ser">Services</a>
                 </div>
             </li>  
@@ -78,7 +77,7 @@
         <ul class="navbar-nav">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <b><%= session.getAttribute("user")%></b>
+                    <b>${user}</b>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item font-weight-bold navHover disabled" href="/QData/settings.jsp" >Paramètres</a>

@@ -141,7 +141,7 @@ public class WindowStatusController {
                     con.closeConnection();
 
                 } catch (Exception ex) {
-                    Logger.getLogger(WindowStatusController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(WindowStatusController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
                 }
             }
             System.out.println("-- t_window_status updated.");

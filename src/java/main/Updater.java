@@ -23,7 +23,17 @@ public class Updater {
         new LoginLogController().updateTodayLoginLogs();
         
         //update goal
-        //updateCible();
+    }
+    public void updateDatabaseAllData() {
+        new AgenceController().updateAllAgenceName();
+        new ServiceController().updateServices();
+        new WindowController().updateWindows();
+        new UserController().updateUsers();
+        new TicketController().updateAllTickets();
+        new WindowStatusController().updateWindowStatus();
+        new LoginLogController().updateAllLoginLogs();
+        
+        //update goal
     }
 
 }

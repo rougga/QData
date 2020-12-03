@@ -1,6 +1,10 @@
 package main.controller;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -53,7 +57,7 @@ public class CibleController {
     }
 
     public Cible getOne(String id, UUID db_id) {
-        Cible dc= new Cible(id, db_id, 0, 0, 0);
+        Cible dc = new Cible(id, db_id, 0, 0, 0);
         try {
             PgConnection con = new PgConnection();
             PreparedStatement p = con.getStatement().getConnection().prepareStatement("select * from cible where biz_type_id=? and db_id=?");
@@ -70,7 +74,8 @@ public class CibleController {
                 );
                 con.closeConnection();
                 return c;
-            }else{
+            } else {
+                con.closeConnection();
                 return dc;
             }
 
@@ -123,10 +128,17 @@ public class CibleController {
         try {
             Agence a = new AgenceController().getAgenceById(c.getDb_id());
             String path = "http://" + a.getHost() + ":" + CfgHandler.APP_PORT + "/" + CfgHandler.NODE_APP_NAME + "/cfg/cible.xml";
-            File xml = new File(path);
+            //File xml = new File(path);
+            System.out.println(path);
+            //modified code
+            URL url = new URL(path);
+            URLConnection urlConnection = url.openConnection();
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+
+            //your code
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(xml);
+            Document doc = dBuilder.parse(in);
             doc.getDocumentElement().normalize();
             Node cibles = doc.getFirstChild();
 
@@ -157,7 +169,9 @@ public class CibleController {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(path));
+            URLConnection urlConnection2 = url.openConnection();
+            urlConnection2.setDoOutput(true);
+            StreamResult result = new StreamResult(urlConnection2.getOutputStream());
             transformer.transform(source, result);
             return 1;
         } catch (Exception ex) {

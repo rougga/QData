@@ -2,6 +2,7 @@ package main.controller;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -93,8 +94,8 @@ public class UserController {
                     }
                     con.closeConnection();
 
-                } catch (Exception ex) {
-                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
                 }
             }
             System.out.println("-- t_user updated.");

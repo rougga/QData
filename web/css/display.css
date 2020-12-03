@@ -16,3 +16,10 @@ div.marquee > div.marquee-text {
     display:inline;
     width:auto;
 }
+#setting{
+    cursor: pointer;
+
+}
+#setting:hover{
+    opacity: 0.6;
+}

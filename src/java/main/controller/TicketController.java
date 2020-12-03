@@ -137,7 +137,7 @@ public class TicketController {
                     con.closeConnection();
 
                 } catch (Exception ex) {
-                    Logger.getLogger(TicketController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(TicketController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
                 }
             }
             System.out.println("-- Today t_ticket updated.");
