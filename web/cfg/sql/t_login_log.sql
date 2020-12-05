@@ -11,4 +11,4 @@ CREATE TABLE public.t_login_log
     session_id character varying(4000) COLLATE pg_catalog."default",
     successed numeric(1,0),
     db_id  character varying(40) not null references agence(id) ON DELETE CASCADE
-)
+);

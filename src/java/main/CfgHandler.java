@@ -48,9 +48,9 @@ public class CfgHandler {
     public CfgHandler(HttpServletRequest r) throws FileNotFoundException, IOException {
         this.request = r;
         url = request.getServletContext().getRealPath(File.separator);
-        appPath = url.substring(0, url.indexOf("OffReport_Global") + 16);
+        appPath = url.substring(0, url.indexOf("QData") + 5);
         
-        appPath="C:\\Users\\bouga\\Desktop\\ProjectsCurrent\\OffReport_Global\\web";
+        //appPath="C:\\Users\\bouga\\Desktop\\ProjectsCurrent\\OffReport_Global\\web";
     }
 
     public String getPropertie(String name) throws IOException {

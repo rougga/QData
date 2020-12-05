@@ -22,4 +22,4 @@ CREATE TABLE public.t_window
     sound_server character varying(32) COLLATE pg_catalog."default",
     branch_id character varying(32) COLLATE pg_catalog."default",
 db_id  character varying(40) not null references agence(id) ON DELETE CASCADE
-)
+);

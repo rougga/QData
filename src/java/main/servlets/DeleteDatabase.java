@@ -3,6 +3,7 @@ package main.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.Objects;
 import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,17 +17,26 @@ public class DeleteDatabase extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String id = request.getParameter("id");
-            if (id != null) {
-                if (new AgenceController().deleteAgenceById(UUID.fromString(id)) == 1) {
-                    response.sendRedirect("./settings.jsp?type=db&err=" + URLEncoder.encode("la base de données est supprimé", "UTF-8"));
-                } else {
-                    response.sendRedirect("./settings.jsp?type=db&err=" + URLEncoder.encode("la base de données n'est pas supprimé", "UTF-8"));
-                }
+            if (Objects.equals(request.getSession().getAttribute("user"), null)) {
+                response.sendRedirect("./index.jsp");
             } else {
-                response.sendRedirect("./settings.jsp?type=db&err=" + URLEncoder.encode("un champ est vide", "UTF-8"));
-            }
+                if (Objects.equals(request.getSession().getAttribute("grade"), "adm")) {
 
+                    String id = request.getParameter("id");
+                    if (id != null) {
+                        if (new AgenceController().deleteAgenceById(UUID.fromString(id)) == 1) {
+                            response.sendRedirect("./settings.jsp?type=db&err=" + URLEncoder.encode("la base de données est supprimé", "UTF-8"));
+                        } else {
+                            response.sendRedirect("./settings.jsp?type=db&err=" + URLEncoder.encode("la base de données n'est pas supprimé", "UTF-8"));
+                        }
+                    } else {
+                        response.sendRedirect("./settings.jsp?type=db&err=" + URLEncoder.encode("un champ est vide", "UTF-8"));
+                    }
+                } else {
+                    response.sendRedirect("./home.jsp?err=" + URLEncoder.encode("vous avez besoin des privilèges d'administrateur", "UTF-8"));
+
+                }
+            }
         }
     }
 

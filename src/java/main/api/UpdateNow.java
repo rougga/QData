@@ -13,7 +13,7 @@ public class UpdateNow extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         new Updater().updateDatabase();
-        resp.sendRedirect("/QData/seting/maj.jsp?err=LL%20Updated");
+        resp.sendRedirect("/QData/setting/maj.jsp?err=LL%20Updated");
     }
     
 }

@@ -30,4 +30,4 @@ CREATE TABLE public.t_biz_type
     extend6 character varying(100) COLLATE pg_catalog."default",
     extend7 character varying(100) COLLATE pg_catalog."default",
     db_id  character varying(40) not null references agence(id) ON DELETE CASCADE
-)
+);

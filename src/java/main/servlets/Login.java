@@ -72,11 +72,11 @@ public class Login extends HttpServlet {
                     }
                     if (!isFound) {
                         err = "1";
-                        response.sendRedirect("/OffReport_Global/index.jsp?err=" + err);
+                        response.sendRedirect("/QData/index.jsp?err=" + err);
                     } else {
                         if (pwFalse) {
                             err = "2";
-                            response.sendRedirect("/OffReport_Global/index.jsp?err=" + err);
+                            response.sendRedirect("/QData/index.jsp?err=" + err);
                         }
                     }
 
@@ -87,7 +87,7 @@ public class Login extends HttpServlet {
                 }
 
             } else {
-                response.sendRedirect("/OffReport_Global/index.jsp?err=" + "");
+                response.sendRedirect("/QData/index.jsp?err=" + "");
             }
         }
     }

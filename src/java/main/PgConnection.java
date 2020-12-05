@@ -8,10 +8,10 @@ import java.sql.SQLException;
 
 public class PgConnection {
 
-    private final String DRIVER = "org.postgresql.Driver";
-    private final String CONNECTIONSTRING = "jdbc:postgresql://localhost:5555/postgres";
-    private final String USER = "postgres";
-    private final String PASSWORD = "123456";
+   private final String DRIVER = "org.postgresql.Driver";
+    private final String CONNECTIONSTRING = "jdbc:postgresql://localhost:5432/postgres";
+    private final String USER = "honyi";
+    private final String PASSWORD = "honyi123";
     private Connection con=null;
     private Statement st=null;
 

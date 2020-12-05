@@ -28,4 +28,4 @@ CREATE TABLE public.t_user
     work character varying(100) COLLATE pg_catalog."default",
     star smallint,
 db_id  character varying(40) not null references agence(id) ON DELETE CASCADE
-)
+);

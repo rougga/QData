@@ -12,4 +12,4 @@ CREATE TABLE public.t_window_status
     pause_time numeric(5,0),
     current_ticket character varying(32) COLLATE pg_catalog."default",
 db_id  character varying(40) not null references agence(id) ON DELETE CASCADE
-)
+);
