@@ -8,7 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpRequest;
@@ -234,7 +236,7 @@ public class Stats {
         }
     }
 
-    public List getWaitingTicketsByService(String d1, String d2,HttpServletResponse res) throws IOException {
+    public List getWaitingTicketsByService(String d1, String d2, HttpServletResponse res) throws IOException {
         List<ArrayList> table = new ArrayList<>();
         try {
             setDate1(d1);
@@ -250,17 +252,15 @@ public class Stats {
             s.setString(2, getDate2());
             ResultSet r = s.executeQuery();
             con.closeConnection();
-            while(r.next()){
+            while (r.next()) {
                 ArrayList row = new ArrayList();
                 row.add(r.getString("name"));
                 row.add(r.getLong("nb_t"));
                 table.add(row);
             }
-            
-            
-            
-        } catch(Exception e){
-            res.sendRedirect("./home.jsp?err="+URLEncoder.encode(e.getMessage(), "UTF-8"));
+
+        } catch (Exception e) {
+            res.sendRedirect("./home.jsp?err=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
         }
         return table;
     }
@@ -295,4 +295,33 @@ public class Stats {
         return date2;
     }
 
+    public Map getTotalDealChart() {
+        Map chart = new HashMap();
+        String lables = "[";
+        String data = "[";
+        try {
+            PgConnection con = new PgConnection();
+            String SQL = "select  "
+                    + "t.db_id, "
+                    + "a.name, "
+                    + "count(*) as nb_t "
+                    + "from t_ticket t ,agence a "
+                    + "where t.db_id=a.id and t.status=4 "
+                    + "GROUP by t.db_id,a.name;";
+            ResultSet r = con.getStatement().executeQuery(SQL);
+            while (r.next()) {
+                lables += "'" + r.getString("name") + "',";
+                data += r.getLong("nb_t") + ",";
+            }
+
+            con.closeConnection();
+        } catch (Exception e) {
+            
+        }
+        lables += "]";
+        data += "]";
+        chart.put("lables", lables);
+        chart.put("data", data);
+        return chart;
+    }
 }

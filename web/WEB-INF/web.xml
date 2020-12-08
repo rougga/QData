@@ -144,6 +144,11 @@
         <location>/addon/error/error404.jsp</location>
     </error-page>
     <error-page>
+        <!-- Missing resource -->
+        <error-code>405</error-code>
+        <location>/addon/error/error404.jsp</location>
+    </error-page>
+    <error-page>
         <!-- Uncaught exception -->
         <error-code>500</error-code>
         <location>/error.jsp</location>

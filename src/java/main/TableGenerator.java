@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -87,7 +88,8 @@ public class TableGenerator {
     public void template(String d1, String d2) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
+        
         List<ArrayList> table = new ArrayList<>();
         AgenceController ac = new AgenceController();
         CibleController cc = new CibleController();
@@ -449,7 +451,7 @@ public class TableGenerator {
     public List<ArrayList> generateGblTable(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         List<ArrayList> table = new ArrayList<>();
         AgenceController ac = new AgenceController();
         CibleController cc = new CibleController();
@@ -1017,7 +1019,7 @@ public class TableGenerator {
     public List<ArrayList> generateEmpTable(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         List<ArrayList> table = new ArrayList<>();
         AgenceController ac = new AgenceController();
         CibleController cc = new CibleController();
@@ -1507,7 +1509,7 @@ public class TableGenerator {
     public List<ArrayList> generateEmpServiceTable(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         List<ArrayList> table = new ArrayList<>();
         AgenceController ac = new AgenceController();
         CibleController cc = new CibleController();
@@ -2000,7 +2002,7 @@ public class TableGenerator {
     public List<ArrayList> generateGchTable(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         List<ArrayList> table = new ArrayList<>();
         AgenceController ac = new AgenceController();
         CibleController cc = new CibleController();
@@ -2558,7 +2560,7 @@ public class TableGenerator {
     public List<ArrayList> generateGchServiceTable(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         List<ArrayList> table = new ArrayList<>();
         AgenceController ac = new AgenceController();
         CibleController cc = new CibleController();
@@ -2930,7 +2932,7 @@ public class TableGenerator {
     public void generateNdtChart2(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         if (this.dbs.length > 0) {
             String dateCon = " and to_date(to_char(t2.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') and (" + getDbsSql("t2") + ")";
 
@@ -3082,7 +3084,7 @@ public class TableGenerator {
     public void generateNdttChart2(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         if (this.dbs.length > 0) {
             String dateCon = " and to_date(to_char(t2.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') and t2.status=4 and (" + getDbsSql("t2") + ")";
 
@@ -3233,7 +3235,7 @@ public class TableGenerator {
     public void generateNdtaChart2(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         if (this.dbs.length > 0) {
             String dateCon = " and to_date(to_char(t2.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD')  and t2.status=2 and (" + getDbsSql("t2") + ") ";
 
@@ -3384,7 +3386,7 @@ public class TableGenerator {
     public void generateNdtsaChart2(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         if (this.dbs.length > 0) {
             String dateCon = " and to_date(to_char(t2.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD')  and t2.status=0 and (" + getDbsSql("t2") + ")";
 
@@ -3676,7 +3678,7 @@ public class TableGenerator {
     public List<ArrayList> generateNdtTable(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         List<ArrayList> table = new ArrayList<>();
         AgenceController ac = new AgenceController();
         CibleController cc = new CibleController();
@@ -4105,7 +4107,7 @@ public class TableGenerator {
     public List<ArrayList> generateNdttTable(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         List<ArrayList> table = new ArrayList<>();
         AgenceController ac = new AgenceController();
         CibleController cc = new CibleController();
@@ -4534,7 +4536,7 @@ public class TableGenerator {
     public List<ArrayList> generateNdtaTable(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         List<ArrayList> table = new ArrayList<>();
         AgenceController ac = new AgenceController();
         CibleController cc = new CibleController();
@@ -4963,7 +4965,7 @@ public class TableGenerator {
     public List<ArrayList> generateNdtsaTable(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         List<ArrayList> table = new ArrayList<>();
         AgenceController ac = new AgenceController();
         CibleController cc = new CibleController();
@@ -5235,7 +5237,7 @@ public class TableGenerator {
     public List<ArrayList> generateCnxTable(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         List<ArrayList> table = new ArrayList<>();
         AgenceController ac = new AgenceController();
         CibleController cc = new CibleController();
@@ -5365,7 +5367,7 @@ public class TableGenerator {
     public List<ArrayList> generateSerTable(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         List<ArrayList> table = new ArrayList<>();
         AgenceController ac = new AgenceController();
         CibleController cc = new CibleController();
@@ -5675,7 +5677,7 @@ public class TableGenerator {
     public List<ArrayList> generateGlaTable(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         List<ArrayList> table = new ArrayList<>();
         AgenceController ac = new AgenceController();
         CibleController cc = new CibleController();
@@ -6002,7 +6004,7 @@ public class TableGenerator {
     public List<ArrayList> generateGltTable(String d1, String d2, String[] dbs) {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        this.dbs = (dbs == null) ? new String[0] : dbs;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
         List<ArrayList> table = new ArrayList<>();
         AgenceController ac = new AgenceController();
         CibleController cc = new CibleController();
@@ -6322,7 +6324,7 @@ public class TableGenerator {
 
                 break;
             case "cnx":
-                T2 = generateCnxTable(request.getParameter("date1"), request.getParameter("date2"),dbs);
+                T2 = generateCnxTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
                 setTitle(th.getCnxTitle());
                 setCols(getCnxCols());
                 setType(type);
@@ -6330,7 +6332,7 @@ public class TableGenerator {
                 this.bottomHTML = "";
                 break;
             case "remp":
-                T2 = generateEmpTable(request.getParameter("date1"), request.getParameter("date2"),dbs);
+                T2 = generateEmpTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
                 setTitle(th.getRempTitle());
                 setCols(getEmpCols());
                 setType(type);
@@ -6576,7 +6578,7 @@ public class TableGenerator {
 
     public void setDefaultHTML() {
         this.topHTML = "<div class='div-wrapper d-flex justify-content-center align-items-center'>"
-                + "<form class='form-inline' id='filterForm' method='POST' action=''>"
+                + "<form class='form-inline' id='filterForm'  action=''>"
                 + "<label class='m-1' for='date1'>Du: </label>"
                 + "<input type='date' class='form-control mb-2 mr-sm-2' id='date1' name='date1' value='" + getDate1() + "' max='" + format.format(new Date()) + "'>"
                 + "<label class='m-1' for='date2'>Au: </label>"
@@ -6602,16 +6604,16 @@ public class TableGenerator {
                 + "    Agences"
                 + "  </button>"
                 + "  <div class='dropdown-menu ' id='agences'>"
-                +"<span class='dropdown-item font-weight-bold  agence'>"
-                +"<input type='checkbox'  class='mr-1 form-check-input check' id='selectAll'><span id='textSelect'>Toutes les agences.</span>"
-                + "</span>"
-                ;
+                + "<span class='dropdown-item font-weight-bold  agence'>"
+                + "<input type='checkbox'  class='mr-1 form-check-input check' id='selectAll'><span id='textSelect'>Toutes les agences.</span>"
+                + ""
+                + "</span>";
         List<Agence> agences = new AgenceController().getAllAgence();
         if (agences != null && agences.size() > 0) {
             for (int i = 0; i < agences.size(); i++) {
                 this.topHTML += "<span class='dropdown-item font-weight-bold appHover agence'>"
                         + "<input type='checkbox' name='agences' class='mr-1 form-check-input check' value='" + agences.get(i).getId().toString() + "' checked>"
-                        + "<span class='ck-text' data-id='"+agences.get(i).getId().toString()+"'>"+agences.get(i).getName()+"</span>"
+                        + "<span class='ck-text' data-id='" + agences.get(i).getId().toString() + "'>" + agences.get(i).getName() + "</span>"
                         + "</span>";
             }
 
@@ -6620,6 +6622,7 @@ public class TableGenerator {
         this.topHTML += "  </div>"
                 + "</div>"
                 + "<button type='button' class='btn btn-primary mb-2' id='refresh'><img src='./img/icon/reload.png'/> Actualiser</button>"
+                + "<input type='hidden' name='format' value='' id='format'>"
                 + "</form>"
                 + "<script>"
                 + "</script>"
@@ -6639,7 +6642,7 @@ public class TableGenerator {
 
     public void setChartHTML(String bol) throws ParseException {
         this.topHTML = "<div class='div-wrapper d-flex justify-content-center align-items-center'>"
-                + "<form class='form-inline' id='filterForm' method='POST' action=''>"
+                + "<form class='form-inline' id='filterForm' action=''>"
                 + "<label class='m-1' for='date1'>Du: </label>"
                 + "<input type='date' class='form-control mb-2 mr-sm-2' id='date1' name='date1' value='" + getDate1() + "' max='" + format.format(new Date()) + "'>"
                 + "<label class='m-1' for='date2'>Au: </label>"
@@ -6665,10 +6668,9 @@ public class TableGenerator {
                 + "    Agences"
                 + "  </button>"
                 + "  <div class='dropdown-menu ' id='agences'>"
-                +"<span class='dropdown-item font-weight-bold appHover agence'>"
-                +"<input type='checkbox'  class='mr-1 form-check-input check' id='selectAll'>Toutes les agences."
-                + "</span>"
-                ;
+                + "<span class='dropdown-item font-weight-bold appHover agence'>"
+                + "<input type='checkbox'  class='mr-1 form-check-input check' id='selectAll'>Toutes les agences."
+                + "</span>";
         List<Agence> agences = new AgenceController().getAllAgence();
         if (agences != null && agences.size() > 0) {
             for (int i = 0; i < agences.size(); i++) {
@@ -6687,12 +6689,13 @@ public class TableGenerator {
                 + "<button type='button' class='btn btn-success mb-2 ml-5  justify-content-end align-items-end' id='excel'><img src='./img/icon/excel.png'/> Excel</button>"
                 + "<button type='button' class='btn btn-danger mb-2 ml-2  justify-content-end align-items-end' id='pdf' disabled><img src='./img/icon/pdf.png'/> PDF</button>"
                 + "</div>"
+                + "<input type='hidden' name='format' value='' id='format'>"
                 + "</form>"
                 + "<script>"
                 + "</script>"
                 + "</div>";
-        this.bottomHTML = 
-                 "<div id='graphs' class='text-white bg-white ' style='height:400px'></div>"
+        this.bottomHTML
+                = "<div id='graphs' class='text-white bg-white ' style='height:400px'></div>"
                 + ""
                 + "                <script type='text/javascript'>"
                 + ""
@@ -6799,4 +6802,9 @@ public class TableGenerator {
         return format3;
     }
 
+    public String[] filterDbs(String[] dbs) {
+        String[] arr = {};
+        
+        return dbs;
+    }
 }

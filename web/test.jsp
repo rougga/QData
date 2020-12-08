@@ -35,7 +35,10 @@
                 <%@include file="./addon/navbar.jsp" %>
             </div>
             <div class="body">
-                ${agences}
+                <%
+                    
+                 
+                %>
             </div>  
         </div>
     </body>

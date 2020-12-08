@@ -16,11 +16,11 @@ public class Print extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
-            if (Objects.equals(request.getSession().getAttribute("user"), 0)) {
+            if (Objects.equals(request.getSession().getAttribute("user"), null)) {
                 response.sendRedirect("./index.jsp");
             } else {
                 String type = request.getParameter("type").trim();
-                String format = request.getParameter("format").trim().toLowerCase();
+                String format = request.getParameter("format");
                 String date1 = request.getParameter("date1").trim();
                 String date2 = request.getParameter("date2").trim();
                 String[] dbs = request.getParameterValues("agences");

@@ -43,7 +43,7 @@
                     </h1>
 
                     <div class="w-50 mx-auto ">
-                        <form action="" method="POST">
+                        <form action="">
                             <a class="btn btn-secondary mx-auto" id="majNowBtn"><img src="/QData/img/icon/maj.png"> Mise à jour maintenant</a>
                             <a class="btn btn-secondary mx-auto m-4" id="majTBtn" ><img src="/QData/img/icon/maj.png"> Mise à jour tous les tickets</a><br>
                             <a class="btn btn-secondary mx-auto" id="majLBtn"><img src="/QData/img/icon/maj.png"> Mise à jour tout le journal de connexion</a>

@@ -1,3 +1,4 @@
+<%@page import="java.util.Map"%>
 <%@page import="javax.swing.text.TabExpander"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -10,6 +11,10 @@
 <%@page import="main.PgConnection"%>
 <%@page import="java.sql.Connection"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+Stats stat=new Stats();
+Map chart= stat.getTotalDealChart();
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -30,19 +35,136 @@
             <div>
                 <%@include file="./addon/navbar.jsp" %>
             </div>
-            <%   
-                String err = "", data = "[", lable = "[";
-                String data2 = "[", labels2 = "[";
-                long wait = 0;
-                long goal = 0;
-                String waitPer = "0";
-                String goalPer = "0";
-                String waitCss = "bg-success";
-                String goalCss = "bg-danger";
-                String waitClass = "is-valid";
-                String goalClass = "is-invalid";
-                
-            %>
-           
+
+            <div class="row">
+                <div class="col-12 col-md-6 mt-4 pt-4">
+                    <div class="border border-white rounded p-2">
+                        <h4 class="text-white mx-1 text-center">Pourcentage de ticket traité par Agence:</h4>
+                        <canvas id="myChart"  height="260"></canvas>
+                    </div>
+
+                    <script>
+                        var ctx = document.getElementById('myChart').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'doughnut',
+                            data : {
+                                labels: <%= chart.get("lables") %>,
+                                datasets: [{
+                                        label: '# of Votes',
+                                        data: <%= chart.get("data") %>,
+                                        backgroundColor: [
+                                            'rgba(255, 99, 132, 0.2)',
+                                            'rgba(54, 162, 235, 0.2)',
+                                            'rgba(255, 206, 86, 0.2)',
+                                            'rgba(75, 192, 192, 0.2)',
+                                            'rgba(153, 102, 255, 0.2)',
+                                            'rgba(255, 159, 64, 0.2)'
+                                        ],
+                                        borderColor: [
+                                            'rgba(255, 99, 132, 1)',
+                                            'rgba(54, 162, 235, 1)',
+                                            'rgba(255, 206, 86, 1)',
+                                            'rgba(75, 192, 192, 1)',
+                                            'rgba(153, 102, 255, 1)',
+                                            'rgba(255, 159, 64, 1)'
+                                        ],
+                                        borderWidth: 1
+                                    }]
+                            },
+                            options: {
+                                    legend: {
+                                        labels: {
+                                            fontColor: 'lightgrey'
+                                        }
+                                    }
+                            }       
+                        });
+                    </script>
+
+                </div>
+                <div class="col-12 col-md-6 mt-4 pt-4">
+                    <form class="text-white border border-white rounded" >
+
+                        <h4 class="text-center"><img src="./img/agence.png" class="img-fluid mx-auto my-3"> TOTALE d'aujourd'hui
+                            <div class='spinner-grow text-white' role='status'>
+                                <span class='sr-only'>Chargement...</span>
+                            </div>
+                        </h4>
+                        <div class="form-group d-flex justify-content-center align-items-center flex-md-row flex-column mx-auto">
+                            <label for="validationDefaultUsername" class="col-12 col-md-5 text-md-right">Tickets édités:</label>
+                            <div class="input-group col-12 col-md-6">
+                                <div class="input-group-prepend ">
+                                    <span class="input-group-text bg-dark" id="inputGroupPrepend2"><img src="img/icon/ticket.png"/></span>
+                                </div>
+                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getTotalTicket(null, null)%>">
+                            </div>
+                        </div>
+                        <div class="form-group d-flex justify-content-center align-items-center flex-md-row flex-column mx-auto">
+                            <label for="validationDefaultUsername" class="col-md-5  text-md-right">Tickets traités:</label>
+                            <div class="input-group  col-md-6">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-dark" id="inputGroupPrepend2"><img src="img/icon/done.png"/></span>
+                                </div>
+                                <input type="text" class="form-control bg-dark text-white text-md-right " id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getDealTicket(null, null)%>">
+                            </div>
+                        </div>
+                        <div class="form-group d-flex justify-content-center align-items-center flex-md-row flex-column">
+                            <label for="validationDefaultUsername" class="col-md-5 text-md-right ">Tickets absents:</label>
+                            <div class="input-group  col-md-6">
+                                <div class="input-group-prepend ">
+                                    <span class="input-group-text bg-dark" id="inputGroupPrepend2"><img src="img/icon/x.png"/></span>
+                                </div>
+                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getAbsentTicket(null, null)%>">
+                            </div>
+                        </div>
+                        <div class="form-group d-flex justify-content-center align-items-center flex-md-row flex-column">
+                            <label for="validationDefaultUsername" class="col-md-5 text-md-right ">Tickets sans affectation:</label>
+                            <div class="input-group  col-md-6">
+                                <div class="input-group-prepend ">
+                                    <span class="input-group-text bg-dark" id="inputGroupPrepend2"><img src="img/icon/ticket.png"/></span>
+                                </div>
+                                <input type="text" class="form-control bg-dark text-white text-md-right " id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getWaitingTicket(null, null)%>">
+                            </div>
+                        </div>
+                        <div class="form-group  d-flex justify-content-center align-items-center flex-md-row flex-column">
+                            <label for="validationDefaultUsername" class="col-md-5 text-md-right ">Moyenne d'attente:</label>
+                            <div class="input-group col-md-6 ">
+                                <div class="input-group-prepend ">
+                                    <span class="input-group-text bg-dark " id="inputGroupPrepend2"><img src="img/icon/wait.png"/></span>
+                                </div>
+                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getAvgWaitTime(null, null)%>">
+                            </div>
+                        </div>
+                        <div class="form-group d-flex justify-content-center align-items-center flex-md-row flex-column">
+                            <label for="validationDefaultUsername" class="col-md-5 text-md-right ">Moyenne de traitement:</label>
+                            <div class="input-group  col-md-6">
+                                <div class="input-group-prepend ">
+                                    <span class="input-group-text bg-dark" id="inputGroupPrepend2"><img src="img/icon/done.png"/></span>
+                                </div>
+                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getAvgDealTime(null, null)%>">
+                            </div>
+                        </div>
+                        <div class="form-group d-flex justify-content-center align-items-center flex-md-row flex-column">
+                            <label for="validationDefaultUsername" class="col-md-5 text-md-right ">Max. Attente:</label>
+                            <div class="input-group  col-md-6">
+                                <div class="input-group-prepend ">
+                                    <span class="input-group-text bg-dark" id="inputGroupPrepend2"><img src="img/icon/max.png"/></span>
+                                </div>
+                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getMaxWaitTime(null, null)%>">
+                            </div>
+                        </div>
+                        <div class="form-group d-flex justify-content-center align-items-center flex-md-row flex-column">
+                            <label for="validationDefaultUsername" class="col-md-5 text-md-right ">Max. Traitement:</label>
+                            <div class="input-group  col-md-6 ">
+                                <div class="input-group-prepend ">
+                                    <span class="input-group-text bg-dark" id="inputGroupPrepend2"><img src="img/icon/max.png"/></span>
+                                </div>
+                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getMaxDealTime(null, null)%>">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

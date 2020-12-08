@@ -47,22 +47,6 @@
         <script src="js/echarts-en.min.js"></script>
         <script src="js/moment.min.js"></script>
         <style>
-            #selectAll{
-                float: left;
-                width: 100%;
-                position: absolute;
-                left: 0;
-                height: 20px;
-                background-color: red;
-                padding: 10px;
-                z-index:99;
-            }
-            #textSelect{
-                margin-left: 10px;
-            }
-            .check{
-                z-index:99;
-            }
         </style>
     </head>
     <body>
@@ -247,11 +231,13 @@ $(document).ready(function() {
     $(".Totale").parent("tr").addClass("appColor").addClass("text-white").removeClass("border-dark").children(".Totale").removeClass("border-dark");
     $("#refresh").on('click', function () {
          $("#filterForm").attr("action","");
+         
          $("#filterForm").submit();
     });
         
     $("#excel").on('click', function () {
-         $("#filterForm").attr("action","./Print?format=excel");
+         $("#filterForm").attr("action","./Print");
+         $("#format").val("excel");
          $("#filterForm").submit();
     });
     $("#word").on('click', function () {
@@ -282,57 +268,102 @@ $(document).ready(function() {
             alert("La date Du est plus gros que la date Au.");
             $("#date2").val(new Date().toLocaleDateString('en-CA'));
         }
+        addDateToSessionStorage();
+        updateLinks();
     });
     $("#date2").on('change', function () {
         if ($("#date1").val() > $("#date2").val()) {
             alert("La date Du est plus gros que la date Au.");
             $("#date2").val(new Date().toLocaleDateString('en-CA'));
         }
+        addDateToSessionStorage();
+        updateLinks();
     });
     $("#today").on('click', function () {
-                    $("#date1").val(moment().format('YYYY-MM-DD'));
-                    $("#date2").val(moment().format('YYYY-MM-DD'));
-                });
-                $("#yesterday").on('click', function () {
-                    $("#date1").val(moment().subtract(1, 'days').format('YYYY-MM-DD'));
-                    $("#date2").val(moment().subtract(1, 'days').format('YYYY-MM-DD'));
-                });
+        $("#date1").val(moment().format('YYYY-MM-DD'));
+        $("#date2").val(moment().format('YYYY-MM-DD'));
+        addDateToSessionStorage();
+        updateLinks();
+    });
+    $("#yesterday").on('click', function () {
+        $("#date1").val(moment().subtract(1, 'days').format('YYYY-MM-DD'));
+        $("#date2").val(moment().subtract(1, 'days').format('YYYY-MM-DD'));
+        addDateToSessionStorage();
+        updateLinks();
+    });
                 
-                $("#cWeek").on('click', function () {
-                    $("#date1").val(moment().startOf('week').format('YYYY-MM-DD'));
-                    $("#date2").val(moment().endOf('week').format('YYYY-MM-DD'));
-                });
-                $("#lWeek").on('click', function () {
-                    $("#date1").val(moment().subtract(1, 'week').startOf('week').format('YYYY-MM-DD'));
-                    $("#date2").val(moment().subtract(1, 'week').endOf('week').format('YYYY-MM-DD'));
-                });
-                $("#cMonth").on('click', function () {
-                    $("#date1").val(moment().startOf('month').format('YYYY-MM-DD'));
-                    $("#date2").val(moment().endOf('month').format('YYYY-MM-DD'));
-                });
-                $("#lMonth").on('click', function () {
-                    $("#date1").val(moment().subtract(1, 'month').startOf('month').format('YYYY-MM-DD'));
-                    $("#date2").val(moment().subtract(1, 'month').endOf('month').format('YYYY-MM-DD'));
-                });
-                $("#cYear").on('click', function () {
-                    $("#date1").val(moment().startOf('year').format('YYYY-MM-DD'));
-                    $("#date2").val(moment().endOf('year').format('YYYY-MM-DD'));
-                });
-                $("#lYear").on('click', function () {
-                    $("#date1").val(moment().subtract(1, 'year').startOf('year').format('YYYY-MM-DD'));
-                    $("#date2").val(moment().subtract(1, 'year').endOf('year').format('YYYY-MM-DD'));
-                });
+    $("#cWeek").on('click', function () {
+        $("#date1").val(moment().startOf('week').format('YYYY-MM-DD'));
+        $("#date2").val(moment().endOf('week').format('YYYY-MM-DD'));
+        addDateToSessionStorage();
+        updateLinks();
+    });
+    $("#lWeek").on('click', function () {
+        $("#date1").val(moment().subtract(1, 'week').startOf('week').format('YYYY-MM-DD'));
+        $("#date2").val(moment().subtract(1, 'week').endOf('week').format('YYYY-MM-DD'));
+        addDateToSessionStorage();
+        updateLinks();
+    });
+    $("#cMonth").on('click', function () {
+        $("#date1").val(moment().startOf('month').format('YYYY-MM-DD'));
+        $("#date2").val(moment().endOf('month').format('YYYY-MM-DD'));
+        addDateToSessionStorage();
+        updateLinks();
+    });
+    $("#lMonth").on('click', function () {
+        $("#date1").val(moment().subtract(1, 'month').startOf('month').format('YYYY-MM-DD'));
+        $("#date2").val(moment().subtract(1, 'month').endOf('month').format('YYYY-MM-DD'));
+        addDateToSessionStorage();
+        updateLinks();
+    });
+    $("#cYear").on('click', function () {
+        $("#date1").val(moment().startOf('year').format('YYYY-MM-DD'));
+        $("#date2").val(moment().endOf('year').format('YYYY-MM-DD'));
+        addDateToSessionStorage();
+        updateLinks();
+    });
+    $("#lYear").on('click', function () {
+        $("#date1").val(moment().subtract(1, 'year').startOf('year').format('YYYY-MM-DD'));
+        $("#date2").val(moment().subtract(1, 'year').endOf('year').format('YYYY-MM-DD'));
+        addDateToSessionStorage();
+        updateLinks();
+    });
                 
    showCols("<%=type%>");
    rowSpan();
    var getCheckedBoxes =function() {
     var searchIDs = $("input:checkbox:checked").map(function(){
-            return $(this).val();
+            if($(this).val()!== "on"){
+                return $(this).val();
+            }
+            
         }).get();
         return searchIDs;
-};
+    };
+    var addDateToSessionStorage = function() {
+        sessionStorage.setItem("date1",$("#date1").val());
+        sessionStorage.setItem("date2",$("#date2").val());
+    };
+    var updateLinks = function(){
+        var ids = getCheckedBoxes();
+        var date1 =sessionStorage.getItem("date1");
+        var date2 =sessionStorage.getItem("date2"); 
+        var agencesLink ="";
+        for(i=0;i<ids.length;i++){
+            agencesLink+= "&agences="+ids[i];
+        }
+        agencesLink+="&date1="+date1+"$date2="+date2;
+        $.each($(".d"),function(i,v) {
+            var link=$(v).attr("href");
+            link= link.substring(0,link.indexOf("d=d")+3);
+            link+=agencesLink;
+            $(v).attr("href",link);
+        });
+        console.log(ids);
+    };
     $(".check").on('change',function() {
         sessionStorage.setItem("dbs",JSON.stringify(getCheckedBoxes()));
+        updateLinks();
     });
     $(".ck-text").on('click', function () {
         var id = $(this).attr("data-id");
@@ -340,17 +371,27 @@ $(document).ready(function() {
         if($(check).prop("checked")){
             $(check).prop("checked",false);
             sessionStorage.setItem("dbs",JSON.stringify(getCheckedBoxes()));
+            updateLinks();
         }else{
             $(check).prop("checked",true);
             sessionStorage.setItem("dbs",JSON.stringify(getCheckedBoxes()));
+            updateLinks();
         }
     });
     
     $("#selectAll").on('change',function() {
         if($(this).prop("checked")){
            $(".check").prop("checked",true);
+           sessionStorage.setItem("dbs",JSON.stringify(getCheckedBoxes()));
+           
+        console.log(getCheckedBoxes());
+           updateLinks();
         }else{
             $(".check").prop("checked",false);
+            sessionStorage.setItem("dbs",JSON.stringify(getCheckedBoxes()));
+            updateLinks();
+            
+        console.log(getCheckedBoxes());
         }
     });
    var checkCheckBoxes = function() {
@@ -365,7 +406,15 @@ $(document).ready(function() {
         }
        
     };
+    var setDates = function() {
+        var date1 =sessionStorage.getItem("date1");
+        var date2 =sessionStorage.getItem("date2");
+        $("#date1").val(date1);
+        $("#date2").val(date2);
+    };
    checkCheckBoxes();
+   setDates();
+   updateLinks();
 });
                 
         </script>

@@ -23,16 +23,16 @@
                     <span class=""></span> Rapport
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownR" >
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=gbl">RAPPORT GLOBALE</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=emp">RAPPORT EMPLOYE</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=empser">RAPPORT EMPLOYE (service)</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=gch">RAPPORT GUICHET</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=gchserv">RAPPORT GUICHET (service)</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="/QData/report.jsp?type=gbl&d=d">RAPPORT GLOBALE</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="/QData/report.jsp?type=emp&d=d">RAPPORT EMPLOYE</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="/QData/report.jsp?type=empser&d=d">RAPPORT EMPLOYE (service)</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="/QData/report.jsp?type=gch&d=d">RAPPORT GUICHET</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="/QData/report.jsp?type=gchserv&d=d">RAPPORT GUICHET (service)</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=gla">Grille attente</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=glt">Grille traitement</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="/QData/report.jsp?type=gla&d=d">Grille attente</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="/QData/report.jsp?type=glt&d=d">Grille traitement</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item font-weight-bold navHover disabled" href="/QData/report.jsp?type=apl">Détail des appels</a>
+                    <a class="dropdown-item font-weight-bold navHover disabled d" href="/QData/report.jsp?type=apl&d=d">Détail des appels</a>
                 </div>
             </li> 
             <li class="nav-item dropdown" id="tranche">
@@ -40,10 +40,10 @@
                     <span class=""></span> Tranche horaire
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownRe" >
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=ndt">Nombre de tickets edités</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=ndtt">Nombre de tickets traités</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=ndta">Nombre de tickets absents</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/report.jsp?type=ndtsa">Nombre de tickets sans affectation</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="/QData/report.jsp?type=ndt&d=d">Nombre de tickets edités</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="/QData/report.jsp?type=ndtt&d=d">Nombre de tickets traités</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="/QData/report.jsp?type=ndta&d=d">Nombre de tickets absents</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="/QData/report.jsp?type=ndtsa&d=d">Nombre de tickets sans affectation</a>
                 </div>
             </li>
             <li class="nav-item dropdown" id="topics">
@@ -51,9 +51,9 @@
                     <span class="far fa-file-alt"></span> Rendement
                 </a>
                 <div class="dropdown-menu" aria-labelledby="rend" >
-                    <a class="dropdown-item  font-weight-bold navHover" href="/QData/report.jsp?type=cnx">Connexions</a>
-                    <a class="dropdown-item  font-weight-bold navHover" href="/QData/report.jsp?type=gbl">Pauses</a>
-                    <a class="dropdown-item  font-weight-bold navHover" href="/QData/report.jsp?type=remp">Employés</a>
+                    <a class="dropdown-item  font-weight-bold navHover d" href="/QData/report.jsp?type=cnx&d=d">Connexions</a>
+                    <a class="dropdown-item  font-weight-bold navHover d" href="/QData/report.jsp?type=gbl&d=d">Pauses</a>
+                    <a class="dropdown-item  font-weight-bold navHover d" href="/QData/report.jsp?type=remp&d=d">Employés</a>
                 </div>
             </li> 
             <li class="nav-item dropdown" id="topics">
