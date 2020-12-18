@@ -127,7 +127,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="port">Port:</label>
-                                        <input type="number" class="form-control" id="port" name="port" value="8888" required min="1">
+                                        <input type="number" class="form-control" id="port" name="port" value="5432" required min="1">
                                     </div>
                                     <div class="form-group">
                                         <label for="db">Database:</label>

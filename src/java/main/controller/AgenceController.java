@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -104,10 +105,14 @@ public class AgenceController {
         Agence a = getAgenceById(id);
         if (a != null) {
             try {
-                Socket socket = new Socket(a.getHost(), a.getPort());
-                socket.close();
+                //Socket socket = new Socket(a.getHost(), a.getPort());
+                //socket.close();
+                PgMultiConnection con = new PgMultiConnection(a.getHost(), String.valueOf(a.getPort()), a.getDatabase(), a.getUsername(), a.getPassword());
+                if (con != null) {
+                    con.closeCon();
+                }
                 return true;
-            } catch (IOException e) {
+            } catch (ClassNotFoundException | SQLException ex) {
                 return false;
             }
 

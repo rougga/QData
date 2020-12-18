@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import main.controller.AgenceController;
+import org.apache.commons.lang3.StringUtils;
 
 public class DeleteDatabase extends HttpServlet {
 
@@ -23,14 +24,14 @@ public class DeleteDatabase extends HttpServlet {
                 if (Objects.equals(request.getSession().getAttribute("grade"), "adm")) {
 
                     String id = request.getParameter("id");
-                    if (id != null) {
+                    if (!StringUtils.isBlank(id)) {
                         if (new AgenceController().deleteAgenceById(UUID.fromString(id)) == 1) {
-                            response.sendRedirect("./settings.jsp?type=db&err=" + URLEncoder.encode("la base de données est supprimé", "UTF-8"));
+                            response.sendRedirect("./setting/agences.jsp?err=" + URLEncoder.encode("la base de données est supprimé", "UTF-8"));
                         } else {
-                            response.sendRedirect("./settings.jsp?type=db&err=" + URLEncoder.encode("la base de données n'est pas supprimé", "UTF-8"));
+                            response.sendRedirect("./settings/agences.jsp?err=" + URLEncoder.encode("la base de données n'est pas supprimé", "UTF-8"));
                         }
                     } else {
-                        response.sendRedirect("./settings.jsp?type=db&err=" + URLEncoder.encode("un champ est vide", "UTF-8"));
+                        response.sendRedirect("./setting/agences.jsp?err=" + URLEncoder.encode("un champ est vide", "UTF-8"));
                     }
                 } else {
                     response.sendRedirect("./home.jsp?err=" + URLEncoder.encode("vous avez besoin des privilèges d'administrateur", "UTF-8"));
