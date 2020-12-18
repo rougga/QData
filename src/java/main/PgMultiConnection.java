@@ -37,4 +37,7 @@ public class PgMultiConnection {
         st.close();
         con.close();
     }
+     public void closeCon() throws SQLException {
+        con.close();
+    }
 }
