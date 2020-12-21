@@ -4,7 +4,7 @@
         response.sendRedirect("/QData/index.jsp");
     }
 %>
-<nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #b83dba;">
+<nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #14b6fa;">
     <a class="navbar-brand" href="#">QData</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">

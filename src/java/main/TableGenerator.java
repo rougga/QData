@@ -6759,7 +6759,7 @@ public class TableGenerator {
                 + "                                data: " + getChartData() + ","
                 + "                                itemStyle: {"
                 + "                                    normal: {"
-                + "                                        color: '#b83dba'"
+                + "                                        color: '#14b6fa'"
                 + "                                    }"
                 + "                                }"
                 + ""

@@ -166,5 +166,25 @@ Map chart= stat.getTotalDealChart();
                 </div>
             </div>
         </div>
+        <script>
+             var updateLinks = function(){
+                var ids = JSON.parse(sessionStorage.getItem("dbs"));
+                var date1 =sessionStorage.getItem("date1");
+                var date2 =sessionStorage.getItem("date2"); 
+                var agencesLink ="";
+                for(i=0;i<ids.length;i++){
+                    agencesLink+= "&agences="+ids[i];
+                }
+                agencesLink+="&date1="+date1+"$date2="+date2;
+                $.each($(".d"),function(i,v) {
+                    var link=$(v).attr("href");
+                    link= link.substring(0,link.indexOf("d=d")+3);
+                    link+=agencesLink;
+                    $(v).attr("href",link);
+                });
+                console.log(ids);
+            };
+            updateLinks();
+        </script>
     </body>
 </html>

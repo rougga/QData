@@ -14,19 +14,19 @@ body {
     color: white;
 }
 .appColor,.appColor th,.appColor td{
-    background-color: #b83dba;
+    background-color: #14b6fa;
     color:white;
     border: 1px solid black;
 }
 .appBg{
-    background-color: #b83dba !important;
+    background-color: #14b6fa !important;
 
 }
 .appBorder{
-    border: 1px solid #b83dba ;
+    border: 1px solid #14b6fa ;
 }
 .appTxt{
-    color: #b83dba;
+    color: #14b6fa;
 }
 .hover:hover{
     opacity: 0.8;

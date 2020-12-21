@@ -50,7 +50,7 @@
         </style>
     </head>
     <body>
-        <div class="container-xl">
+        <div class="container-xl bg-dark h-100 p-0">
 
             <div class="head">
                 <%@include file="./addon/navbar.jsp" %>
@@ -359,6 +359,7 @@ $(document).ready(function() {
             link+=agencesLink;
             $(v).attr("href",link);
         });
+        sessionStorage.setItem("dbs",JSON.stringify(ids));
         console.log(ids);
     };
     $(".check").on('change',function() {
