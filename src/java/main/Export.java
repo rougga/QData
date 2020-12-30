@@ -1,4 +1,4 @@
-package main;
+ package main;
 
 import com.google.common.collect.HashBiMap;
 import java.io.File;
@@ -16,15 +16,19 @@ import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import main.handler.TitleHandler;
+import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jxls.exception.ParsePropertyException;
 import net.sf.jxls.transformer.XLSTransformer;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.xml.sax.SAXException;
+
+
 
 public class Export {
 
@@ -35,7 +39,7 @@ public class Export {
         return (new SimpleDateFormat("yyyyMMddhhmmss")).format(new Date()) + (new Random()).nextInt(100000);
     }
 
-    public int exportGblExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2,String[] dbs) {
+    public int exportGblExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2, String[] dbs) {
 
         try {
             XLSTransformer transformer = new XLSTransformer();
@@ -48,7 +52,7 @@ public class Export {
             data.put("title", new TitleHandler(request).getGblTitle() + " Du " + date1 + " Au " + date2);
 
             TableGenerator tbl = new TableGenerator();
-            List<ArrayList> gtable = tbl.generateGblTable(date1, date2,dbs);
+            List<ArrayList> gtable = tbl.generateGblTable(date1, date2, dbs);
             List table = new ArrayList();
 
             if (gtable != null && gtable.size() > 0) {
@@ -83,7 +87,50 @@ public class Export {
         }
     }
 
-    public int exportEmpExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2,String[] dbs) {
+    public int exportGblPDF(HttpServletResponse response, HttpServletRequest request, String date1, String date2, String[] dbs) {
+        System.err.println("Printing PDF...");
+        try {
+            String filename = getRandomName() + ".pdf";
+            Map data = new HashMap();
+            //data here
+            data.put("title", new TitleHandler(request).getGblTitle() + " Du " + date1 + " Au " + date2);
+
+            TableGenerator tbl = new TableGenerator();
+            List<ArrayList> gtable = tbl.generateGblTable(date1, date2, dbs);
+            List table = new ArrayList();
+
+            if (gtable != null && gtable.size() > 0) {
+                for (int i = 0; i < gtable.size(); i++) {
+                    Map row = new HashMap();
+                    for (int j = 0; j < gtable.get(i).size(); j++) {
+                        row.put("d" + j, gtable.get(i).get(j));
+                    }
+                    table.add(row);
+                }
+
+                File reportFile = new File(request.getSession().getServletContext().getRealPath("/cfg/pdf/gbl.jasper"));
+
+                byte[] bytes = JasperRunManager.runReportToPdf(reportFile.getPath(), data, new PgConnection().getStatement().getConnection());
+                response.setContentType("application/pdf");
+                response.setHeader("Content-Disposition", "attachment;filename=" + filename);
+                response.setContentLength(bytes.length);
+                ServletOutputStream outStream = response.getOutputStream();
+                outStream.write(bytes, 0, bytes.length);
+                outStream.flush();
+                outStream.close();
+                System.err.println("Finished printing pdf");
+                return 1;
+            } else {
+                return 0;
+            }
+
+        } catch (Exception e) {
+            Logger.getLogger(Export.class.getName()).log(Level.SEVERE, null, e);
+            return 0;
+        }
+    }
+
+    public int exportEmpExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2, String[] dbs) {
 
         try {
             XLSTransformer transformer = new XLSTransformer();
@@ -96,7 +143,7 @@ public class Export {
             data.put("title", new TitleHandler(request).getEmpTitle() + " Du " + date1 + " Au " + date2);
 
             TableGenerator tbl = new TableGenerator();
-            List<ArrayList> gtable = tbl.generateEmpTable(date1, date2,dbs);
+            List<ArrayList> gtable = tbl.generateEmpTable(date1, date2, dbs);
             List table = new ArrayList();
 
             if (gtable != null && gtable.size() > 0) {
@@ -130,7 +177,7 @@ public class Export {
         }
     }
 
-    public int exportEmpServiceExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2,String[] dbs) {
+    public int exportEmpServiceExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2, String[] dbs) {
 
         try {
             XLSTransformer transformer = new XLSTransformer();
@@ -143,7 +190,7 @@ public class Export {
             data.put("title", new TitleHandler(request).getEmpSerTitle() + " Du " + date1 + " Au " + date2);
 
             TableGenerator tbl = new TableGenerator();
-            List<ArrayList> gtable = tbl.generateEmpServiceTable(date1, date2,dbs);
+            List<ArrayList> gtable = tbl.generateEmpServiceTable(date1, date2, dbs);
             List table = new ArrayList();
 
             if (gtable != null && gtable.size() > 0) {
@@ -177,7 +224,7 @@ public class Export {
         }
     }
 
-    public int exportGchExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2,String[] dbs) {
+    public int exportGchExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2, String[] dbs) {
 
         try {
             XLSTransformer transformer = new XLSTransformer();
@@ -190,7 +237,7 @@ public class Export {
             data.put("title", new TitleHandler(request).getGchTitle() + " Du " + date1 + " Au " + date2);
 
             TableGenerator tbl = new TableGenerator();
-            List<ArrayList> gtable = tbl.generateGchTable(date1, date2,dbs);
+            List<ArrayList> gtable = tbl.generateGchTable(date1, date2, dbs);
             List table = new ArrayList();
 
             if (gtable != null && gtable.size() > 0) {
@@ -224,7 +271,7 @@ public class Export {
         }
     }
 
-    public int exportGchServiceExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2,String[] dbs) {
+    public int exportGchServiceExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2, String[] dbs) {
 
         try {
             XLSTransformer transformer = new XLSTransformer();
@@ -237,7 +284,7 @@ public class Export {
             data.put("title", new TitleHandler(request).getGchServTitle() + " Du " + date1 + " Au " + date2);
 
             TableGenerator tbl = new TableGenerator();
-            List<ArrayList> gtable = tbl.generateGchServiceTable(date1, date2,dbs);
+            List<ArrayList> gtable = tbl.generateGchServiceTable(date1, date2, dbs);
             List table = new ArrayList();
 
             if (gtable != null && gtable.size() > 0) {
@@ -271,7 +318,7 @@ public class Export {
         }
     }
 
-    public int exportNdtExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2,String[] dbs) {
+    public int exportNdtExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2, String[] dbs) {
 
         try {
             XLSTransformer transformer = new XLSTransformer();
@@ -281,10 +328,10 @@ public class Export {
             Map beans = new HashMap();
             Map data = new HashMap();
             //data here
-            data.put("title", "Tranche horaire: "+new TitleHandler(request).getNdtTitle() + " Du " + date1 + " Au " + date2);
+            data.put("title", "Tranche horaire: " + new TitleHandler(request).getNdtTitle() + " Du " + date1 + " Au " + date2);
 
             TableGenerator tbl = new TableGenerator();
-            List<ArrayList> gtable = tbl.generateNdtTable(date1, date2,dbs);
+            List<ArrayList> gtable = tbl.generateNdtTable(date1, date2, dbs);
             List table = new ArrayList();
 
             if (gtable != null && gtable.size() > 0) {
@@ -318,7 +365,7 @@ public class Export {
         }
     }
 
-    public int exportNdttExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2,String[] dbs) {
+    public int exportNdttExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2, String[] dbs) {
         try {
             XLSTransformer transformer = new XLSTransformer();
             String filename = getRandomName() + ".xlsx";
@@ -327,10 +374,10 @@ public class Export {
             Map beans = new HashMap();
             Map data = new HashMap();
             //data here
-            data.put("title", "Tranche horaire: "+new TitleHandler(request).getNdtTitle() + " Du " + date1 + " Au " + date2);
+            data.put("title", "Tranche horaire: " + new TitleHandler(request).getNdtTitle() + " Du " + date1 + " Au " + date2);
 
             TableGenerator tbl = new TableGenerator();
-            List<ArrayList> gtable = tbl.generateNdttTable(date1, date2,dbs);
+            List<ArrayList> gtable = tbl.generateNdttTable(date1, date2, dbs);
             List table = new ArrayList();
 
             if (gtable != null && gtable.size() > 0) {
@@ -364,7 +411,7 @@ public class Export {
         }
     }
 
-    public int exportNdtaExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2,String[] dbs) {
+    public int exportNdtaExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2, String[] dbs) {
         try {
             XLSTransformer transformer = new XLSTransformer();
             String filename = getRandomName() + ".xlsx";
@@ -373,10 +420,10 @@ public class Export {
             Map beans = new HashMap();
             Map data = new HashMap();
             //data here
-            data.put("title", "Tranche horaire: "+new TitleHandler(request).getNdtaTitle() + " Du " + date1 + " Au " + date2);
+            data.put("title", "Tranche horaire: " + new TitleHandler(request).getNdtaTitle() + " Du " + date1 + " Au " + date2);
 
             TableGenerator tbl = new TableGenerator();
-            List<ArrayList> gtable = tbl.generateNdtaTable(date1, date2,dbs);
+            List<ArrayList> gtable = tbl.generateNdtaTable(date1, date2, dbs);
             List table = new ArrayList();
 
             if (gtable != null && gtable.size() > 0) {
@@ -410,7 +457,7 @@ public class Export {
         }
     }
 
-    public int exportNdtsaExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2,String[] dbs) {
+    public int exportNdtsaExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2, String[] dbs) {
         try {
             XLSTransformer transformer = new XLSTransformer();
             String filename = getRandomName() + ".xlsx";
@@ -419,10 +466,10 @@ public class Export {
             Map beans = new HashMap();
             Map data = new HashMap();
             //data here
-            data.put("title", "Tranche horaire: "+new TitleHandler(request).getNdtsaTitle() + " Du " + date1 + " Au " + date2);
+            data.put("title", "Tranche horaire: " + new TitleHandler(request).getNdtsaTitle() + " Du " + date1 + " Au " + date2);
 
             TableGenerator tbl = new TableGenerator();
-            List<ArrayList> gtable = tbl.generateNdtsaTable(date1, date2,dbs);
+            List<ArrayList> gtable = tbl.generateNdtsaTable(date1, date2, dbs);
             List table = new ArrayList();
 
             if (gtable != null && gtable.size() > 0) {
@@ -456,7 +503,7 @@ public class Export {
         }
     }
 
-    public int exportGlaExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2,String[] dbs) {
+    public int exportGlaExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2, String[] dbs) {
         try {
             XLSTransformer transformer = new XLSTransformer();
             String filename = getRandomName() + ".xlsx";
@@ -468,7 +515,7 @@ public class Export {
             data.put("title", new TitleHandler(request).getGlaTitle() + " Du " + date1 + " Au " + date2);
 
             TableGenerator tbl = new TableGenerator();
-            List<ArrayList> gtable = tbl.generateGlaTable(date1, date2,dbs);
+            List<ArrayList> gtable = tbl.generateGlaTable(date1, date2, dbs);
             List table = new ArrayList();
 
             if (gtable != null && gtable.size() > 0) {
@@ -502,7 +549,7 @@ public class Export {
         }
     }
 
-    public int exportGltExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2,String[] dbs) {
+    public int exportGltExcel(HttpServletResponse response, HttpServletRequest request, String date1, String date2, String[] dbs) {
         try {
             XLSTransformer transformer = new XLSTransformer();
             String filename = getRandomName() + ".xlsx";
@@ -514,7 +561,7 @@ public class Export {
             data.put("title", new TitleHandler(request).getGltTitle() + " Du " + date1 + " Au " + date2);
 
             TableGenerator tbl = new TableGenerator();
-            List<ArrayList> gtable = tbl.generateGltTable(date1, date2,dbs);
+            List<ArrayList> gtable = tbl.generateGltTable(date1, date2, dbs);
             List table = new ArrayList();
 
             if (gtable != null && gtable.size() > 0) {

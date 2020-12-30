@@ -241,12 +241,11 @@ $(document).ready(function() {
          $("#filterForm").submit();
     });
     $("#word").on('click', function () {
-        $("#format").val("word");
-        $("#printForm").submit();
     });
     $("#pdf").on('click', function () {
+        $("#filterForm").attr("action","./Print");
         $("#format").val("pdf");
-        $("#printForm").submit();
+        $("#filterForm").submit();
     });
     $("#plus").on('click', function () {
         if ($(this).text() === "PLUS >>") {
