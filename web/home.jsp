@@ -24,7 +24,7 @@ Map chart= stat.getTotalDealChart();
         <link rel="icon" type="image/png" href="./img/favicon-32x32.png">
         <script src="./js/jquery.js"></script>
         <link href="./css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <script src="./js/bootstrap.min.js"></script>
+        <script src="./js/bootstrap.bundle.min.js"></script>
         <script src="./js/Chart.min.js"></script>
         <link href="./css/Chart.min.css" rel="stylesheet" type="text/css"/>
         <link href="./css/body.css" rel="stylesheet" type="text/css"/>
@@ -172,8 +172,10 @@ Map chart= stat.getTotalDealChart();
                 var date1 =sessionStorage.getItem("date1");
                 var date2 =sessionStorage.getItem("date2"); 
                 var agencesLink ="";
-                for(i=0;i<ids.length;i++){
-                    agencesLink+= "&agences="+ids[i];
+                if(ids){ 
+                    for(i=0;i<ids.length;i++){
+                        agencesLink+= "&agences="+ids[i];
+                    }
                 }
                 agencesLink+="&date1="+date1+"$date2="+date2;
                 $.each($(".d"),function(i,v) {

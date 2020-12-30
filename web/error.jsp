@@ -19,7 +19,7 @@
         <link rel="icon" type="image/png" href="./img/favicon-32x32.png">
         <script src="./js/jquery.js"></script>
         <link href="./css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <script src="./js/bootstrap.min.js"></script>
+        <script src="./js/bootstrap.bundle.min.js"></script>
         <script src="./js/Chart.min.js"></script>
         <link href="./css/Chart.min.css" rel="stylesheet" type="text/css"/>
         <link href="./css/body.css" rel="stylesheet" type="text/css"/>

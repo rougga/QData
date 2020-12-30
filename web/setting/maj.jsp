@@ -11,7 +11,7 @@
         <link rel="icon" type="image/png" href="../img/favicon-32x32.png">
         <script src="../js/jquery.js"></script>
         <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/bootstrap.bundle.min.js"></script>
         <link href="../css/navbar.css" rel="stylesheet" type="text/css"/> 
         <link href="../css/body.css" rel="stylesheet" type="text/css"/>
         <script src="../js/settings.js"></script>
@@ -43,11 +43,10 @@
                     </h1>
 
                     <div class="w-50 mx-auto ">
-                        <form action="">
-                            <a class="btn btn-secondary mx-auto" id="majNowBtn"><img src="/QData/img/icon/maj.png"> Mise à jour maintenant</a>
-                            <a class="btn btn-secondary mx-auto m-4" id="majTBtn" ><img src="/QData/img/icon/maj.png"> Mise à jour tous les tickets</a><br>
-                            <a class="btn btn-secondary mx-auto" id="majLBtn"><img src="/QData/img/icon/maj.png"> Mise à jour tout le journal de connexion</a>
-
+                        <form action="" class="d-flex justify-content-center flex-column">
+                            <a class="btn btn-secondary m-1" id="majNowBtn"><img src="/QData/img/icon/maj.png"> Mise à jour (aujourd'hui) maintenant</a>
+                            <a class="btn btn-secondary m-1" id="majTBtn" ><img src="/QData/img/icon/maj.png"> Mise à jour tous les tickets</a>
+                            <a class="btn btn-secondary m-1" id="majLBtn"><img src="/QData/img/icon/maj.png"> Mise à jour tout le journal de connexion</a>
                         </form>
                     </div>
                 </div>

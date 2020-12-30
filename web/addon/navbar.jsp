@@ -52,7 +52,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="rend" >
                     <a class="dropdown-item  font-weight-bold navHover d" href="/QData/report.jsp?type=cnx&d=d">Connexions</a>
-                    <a class="dropdown-item  font-weight-bold navHover d" href="/QData/report.jsp?type=gbl&d=d">Pauses</a>
+                    <a class="dropdown-item  font-weight-bold navHover d disabled" href="/QData/report.jsp?type=gbl&d=d">Pauses</a>
                     <a class="dropdown-item  font-weight-bold navHover d" href="/QData/report.jsp?type=remp&d=d">Employés</a>
                 </div>
             </li> 

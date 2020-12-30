@@ -810,7 +810,7 @@ public class TableGenerator {
                             + "(SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) FROM T_TICKET T2 WHERE t2.deal_user = t1.deal_user and T2.STATUS = 4  " + dateCon + ") AS AVGSEC_T  "
                             + "from t_ticket t1, t_user u "
                             + "where t1.deal_user= u.id and to_date(to_char(t1.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD')  and t1.db_id='" + a.getId() + "'  and u.db_id='" + a.getId() + "' "
-                            + "group by u.name,t1.deal_user) g1;";
+                            + "group by u.name,t1.deal_user) g1 order by g1.name;";
                     String subSQL = "SELECT G1.NB_T, "
                             + "G1.NB_TT, "
                             + "G1.NB_A, "
@@ -1068,7 +1068,7 @@ public class TableGenerator {
                             + "(SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) FROM T_TICKET T2 WHERE t2.deal_user = t1.deal_user and T2.STATUS = 4  " + dateCon + ") AS AVGSEC_T  "
                             + "from t_ticket t1, t_user u "
                             + "where t1.deal_user= u.id and to_date(to_char(t1.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD')  and t1.db_id='" + a.getId() + "'  and u.db_id='" + a.getId() + "' "
-                            + "group by u.name,t1.deal_user) g1;";
+                            + "group by u.name,t1.deal_user) g1 order by g1.name;";
                     String subSQL = "SELECT G1.NB_T, "
                             + "G1.NB_TT, "
                             + "G1.NB_A, "
@@ -1299,7 +1299,7 @@ public class TableGenerator {
                             + "(SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) FROM T_TICKET T2 WHERE t2.deal_user=t1.deal_user and t2.biz_type_id=t1.biz_type_id and T2.STATUS = 4   " + dateCon + " ) AS AVGSEC_T "
                             + "  from t_ticket t1 , t_biz_type b,t_user u "
                             + "where t1.deal_user is not null and t1.biz_type_id=b.id and t1.deal_user=u.id and to_date(to_char(t1.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD')  and t1.db_id='" + a.getId() + "' and b.db_id='" + a.getId() + "' and u.db_id='" + a.getId() + "'"
-                            + "group by t1.deal_user,u.name,t1.biz_type_id,b.name) g1;";
+                            + "group by t1.deal_user,u.name,t1.biz_type_id,b.name) g1 order by g1.username;";
                     String subSQL = "SELECT G1.NB_T, "
                             + "G1.NB_TT, "
                             + "G1.NB_A, "
@@ -1531,7 +1531,7 @@ public class TableGenerator {
                             + "(SELECT AVG(DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric) FROM T_TICKET T2 WHERE t2.deal_user=t1.deal_user and t2.biz_type_id=t1.biz_type_id and T2.STATUS = 4   " + dateCon + " ) AS AVGSEC_T "
                             + "  from t_ticket t1 , t_biz_type b,t_user u "
                             + "where t1.deal_user is not null and t1.biz_type_id=b.id and t1.deal_user=u.id and to_date(to_char(t1.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD')  and t1.db_id='" + a.getId() + "' and b.db_id='" + a.getId() + "' and u.db_id='" + a.getId() + "'"
-                            + "group by t1.deal_user,u.name,t1.biz_type_id,b.name) g1;";
+                            + "group by t1.deal_user,u.name,t1.biz_type_id,b.name) g1 order by g1.username;";
                     String subSQL = "SELECT G1.NB_T, "
                             + "G1.NB_TT, "
                             + "G1.NB_A, "
@@ -2257,7 +2257,7 @@ public class TableGenerator {
                 Logger.getLogger(TableGenerator.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            return generateGblTable2(getDate1(), getDate2());
+            return generateGchTable2(getDate1(), getDate2());
         }
         return table;
     }
@@ -2851,7 +2851,7 @@ public class TableGenerator {
                 Logger.getLogger(TableGenerator.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            return generateGblTable2(getDate1(), getDate2());
+            return generateGchServiceTable2(getDate1(), getDate2());
         }
         return table;
     }
@@ -6629,7 +6629,7 @@ public class TableGenerator {
                 + "</div>";
         this.bottomHTML = "<div class='div-wrapper d-flex justify-content-center align-items-center p-2'>"
                 + "<a type='button' class='btn btn-success m-2' id='excel'><img src='./img/icon/excel.png'/> Excel</a>"
-                + "<a type='button' class='btn btn-danger m-2 disabled' id='pdf' ><img src='./img/icon/pdf.png'/> PDF</a>"
+                + "<!--<a type='button' class='btn btn-danger m-2 disabled' id='pdf' ><img src='./img/icon/pdf.png'/> PDF</a>-->"
                 + "</div>";
     }
 
@@ -6687,7 +6687,7 @@ public class TableGenerator {
                 + "<button type='button' class='btn btn-primary mb-2' id='refresh'><img src='./img/icon/reload.png'/> Actualiser</button>"
                 + "<div class=''>"
                 + "<button type='button' class='btn btn-success mb-2 ml-5  justify-content-end align-items-end' id='excel'><img src='./img/icon/excel.png'/> Excel</button>"
-                + "<button type='button' class='btn btn-danger mb-2 ml-2  justify-content-end align-items-end' id='pdf' disabled><img src='./img/icon/pdf.png'/> PDF</button>"
+                + "<!--<button type='button' class='btn btn-danger mb-2 ml-2  justify-content-end align-items-end' id='pdf' disabled><img src='./img/icon/pdf.png'/> PDF</button>-->"
                 + "</div>"
                 + "<input type='hidden' name='format' value='' id='format'>"
                 + "</form>"
