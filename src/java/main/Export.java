@@ -94,11 +94,10 @@ public class Export {
             Map data = new HashMap();
             //data here
             data.put("title", new TitleHandler(request).getGblTitle() + " Du " + date1 + " Au " + date2);
-
             TableGenerator tbl = new TableGenerator();
             List<ArrayList> gtable = tbl.generateGblTable(date1, date2, dbs);
-            List table = new ArrayList();
-
+            List<Map> table = new ArrayList();
+           
             if (gtable != null && gtable.size() > 0) {
                 for (int i = 0; i < gtable.size(); i++) {
                     Map row = new HashMap();
@@ -107,7 +106,8 @@ public class Export {
                     }
                     table.add(row);
                 }
-
+                
+                data.put("table", table);
                 File reportFile = new File(request.getSession().getServletContext().getRealPath("/cfg/pdf/gbl.jasper"));
 
                 byte[] bytes = JasperRunManager.runReportToPdf(reportFile.getPath(), data, new PgConnection().getStatement().getConnection());
