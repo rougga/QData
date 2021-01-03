@@ -25,6 +25,7 @@ Map chart= stat.getTotalDealChart();
         <script src="./js/jquery.js"></script>
         <link href="./css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <script src="./js/bootstrap.bundle.min.js"></script>
+        <script src="./js/moment.min.js"></script>
         <script src="./js/Chart.min.js"></script>
         <link href="./css/Chart.min.css" rel="stylesheet" type="text/css"/>
         <link href="./css/body.css" rel="stylesheet" type="text/css"/>
@@ -167,10 +168,18 @@ Map chart= stat.getTotalDealChart();
             </div>
         </div>
         <script>
+             var filterDate = function(date) {
+                if (date){
+                     return date;
+                }
+             else{
+                return moment().format("YYYY-MM-DD");
+                }
+            };
              var updateLinks = function(){
                 var ids = JSON.parse(sessionStorage.getItem("dbs"));
-                var date1 =sessionStorage.getItem("date1");
-                var date2 =sessionStorage.getItem("date2"); 
+                var date1 = filterDate(sessionStorage.getItem("date1"));
+                var date2 =filterDate(sessionStorage.getItem("date2")); 
                 var agencesLink ="";
                 if(ids){ 
                     for(i=0;i<ids.length;i++){

@@ -1,5 +1,6 @@
 package main;
 
+import java.util.UUID;
 import main.controller.AgenceController;
 import main.controller.LoginLogController;
 import main.controller.ServiceController;
@@ -13,6 +14,17 @@ public class Updater {
     public Updater() {
     }
 
+    public void updateDatabaseById(UUID id) {
+        new AgenceController().updateAgenceNameById(id);
+        new ServiceController().updateServicesById(id);
+        new WindowController().updateWindowsById(id);
+        new UserController().updateUsersById(id);
+        new TicketController().updateTodayTicketsById(id);
+        new WindowStatusController().updateWindowStatusById(id);
+        new LoginLogController().updateTodayLoginLogsById(id);
+        //update goal
+    }
+    
     public void updateDatabase() {
         new AgenceController().updateAllAgenceName();
         new ServiceController().updateServices();
@@ -21,9 +33,21 @@ public class Updater {
         new TicketController().updateTodayTickets();
         new WindowStatusController().updateWindowStatus();
         new LoginLogController().updateTodayLoginLogs();
+        //update goal
+    }
+    
+    public void updateDatabaseAllDataById(UUID id) {
+        new AgenceController().updateAgenceNameById(id);
+        new ServiceController().updateServicesById(id);
+        new WindowController().updateWindowsById(id);
+        new UserController().updateUsersById(id);
+        new TicketController().updateAllTicketsById(id);
+        new WindowStatusController().updateWindowStatusById(id);
+        new LoginLogController().updateAllLoginLogsById(id);
         
         //update goal
     }
+    
     public void updateDatabaseAllData() {
         new AgenceController().updateAllAgenceName();
         new ServiceController().updateServices();

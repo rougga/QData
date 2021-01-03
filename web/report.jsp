@@ -343,10 +343,19 @@ $(document).ready(function() {
         sessionStorage.setItem("date1",$("#date1").val());
         sessionStorage.setItem("date2",$("#date2").val());
     };
+    var filterDate = function(date) {
+        if (date){
+            return date;
+        }
+        else{
+            return moment().format("YYYY-MM-DD");
+        }
+    };
     var updateLinks = function(){
         var ids = getCheckedBoxes();
-        var date1 =sessionStorage.getItem("date1");
-        var date2 =sessionStorage.getItem("date2"); 
+        var date1 =filterDate(sessionStorage.getItem("date1"));
+        var date2 =filterDate(sessionStorage.getItem("date2")); 
+        
         var agencesLink ="";
         for(i=0;i<ids.length;i++){
             agencesLink+= "&agences="+ids[i];
@@ -407,10 +416,11 @@ $(document).ready(function() {
        
     };
     var setDates = function() {
-        var date1 =sessionStorage.getItem("date1");
-        var date2 =sessionStorage.getItem("date2");
+        var date1 =filterDate(sessionStorage.getItem("date1"));
+        var date2 =filterDate(sessionStorage.getItem("date2"));
         $("#date1").val(date1);
         $("#date2").val(date2);
+        
     };
    checkCheckBoxes();
    setDates();

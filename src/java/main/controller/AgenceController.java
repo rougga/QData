@@ -217,4 +217,26 @@ public class AgenceController {
             return null;
         }
     }
+
+    public void updateAgenceNameById(UUID id) {
+        Agence a = new AgenceController().getAgenceById(id);
+        if (a != null) {
+            PgMultiConnection con;
+            System.out.println("-- Updating Agence " + a.getName() + " :....");
+            try {
+                con = new PgMultiConnection(a.getHost(), String.valueOf(a.getPort()), a.getDatabase(), a.getUsername(), a.getPassword());
+                String SQL = "SELECT value FROM t_basic_par where name='BRANCH_NAME' ;";
+                ResultSet r = con.getStatement().executeQuery(SQL);
+                if (r.next()) {
+                    updateName(a.getId(), r.getString("value"));
+                    setLastUpdate(a.getId());
+                }
+                con.closeConnection();
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
+            }
+
+            System.out.println("-- Agence "+a.getName()+" updated.");
+        }
+    }
 }

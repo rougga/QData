@@ -16,9 +16,10 @@
         <link href="../css/navbar.css" rel="stylesheet" type="text/css"/> 
         <link href="../css/body.css" rel="stylesheet" type="text/css"/>
         <script src="../js/settings.js"></script>
+        <script src="../js/setting/agence.js"></script>
     </head>
     <body>
-        <div class="container-lg">
+        <div class="container-lg p-0 ">
             <div class="head">
                 <%@include file="../addon/navbar.jsp" %>
                 <script>
@@ -37,22 +38,22 @@
                 <%
                     }
                 %>
-                
+
                 <div class="w-100" id="dbTbl">
-                    <h1 class="text-white text_center ">
+                    <h1 class="text-white text_center pl-2">
                         Les bases de données :
                         <span class=" float-right">
                             <a class="btn btn-success" id="dbAdd" data-toggle="modal" data-target="#dbModal"><img src="/QData/img/icon/plus.png"> Ajouter</a>
 
                         </span>
                     </h1>
-                    <table class="table table-bordered table-light   table-responsive-sm border-dark" id="dbTable">
+                    <table class="table table-bordered table-light table-responsive-md border-dark"  id="dbTable">
                         <thead class="appColor border-dark">
                             <tr>
                                 <th scope="col">Name</th>
                                 <th scope="col">Host:port</th>
-                                <th scope="col">Base de donnée</th>
-                                <th scope="col">Utilisateur</th>
+                                <th scope="col">DB</th>
+                                <th scope="col">User</th>
                                 <th scope="col">Mot de passe</th>
                                 <th scope="col">Statut</th>
                                 <th scope="col">Dernière mise à jour</th>
@@ -73,22 +74,16 @@
                                 <td class="border-dark align-middle"><%=table.get(i).getDatabase() %></td>
                                 <td class="border-dark align-middle"><%=table.get(i).getUsername() %></td>
                                 <td class="border-dark align-middle"><%=table.get(i).getPassword() %></td>
-                                <td class="border-dark align-middle">
-                                    <%
-                                    if(ac.isOnline(table.get(i).getId()) ){
-                                    %>
-                                    <span class='text-center text-white bg-success p-1'>Online</span> 
-                                    <%
-                               }else{
-                                    %>
-                                    <span class='text-center text-white bg-danger p-1'>Offline</span> 
-                                    <%
-                               }
-
-                                    %>
+                                <td class="border-dark align-middle status" data-id="<%= table.get(i).getId() %>">
+                                    <div class="spinner-border" role="status">
+                                        <span class="sr-only text-center text-white bg-secondary p-1">UNK</span>
+                                    </div>
                                 </td>
                                 <td class="border-dark align-middle"><%= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(ac.getLastUpdate(table.get(i).getId()))%></td>
                                 <td class="border-dark align-middle">
+                                    <a class="btn btn-warning m-0" id="dbUpdateToday" href="/QData/TodayUpdateAgence?id=<%= table.get(i).getId() %>"><img src="/QData/img/icon/24-hour.png" class=""></a>
+                                     <a class="btn btn-secondary m-0" id="dbUpdateAll" href="/QData/UpdateAgence?id=<%= table.get(i).getId() %>"><img src="/QData/img/icon/maj.png"></a>
+                                    <a class="btn btn-primary m-0 disabled" id="dbEdit" data-id="<%= table.get(i).getId() %>"><img src="/QData/img/icon/pencil.png"></a>
                                     <a class="btn btn-danger m-0" id="dbDlt" href="/QData/DeleteDatabase?id=<%= table.get(i).getId() %>"><img src="/QData/img/icon/trash.png"></a>
                                 </td>
                             </tr>

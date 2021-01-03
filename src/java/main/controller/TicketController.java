@@ -99,17 +99,18 @@ public class TicketController {
     }
 
     public void updateTodayTickets() {
-        List<Agence> agences = new AgenceController().getAllAgence();
+        AgenceController ac = new AgenceController();
+        List<Agence> agences = ac.getAllAgence();
         if (agences != null) {
             System.out.println("-- Updating Today t_ticket ....");
             for (int i = 0; i < agences.size(); i++) {
                 try {
                     PgMultiConnection con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
                     String SQL = "select * from t_ticket where to_date(to_char(ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  >= TO_DATE(?,'YYYY-MM-DD') ;";
-                    clearTodayTickets(agences.get(i).getId());
                     PreparedStatement p = con.getStatement().getConnection().prepareStatement(SQL);
                     p.setString(1, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                     ResultSet r = p.executeQuery();
+                    clearTodayTickets(agences.get(i).getId());
                     while (r.next()) {
                         addTicket(
                                 new Ticket(
@@ -143,6 +144,7 @@ public class TicketController {
             System.out.println("-- Today t_ticket updated.");
         }
     }
+    
     public void updateAllTickets() {
         List<Agence> agences = new AgenceController().getAllAgence();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -152,9 +154,9 @@ public class TicketController {
                 try {
                     PgMultiConnection con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
                     String SQL = "select * from t_ticket ;";
-                    clearAllTickets(agences.get(i).getId());
                     PreparedStatement p = con.getStatement().getConnection().prepareStatement(SQL);
                     ResultSet r = p.executeQuery();
+                    clearAllTickets(agences.get(i).getId());
                     while (r.next()) {
                         addTicket(
                                 new Ticket(
@@ -188,6 +190,7 @@ public class TicketController {
             System.out.println("-- t_ticket updated.");
         }
     }
+    
     public String getFormatedDateAsString(Date date){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if(date!=null){
@@ -196,6 +199,7 @@ public class TicketController {
             return null;
         }
     }
+    
     public Date getFormatedDateAsDate(String date){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if(date!=null){
