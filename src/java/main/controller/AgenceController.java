@@ -27,7 +27,7 @@ public class AgenceController {
         try {
             List<Agence> agences = new ArrayList();
             PgConnection con = new PgConnection();
-            ResultSet r = con.getStatement().executeQuery("select * from agence;");
+            ResultSet r = con.getStatement().executeQuery("select * from agence order by name;");
             while (r.next()) {
                 agences.add(new Agence(UUID.fromString(r.getString("id")), r.getString("name"), r.getString("host"), r.getInt("port"), r.getString("database"), r.getString("username"), r.getString("password"), r.getInt("status")));
             }

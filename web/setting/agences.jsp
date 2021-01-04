@@ -3,6 +3,12 @@
 <%@page import="java.util.List"%>
 <%@page import="main.controller.AgenceController"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    if (!Objects.equals(session.getAttribute("grade"), "adm")) {
+        response.sendRedirect("./home.jsp");
+    }
+    
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -81,10 +87,10 @@
                                 </td>
                                 <td class="border-dark align-middle"><%= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(ac.getLastUpdate(table.get(i).getId()))%></td>
                                 <td class="border-dark align-middle">
-                                    <a class="btn btn-warning m-0" id="dbUpdateToday" href="/QData/TodayUpdateAgence?id=<%= table.get(i).getId() %>"><img src="/QData/img/icon/24-hour.png" class=""></a>
-                                     <a class="btn btn-secondary m-0" id="dbUpdateAll" href="/QData/UpdateAgence?id=<%= table.get(i).getId() %>"><img src="/QData/img/icon/maj.png"></a>
-                                    <a class="btn btn-primary m-0 disabled" id="dbEdit" data-id="<%= table.get(i).getId() %>"><img src="/QData/img/icon/pencil.png"></a>
-                                    <a class="btn btn-danger m-0" id="dbDlt" href="/QData/DeleteDatabase?id=<%= table.get(i).getId() %>"><img src="/QData/img/icon/trash.png"></a>
+                                    <a class="btn btn-secondary m-0 dbUpdateToday disabled" data-id="<%= table.get(i).getId() %>" href="/QData/TodayUpdateAgence?id=<%= table.get(i).getId() %>"><img src="/QData/img/icon/24-hour.png" class=""></a>
+                                     <a class="btn btn-secondary m-0 dbUpdateAll disabled" data-id="<%= table.get(i).getId() %>" href="/QData/UpdateAgence?id=<%= table.get(i).getId() %>"><img src="/QData/img/icon/maj.png"></a>
+                                    <a class="btn btn-primary m-0 disabled dbEdit" data-id="<%= table.get(i).getId() %>" data-id="<%= table.get(i).getId() %>"><img src="/QData/img/icon/pencil.png"></a>
+                                    <a class="btn btn-danger m-0 dbDlt" data-id="<%= table.get(i).getId() %>" href="/QData/DeleteDatabase?id=<%= table.get(i).getId() %>"><img src="/QData/img/icon/trash.png"></a>
                                 </td>
                             </tr>
                             <%
