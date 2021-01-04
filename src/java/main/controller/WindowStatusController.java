@@ -119,8 +119,8 @@ public class WindowStatusController {
                 try {
                     PgMultiConnection con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
                     String SQL = "select * from t_window_status;";
-                    clearTable(agences.get(i).getId());
                     ResultSet r = con.getStatement().executeQuery(SQL);
+                    clearTable(agences.get(i).getId());
                     while (r.next()) {
                         addWindowStatus(
                                 new WindowStatus(
@@ -144,6 +144,46 @@ public class WindowStatusController {
                     Logger.getLogger(WindowStatusController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
                 }
             }
+            System.out.println("-- t_window_status updated.");
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
+    public int updateWindowStatusById(UUID id) {
+        Agence a = new AgenceController().getAgenceById(id);
+        if (a != null) {
+            System.out.println("-- Updating t_window_status for " + a.getName() + " ....");
+            try {
+                PgMultiConnection con = new PgMultiConnection(a.getHost(), String.valueOf(a.getPort()), a.getDatabase(), a.getUsername(), a.getPassword());
+                String SQL = "select * from t_window_status;";
+                ResultSet r = con.getStatement().executeQuery(SQL);
+                clearTable(a.getId());
+                while (r.next()) {
+                    addWindowStatus(
+                            new WindowStatus(
+                                    r.getString("window_id"),
+                                    r.getString("user_id"),
+                                    r.getInt("status"),
+                                    getFormatedDateAsDate(r.getString("access_time")),
+                                    r.getLong("pause_count"),
+                                    getFormatedDateAsDate(r.getString("final_opernate_time")),
+                                    r.getString("ip"),
+                                    getFormatedDateAsDate(r.getString("win_puase_time")),
+                                    r.getInt("batch_deal_status"),
+                                    r.getLong("pause_time"),
+                                    r.getString("current_ticket"),
+                                    a.getId().toString())
+                    );
+                }
+                con.closeConnection();
+
+            } catch (Exception ex) {
+                Logger.getLogger(WindowStatusController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
+            }
+
             System.out.println("-- t_window_status updated.");
             return 1;
         } else {

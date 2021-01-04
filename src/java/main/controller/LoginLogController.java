@@ -121,10 +121,10 @@ public class LoginLogController {
                 try {
                     PgMultiConnection con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
                     String SQL = "select * from t_login_log where to_date(to_char(login_time,'YYYY-MM-DD'),'YYYY-MM-DD')  >= TO_DATE(?,'YYYY-MM-DD') ;";
-                    clearTodayLoginLog(agences.get(i).getId());
                     PreparedStatement p = con.getStatement().getConnection().prepareStatement(SQL);
                     p.setString(1, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                     ResultSet r = p.executeQuery();
+                    clearTodayLoginLog(agences.get(i).getId());
                     while (r.next()) {
                         addLoginLog(
                                 new LoginLog(r.getString("id"),
@@ -162,8 +162,8 @@ public class LoginLogController {
                 try {
                     PgMultiConnection con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
                     String SQL = "select * from t_login_log;";
-                    clearTable(agences.get(i).getId());
                     ResultSet r = con.getStatement().executeQuery(SQL);
+                    clearTable(agences.get(i).getId());
                     while (r.next()) {
                         addLoginLog(
                                 new LoginLog(r.getString("id"),
@@ -186,6 +186,84 @@ public class LoginLogController {
                 }
             }
             System.out.println("-- t_login_log updated.");
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
+    public int updateTodayLoginLogsById(UUID id) {
+        Agence a = new AgenceController().getAgenceById(id);
+        if (a != null) {
+            System.out.println("-- Updating Today t_login_log for "+a.getName()+" ....");
+                try {
+                    PgMultiConnection con = new PgMultiConnection(a.getHost(), String.valueOf(a.getPort()), a.getDatabase(), a.getUsername(), a.getPassword());
+                    String SQL = "select * from t_login_log where to_date(to_char(login_time,'YYYY-MM-DD'),'YYYY-MM-DD')  >= TO_DATE(?,'YYYY-MM-DD') ;";
+                    PreparedStatement p = con.getStatement().getConnection().prepareStatement(SQL);
+                    p.setString(1, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                    ResultSet r = p.executeQuery();
+                    clearTodayLoginLog(a.getId());
+                    while (r.next()) {
+                        addLoginLog(
+                                new LoginLog(r.getString("id"),
+                                        getFormatedDateAsDate(r.getString("login_time")),
+                                        r.getString("login_type"),
+                                        r.getString("user_id"),
+                                        r.getString("account"),
+                                        null,
+                                        null,
+                                        r.getString("login_ip"),
+                                        null,
+                                        r.getInt("successed"),
+                                        a.getId().toString())
+                        );
+                    }
+                    con.closeConnection();
+
+                } catch (Exception ex) {
+                    Logger.getLogger(LoginLogController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
+                }
+            
+            System.out.println("-- Today t_login_log updated.");
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
+    public int updateAllLoginLogsById(UUID id) {
+         Agence a = new AgenceController().getAgenceById(id);
+        if (a != null) {
+            System.out.println("-- Updating t_login_log (All) for "+a.getName()+" ....");
+                try {
+                    PgMultiConnection con = new PgMultiConnection(a.getHost(), String.valueOf(a.getPort()), a.getDatabase(), a.getUsername(), a.getPassword());
+                    String SQL = "select * from t_login_log;";
+                    ResultSet r = con.getStatement().executeQuery(SQL);
+                    clearTable(a.getId());
+                    while (r.next()) {
+                        addLoginLog(
+                                new LoginLog(r.getString("id"),
+                                        getFormatedDateAsDate(r.getString("login_time")),
+                                        r.getString("login_type"),
+                                        r.getString("user_id"),
+                                        r.getString("account"),
+                                        null,
+                                        null,
+                                        r.getString("login_ip"),
+                                        null,
+                                        r.getInt("successed"),
+                                        a.getId().toString())
+                        );
+                    }
+                    con.closeConnection();
+
+                } catch (Exception ex) {
+                    Logger.getLogger(LoginLogController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            
+            System.out.println("-- t_login_log updated (All) for "+a.getName()+".");
             return 1;
         } else {
             return 0;

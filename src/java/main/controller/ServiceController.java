@@ -130,8 +130,8 @@ public class ServiceController {
                 try {
                     PgMultiConnection con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
                     String SQL = "select * from t_biz_type;";
-                    clearTable(agences.get(i).getId());
                     ResultSet r = con.getStatement().executeQuery(SQL);
+                    clearTable(agences.get(i).getId());
                     while (r.next()) {
                         addService(new Service(
                                 r.getString("id"),
@@ -153,6 +153,39 @@ public class ServiceController {
                 }
             }
             System.err.println("-- t_biz_type updated.");
+        }
+    }
+
+    public void updateServicesById(UUID id) {
+        Agence a = new AgenceController().getAgenceById(id);
+        if (a != null) {
+            System.err.println("-- Updating t_biz_type for " + a.getName() + " .....");
+            try {
+                PgMultiConnection con = new PgMultiConnection(a.getHost(), String.valueOf(a.getPort()), a.getDatabase(), a.getUsername(), a.getPassword());
+                String SQL = "select * from t_biz_type;";
+                ResultSet r = con.getStatement().executeQuery(SQL);
+                clearTable(a.getId());
+                while (r.next()) {
+                    addService(new Service(
+                            r.getString("id"),
+                            r.getString("name"),
+                            r.getString("biz_prefix"),
+                            r.getInt("status"),
+                            r.getString("start_num"),
+                            r.getInt("sort"),
+                            r.getInt("call_delay"),
+                            r.getString("biz_class_id"),
+                            r.getInt("deal_time_warning"),
+                            r.getInt("hidden"),
+                            a.getId()));
+                }
+                con.closeConnection();
+
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(ServiceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
+            }
+
+            System.err.println("-- t_biz_type for "+a.getName()+" updated.");
         }
     }
 }

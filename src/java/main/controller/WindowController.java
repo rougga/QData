@@ -62,8 +62,8 @@ public class WindowController {
                 try {
                     PgMultiConnection con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
                     String SQL = "select * from t_window;";
-                    clearTable(agences.get(i).getId());
                     ResultSet r = con.getStatement().executeQuery(SQL);
+                    clearTable(agences.get(i).getId());
                     while (r.next()) {
                         addWindow(
                                 new Window(
@@ -86,6 +86,44 @@ public class WindowController {
                 }
             }
             System.out.println("-- t_window updated.");
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
+    public int updateWindowsById(UUID id) {
+        Agence a = new AgenceController().getAgenceById(id);
+        if (a != null) {
+            System.out.println("-- Updating t_window for " + a.getName() + "....");
+            try {
+                PgMultiConnection con = new PgMultiConnection(a.getHost(), String.valueOf(a.getPort()), a.getDatabase(), a.getUsername(), a.getPassword());
+                String SQL = "select * from t_window;";
+                ResultSet r = con.getStatement().executeQuery(SQL);
+                clearTable(a.getId());
+                while (r.next()) {
+                    addWindow(
+                            new Window(
+                                    r.getString("id"),
+                                    r.getInt("win_number"),
+                                    r.getString("name"),
+                                    r.getInt("status"),
+                                    r.getString("win_group_id"),
+                                    r.getString("default_user"),
+                                    r.getString("branch_id"),
+                                    a.getId(),
+                                    r.getString("screen_type")
+                            )
+                    );
+                }
+                con.closeConnection();
+
+            } catch (Exception ex) {
+                Logger.getLogger(WindowController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
+            }
+
+            System.out.println("-- t_window for " + a.getName() + " updated.");
             return 1;
         } else {
             return 0;
