@@ -146,15 +146,15 @@ public class GblController {
                                 r.getLong("nb_a"),
                                 r.getLong("nb_tl1"),
                                 r.getLong("nb_sa"),
-                                r.getFloat("perApT"),
-                                r.getFloat("PERTL1pt"),
-                                r.getFloat("perSApT"),
-                                r.getFloat("avgSec_A"),
+                                r.getFloat("perApT")+"",
+                                r.getFloat("PERTL1pt")+"",
+                                r.getFloat("perSApT")+"",
+                                r.getFloat("avgSec_A")+"",
                                 0,
+                                "0",
+                                r.getFloat("avgSec_T")+"",
                                 0,
-                                r.getFloat("avgSec_T"),
-                                0,
-                                0);
+                                "0");
                         table.add(row);
                     }
                     r = con.getStatement().executeQuery(subSQL);
@@ -168,15 +168,15 @@ public class GblController {
                                 r.getLong("nb_a"),
                                 r.getLong("nb_tl1"),
                                 r.getLong("nb_sa"),
-                                r.getFloat("perApT"),
-                                r.getFloat("PERTL1pt"),
-                                r.getFloat("perSApT"),
-                                r.getFloat("avgSec_A"),
+                                r.getFloat("perApT")+"",
+                                r.getFloat("PERTL1pt")+"",
+                                r.getFloat("perSApT")+"",
+                                r.getFloat("avgSec_A")+"",
                                 0,
+                                "0",
+                                r.getFloat("avgSec_T")+"",
                                 0,
-                                r.getFloat("avgSec_T"),
-                                0,
-                                0);
+                                "0");
                         table.add(row);
                     }
 
