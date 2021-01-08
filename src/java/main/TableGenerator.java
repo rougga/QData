@@ -6687,7 +6687,7 @@ public class TableGenerator {
                 + "<button type='button' class='btn btn-primary mb-2' id='refresh'><img src='./img/icon/reload.png'/> Actualiser</button>"
                 + "<div class=''>"
                 + "<button type='button' class='btn btn-success mb-2 ml-5  justify-content-end align-items-end' id='excel'><img src='./img/icon/excel.png'/> Excel</button>"
-                + "<!--<button type='button' class='btn btn-danger mb-2 ml-2  justify-content-end align-items-end' id='pdf' disabled><img src='./img/icon/pdf.png'/> PDF</button>-->"
+                + "<button type='button' class='btn btn-danger mb-2 ml-2  justify-content-end align-items-end' id='pdf'><img src='./img/icon/pdf.png'/> PDF</button>"
                 + "</div>"
                 + "<input type='hidden' name='format' value='' id='format'>"
                 + "</form>"
