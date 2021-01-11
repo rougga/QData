@@ -127,7 +127,7 @@ $(document).ready(function() {
         gchser: ".0,.1,.2,.3,.4,.5,.11,.14",
         ndt: ".0,.1,.8,.9,.10,.11,.12,.13,.14,.15,.16,.17,.18",
         cnx: ".0,.1,.2,.3,.4,.5",
-        remp: ".0,.1,.2,.10,.11,.12,.13,.14,.15",
+        remp: ".0,.1,.3,.10,.11,.12,.13,.14,.15",
         ser: ".0,.1,.2,.3,.4,.5,.6,.7,.8",
         sgch: ".0,.1,.2,.3,.4,.5,.6,.7",
         apl: ".0,.1,.2,.7,.8,.9,.10,.11",
@@ -360,7 +360,7 @@ $(document).ready(function() {
         for(i=0;i<ids.length;i++){
             agencesLink+= "&agences="+ids[i];
         }
-        agencesLink+="&date1="+date1+"$date2="+date2;
+        agencesLink+="&date1="+date1+"&date2="+date2;
         $.each($(".d"),function(i,v) {
             var link=$(v).attr("href");
             link= link.substring(0,link.indexOf("d=d")+3);

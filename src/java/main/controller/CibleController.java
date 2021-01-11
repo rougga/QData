@@ -127,7 +127,7 @@ public class CibleController {
     public int addCibleXml(Cible c) {
         try {
             Agence a = new AgenceController().getAgenceById(c.getDb_id());
-            String path = "http://" + a.getHost() + ":" + CfgHandler.APP_PORT + "/" + CfgHandler.NODE_APP_NAME + "/cfg/cible.xml";
+            String path = "http://" + a.getHost() + ":" + CfgHandler.APP_PORT + "/" + CfgHandler.APP + "/cfg/cible.xml";
             //File xml = new File(path);
             System.out.println(path);
             //modified code

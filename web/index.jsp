@@ -1,3 +1,4 @@
+<%@page import="main.CfgHandler"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!doctype html>
 <html>
@@ -45,12 +46,15 @@
                 <p class="title">Connexion:</p>
                 <input type="text" placeholder="Nom D'utilisateur" name="username" autofocus required/>
                 <input type="password" name="password" placeholder="Mot de passe" required/>
-                <a href="https://www.marocnst.ma/contacts">Mot de passe oublié ?</a>
+                <a href="https://www.marocnst.ma/contacts" class=" text-dark">Mot de passe oublié ?</a>
                 <button type="submit">
-                    <span class="state">Connexion</span>
+                    <span class="state  font-weight-bold">Connexion</span>
                 </button>
             </form>
-            <footer><a target="_blank" href="#">CopyRight &COPY; 2020 Maroc-NST</a></footer>
+            <footer>
+                <a target="_blank" href="https://www.marocnst.ma/">CopyRight &COPY; 2020 Maroc-NST</a>
+                <p><%= CfgHandler.APP + " v"+CfgHandler.VERSION %></p>
+            </footer>
 
         </div>
     </body>

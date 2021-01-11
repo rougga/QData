@@ -19,10 +19,16 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class CfgHandler {
-    public static int APP_PORT=8989;
-    public static String NODE_APP_NAME="QStates";
-    public static String APP_NAME="QData";
-    private Properties prop = null;
+    
+    //MetaData
+    public  static final String APP = "QData";
+    public static final String VERSION = "0.3";
+    public static final String COMPANY = "ROUGGA";
+    public static final String CLIENT = "";
+    public static final int APP_PORT=8989;
+    public static String APP_NODE="QStates";
+    
+    //Data
     private final String cfgFile = "\\cfg\\cfg.properties";
     private final String userFile = "\\cfg\\db\\users.xml";
     private final String cibleFile = "\\cfg\\db\\cible.xml";
@@ -30,6 +36,7 @@ public class CfgHandler {
     private final String dbFile = "\\cfg\\db\\db.xml";
     private final String titleFile = "\\cfg\\db\\title.xml";
     
+    //Excel
     private final String tempxls = "\\cfg\\excel\\temp.xls";
     private final String gblTempExcel = "\\cfg\\excel\\gbltemp.xlsx";
     private final String empTempExcel = "\\cfg\\excel\\emptemp.xlsx";
@@ -39,6 +46,9 @@ public class CfgHandler {
     private final String ndtTempExcel = "\\cfg\\excel\\ndttemp.xlsx";
     private final String glaTempExcel = "\\cfg\\excel\\glatemp.xlsx";
     private final String gltTempExcel = "\\cfg\\excel\\glttemp.xlsx";
+    
+    //Pars
+    private Properties prop = null;
     private String url;
     private String appPath;
     private HttpServletRequest request;
@@ -47,10 +57,6 @@ public class CfgHandler {
 
     public CfgHandler(HttpServletRequest r) throws FileNotFoundException, IOException {
         this.request = r;
-        url = request.getServletContext().getRealPath(File.separator);
-        appPath = url.substring(0, url.indexOf("QData") + 5);
-        
-        appPath="C:\\Users\\bouga\\Desktop\\ProjectsCurrent\\OffReport_Global\\web";
     }
 
     public String getPropertie(String name) throws IOException {
@@ -137,58 +143,58 @@ public class CfgHandler {
         return tempxls;
     }
     public String getCfgFile() {
-        return appPath+cfgFile;
+        return request.getServletContext().getRealPath(cfgFile);
     }
 
     public String getUserFile() {
-        return appPath + userFile;
+        return request.getServletContext().getRealPath(userFile);
     }
 
     public String getCibleFile() {
-        return appPath + cibleFile;
+        return request.getServletContext().getRealPath(cibleFile);
     }
 
     public String getExtraFile() {
-        return appPath + extraFile;
+        return request.getServletContext().getRealPath(extraFile);
     }
      public String getGblTempExcel() {
-        return appPath + gblTempExcel;
+        return request.getServletContext().getRealPath(gblTempExcel);
     }
 
     public String getEmpTempExcel() {
-        return appPath + empTempExcel;
+        return request.getServletContext().getRealPath(empTempExcel);
     }
 
     public String getGchTempExcel() {
-        return appPath + GchTempExcel;
+        return request.getServletContext().getRealPath(GchTempExcel);
     }
 
     public String getEmpServTempExcel() {
-        return appPath + empServTempExcel;
+        return request.getServletContext().getRealPath(empServTempExcel);
     }
 
     public String getGchServTempExcel() {
-        return appPath + GchservTempExcel;
+        return request.getServletContext().getRealPath(GchservTempExcel);
     }
 
     public String getNdtTempExcel() {
-        return appPath + ndtTempExcel;
+        return request.getServletContext().getRealPath(ndtTempExcel);
     }
 
     public String getGlaTempExcel() {
-        return appPath + glaTempExcel;
+        return request.getServletContext().getRealPath(glaTempExcel);
     }
 
     public String getGltTempExcel() {
-        return appPath + gltTempExcel;
+        return request.getServletContext().getRealPath(gltTempExcel);
     }
 
     public String getDbFile() {
-        return  appPath + dbFile;
+        return  request.getServletContext().getRealPath(dbFile);
     }
 
     public String getTitleFile() {
-        return appPath + titleFile;
+        return request.getServletContext().getRealPath(titleFile);
     }
 
 
