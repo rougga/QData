@@ -87,10 +87,10 @@
                                 </td>
                                 <td class="border-dark align-middle"><%= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(ac.getLastUpdate(table.get(i).getId()))%></td>
                                 <td class="border-dark align-middle">
-                                    <a class="btn btn-secondary m-0 dbUpdateToday disabled" data-id="<%= table.get(i).getId() %>" href="/QData/TodayUpdateAgence?id=<%= table.get(i).getId() %>"><img src="/QData/img/icon/24-hour.png" class=""></a>
-                                     <a class="btn btn-secondary m-0 dbUpdateAll disabled" data-id="<%= table.get(i).getId() %>" href="/QData/UpdateAgence?id=<%= table.get(i).getId() %>"><img src="/QData/img/icon/maj.png"></a>
-                                    <a class="btn btn-primary m-0 disabled dbEdit" data-id="<%= table.get(i).getId() %>" data-id="<%= table.get(i).getId() %>"><img src="/QData/img/icon/pencil.png"></a>
-                                    <a class="btn btn-danger m-0 dbDlt" data-id="<%= table.get(i).getId() %>" href="/QData/DeleteDatabase?id=<%= table.get(i).getId() %>"><img src="/QData/img/icon/trash.png"></a>
+                                    <a class="btn btn-secondary m-0 dbUpdateToday disabled" data-id="<%= table.get(i).getId() %>" href="/QData/TodayUpdateAgence?id=<%= table.get(i).getId() %>" title="Mise à jour d'aujourd'hui"><img src="/QData/img/icon/24-hours.png" class=""></a>
+                                    <a class="btn btn-secondary m-0 dbUpdateAll disabled" data-id="<%= table.get(i).getId() %>" href="/QData/UpdateAgence?id=<%= table.get(i).getId() %>" title="Mise à jour Globale"><img src="/QData/img/icon/maj.png"></a>
+                                    <!--<a class="btn btn-primary m-0 disabled dbEdit" data-id="<%= table.get(i).getId() %>" data-id="<%= table.get(i).getId() %>" title="Modifier"><img src="/QData/img/icon/pencil.png"></a>-->
+                                    <a class="btn btn-danger m-0 dbDlt" data-id="<%= table.get(i).getId() %>" href="/QData/DeleteDatabase?id=<%= table.get(i).getId() %>" title="Supprimer"><img src="/QData/img/icon/trash.png"></a>
                                 </td>
                             </tr>
                             <%
