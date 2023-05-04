@@ -57,6 +57,7 @@ public class TableGenerator {
     private String[] glaCols;
     private String[] gltCols;
     private String[] ndtChartCols;
+    private String[] taskCols;
 
     public TableGenerator() {
 
@@ -74,6 +75,7 @@ public class TableGenerator {
         this.aplCols = new String[]{"Site", "Service", "Numéro", "Heure edition ticket", "Heure appel", "Heure début de traitement", "Heure fin traitement", "Guichet", "Employé", "Durée attente", "Durée traitement", "Statut"};
         this.glaCols = new String[]{"Site", "Service", "0-15s", "15s-30s", "30s-1min", "1min-1min30s", "1min30s-2min", "2-5min", "0-5min", "5-10min", "10-20min", "20-30min", "30-45min", "45-50min", "> 50min", "Total"};
         this.gltCols = new String[]{"Site", "Service", "0-15s", "15s-30s", "30s-1min", "1min-1min30s", "1min30s-2min", "2-5min", ">5min", "5-10min", "10-20min", "20-30min", "30-45min", "45-50min", "> 50min", "Total"};
+        this.taskCols = new String[]{"Site", "Service", "Tache", "Nb. Tickets Traités", "Qte. Traités"};
         this.table = new ArrayList<>();
         this.subTotal = new ArrayList<>();
     }
@@ -89,7 +91,7 @@ public class TableGenerator {
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
         this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
-        
+
         List<ArrayList> table = new ArrayList<>();
         AgenceController ac = new AgenceController();
         CibleController cc = new CibleController();
@@ -6243,6 +6245,83 @@ public class TableGenerator {
         return this.table;
     }
 
+    public List<ArrayList> generateTaskTable(String d1, String d2, String[] dbs) {
+        this.date1 = (d1 == null) ? format.format(new Date()) : d1;
+        this.date2 = (d2 == null) ? format.format(new Date()) : d2;
+        this.dbs = (dbs == null) ? new String[0] : filterDbs(dbs);
+        List<ArrayList> table = new ArrayList<>();
+        AgenceController ac = new AgenceController();
+        CibleController cc = new CibleController();
+        if (this.dbs.length > 0) {
+            for (int i = 0; i < this.dbs.length; i++) {
+                try {
+                    Agence a = ac.getAgenceById(UUID.fromString(this.dbs[i]));
+                    PgConnection con = new PgConnection();
+
+                    String dateCon = " and to_date(to_char(t2.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') and t2.db_id='" + a.getId() + "'";
+
+                    String gblSQL2 = "select "
+                            + "b.id as biz_id,"
+                            + "tt.id_task,"
+                            + "b.name as service,"
+                            + "tch.name as task,"
+                            + "(SELECT COUNT(*) FROM rougga_ticket_task tt2 , t_ticket t2 WHERE tt2.id_task=tt.id_task and tt2.id_ticket=t2.id " + dateCon + " ) AS NB_TT,"
+                            + "(SELECT sum(tt2.quantity) FROM rougga_ticket_task tt2 , t_ticket t2 WHERE tt2.id_task=tt.id_task and tt2.id_ticket=t2.id " + dateCon + " ) AS NB_QTT "
+                            + "from "
+                            + "rougga_task tch, rougga_ticket_task tt, t_biz_type b , t_ticket t "
+                            + "where "
+                            + "tch.id_service=b.id and tt.id_task=tch.id and tt.id_ticket = t.id and to_date(to_char(t.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') "
+                            + "group by biz_id, id_task, service , task "
+                            + "order by service "
+                            + ";";
+
+                    String subTotalSQL = "";
+                    ResultSet r = con.getStatement().executeQuery(gblSQL2);
+                    table.clear();
+                    while (r.next()) {
+                        ArrayList row = new ArrayList<>();
+//            row.add(r.getString("biz_id"));
+//            row.add(r.getString("id_task"));
+                        row.add(a.getName());
+                        row.add(r.getString("service"));
+                        row.add(r.getString("task"));
+                        row.add(r.getLong("NB_TT") + "");
+                        row.add(r.getLong("NB_QTT") + "");
+                        table.add(row);
+                    }
+
+                    // r = con.getStatement().executeQuery(subTotalSQL);
+//        while (r.next()) {
+//            ArrayList<String> row = new ArrayList<>();
+//            row.add("Sous-Totale");
+//            row.add(r.getLong("nb_t") + "");
+//            row.add(r.getLong("nb_tt") + "");
+//            row.add(r.getLong("nb_a") + "");
+//            row.add(r.getLong("nb_tl1") + "");
+//            row.add(r.getLong("nb_sa") + "");
+//            row.add(r.getFloat("perApT") + "%");
+//            row.add(r.getFloat("PERTL1pt") + "%");
+//            row.add(r.getFloat("perSApT") + "%");
+//            row.add(getFormatedTime(r.getFloat("avgSec_A")));
+//            row.add("--");
+//            row.add("--%");
+//            row.add(getFormatedTime(r.getFloat("avgSec_T")));
+//            row.add("--");
+//            row.add("-%");
+//            table.add(row);
+//        }
+                    con.closeConnection();
+
+                } catch (Exception ex) {
+                    Logger.getLogger(TableGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else {
+            return generateGblTable2(getDate1(), getDate2());
+        }
+        return table;
+    }
+
     public SimpleDateFormat getFormat() {
         return format;
     }
@@ -6373,6 +6452,13 @@ public class TableGenerator {
                 setType(type);
                 setChartHTML("true");
                 break;
+            case "tch":
+                T2 = generateGltTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
+                setTitle(th.getTaskTitle());
+                setCols(getTaskCols());
+                setType(type);
+                setDefaultHTML();
+                break;
             default:
                 T2 = generateGblTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
                 setTitle(th.getGblTitle());
@@ -6455,6 +6541,10 @@ public class TableGenerator {
 
     public String[] getGltCols() {
         return gltCols;
+    }
+
+    public String[] getTaskCols() {
+        return taskCols;
     }
 
     public void setTitle(String title) {
@@ -6804,7 +6894,7 @@ public class TableGenerator {
 
     public String[] filterDbs(String[] dbs) {
         String[] arr = {};
-        
+
         return dbs;
     }
 }

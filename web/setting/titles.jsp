@@ -141,6 +141,13 @@
                                 <input type="text" class="form-control border border-dark disabled" id="ser" name="ser" required value="<%= th.getSerTitle() %>">                 
                             </div>
                         </div>
+                            
+                        <div class="form-group row">
+                            <label for="tch" class="col-sm-3 col-form-label text-dark">Rapport Tache:</label>
+                            <div class="col-sm-9">                               
+                                <input type="text" class="form-control border border-dark disabled" id="tch" name="tch" required value="<%= th.getTaskTitle() %>">                 
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <div class="col-sm-10">
                                 <button type="submit" class="btn btn-success float-right" >Sauvegarder</button>

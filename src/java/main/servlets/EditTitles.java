@@ -39,7 +39,8 @@ public class EditTitles extends HttpServlet {
                     String remp = request.getParameter("remp");
                     String sgch = request.getParameter("sgch");
                     String ser = request.getParameter("ser");
-                    if (StringUtils.isNoneBlank(gbl,emp,empser,gch,gchserv,gla,glt,apl,ndt,ndtt,ndta,ndtsa,cnx,remp,sgch,ser)) {
+                    String tch = request.getParameter("tch");
+                    if (StringUtils.isNoneBlank(gbl,emp,empser,gch,gchserv,gla,glt,apl,ndt,ndtt,ndta,ndtsa,cnx,remp,sgch,ser,tch)) {
                         TitleHandler th = new TitleHandler(request);
                         th.setTitle("gbl", gbl);
                         th.setTitle("emp", emp);
@@ -57,6 +58,7 @@ public class EditTitles extends HttpServlet {
                         th.setTitle("remp", remp);
                         th.setTitle("sgch", sgch);
                         th.setTitle("ser", ser);
+                        th.setTitle("tch", tch);
                         response.sendRedirect("/QData/setting/titles.jsp?err="+URLEncoder.encode("Modifié", "UTF-8"));
                     } else {
                         response.sendRedirect("/QData/setting/titles.jsp?err="+URLEncoder.encode("une ou plusieurs entrées vides", "UTF-8"));

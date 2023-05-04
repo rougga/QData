@@ -24,7 +24,7 @@ public class CfgHandler {
     public  static final String APP = "QData";
     public static final String VERSION = "0.4";
     public static final String COMPANY = "ROUGGA";
-    public static final String CLIENT = "";
+    public static final String CLIENT = "NST-Maroc";
     public static final int APP_PORT=8989;
     public static String APP_NODE="QStates";
     
@@ -46,6 +46,12 @@ public class CfgHandler {
     private final String ndtTempExcel = "\\cfg\\excel\\ndttemp.xlsx";
     private final String glaTempExcel = "\\cfg\\excel\\glatemp.xlsx";
     private final String gltTempExcel = "\\cfg\\excel\\glttemp.xlsx";
+    
+    //Pages
+
+    public static String PAGE_HOME = "/QData/home.jsp";
+    public static String PAGE_REPORT = "/QData/report.jsp";
+    public static String PAGE_TASK = "/QData/setting/taches.jsp";
     
     //Pars
     private Properties prop = null;
