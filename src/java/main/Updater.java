@@ -4,6 +4,7 @@ import java.util.UUID;
 import main.controller.AgenceController;
 import main.controller.LoginLogController;
 import main.controller.ServiceController;
+import main.controller.TaskController;
 import main.controller.TicketController;
 import main.controller.UserController;
 import main.controller.WindowController;
@@ -22,6 +23,7 @@ public class Updater {
         new TicketController().updateTodayTicketsById(id);
         new WindowStatusController().updateWindowStatusById(id);
         new LoginLogController().updateTodayLoginLogsById(id);
+        new TaskController().updateTasksById(id);
         //update goal
     }
     
@@ -33,6 +35,7 @@ public class Updater {
         new TicketController().updateTodayTickets();
         new WindowStatusController().updateWindowStatus();
         new LoginLogController().updateTodayLoginLogs();
+       // new TaskController().updateAllTasks();
         //update goal
     }
     
@@ -44,7 +47,7 @@ public class Updater {
         new TicketController().updateAllTicketsById(id);
         new WindowStatusController().updateWindowStatusById(id);
         new LoginLogController().updateAllLoginLogsById(id);
-        
+                new TaskController().updateTasksById(id);
         //update goal
     }
     
@@ -56,7 +59,7 @@ public class Updater {
         new TicketController().updateAllTickets();
         new WindowStatusController().updateWindowStatus();
         new LoginLogController().updateAllLoginLogs();
-        
+        //new TaskController().updateAllTasks();
         //update goal
     }
 

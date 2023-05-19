@@ -6265,12 +6265,12 @@ public class TableGenerator {
                             + "tt.id_task,"
                             + "b.name as service,"
                             + "tch.name as task,"
-                            + "(SELECT COUNT(*) FROM rougga_ticket_task tt2 , t_ticket t2 WHERE tt2.id_task=tt.id_task and tt2.id_ticket=t2.id " + dateCon + " ) AS NB_TT,"
+                            + "(SELECT COUNT(*) FROM rougga_ticket_task tt2 , t_ticket t2 WHERE tt2.id_task=tt.id_task and tt2.id_ticket=t2.id " + dateCon + ") AS NB_TT,"
                             + "(SELECT sum(tt2.quantity) FROM rougga_ticket_task tt2 , t_ticket t2 WHERE tt2.id_task=tt.id_task and tt2.id_ticket=t2.id " + dateCon + " ) AS NB_QTT "
                             + "from "
                             + "rougga_task tch, rougga_ticket_task tt, t_biz_type b , t_ticket t "
                             + "where "
-                            + "tch.id_service=b.id and tt.id_task=tch.id and tt.id_ticket = t.id and to_date(to_char(t.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') "
+                            + "tch.id_service=b.id and tt.id_task=tch.id and tt.id_ticket = t.id and to_date(to_char(t.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') and t.db_id='" + a.getId() + "' "
                             + "group by biz_id, id_task, service , task "
                             + "order by service "
                             + ";";
@@ -6453,7 +6453,7 @@ public class TableGenerator {
                 setChartHTML("true");
                 break;
             case "tch":
-                T2 = generateGltTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
+                T2 = generateTaskTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
                 setTitle(th.getTaskTitle());
                 setCols(getTaskCols());
                 setType(type);

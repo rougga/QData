@@ -13,7 +13,9 @@ import java.util.logging.Logger;
 public class PgMultiConnection {
 
     private final String DRIVER = "org.postgresql.Driver";
-    private final String CONNECTIONSTRING = "jdbc:postgresql://localhost:5432/postgres";
+    //private final String CONNECTIONSTRING = "jdbc:postgresql://localhost:5432/postgres";
+    
+    private final String CONNECTIONSTRING = "jdbc:postgresql://localhost:5434/postgres";
     private final String USER = "honyi";
     private final String PASSWORD = "honyi123";
     private Connection con = null;
