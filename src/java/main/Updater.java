@@ -26,7 +26,7 @@ public class Updater {
         new TaskController().updateTasksById(id);
         //update goal
     }
-    
+
     public void updateDatabase() {
         new AgenceController().updateAllAgenceName();
         new ServiceController().updateServices();
@@ -35,10 +35,10 @@ public class Updater {
         new TicketController().updateTodayTickets();
         new WindowStatusController().updateWindowStatus();
         new LoginLogController().updateTodayLoginLogs();
-       // new TaskController().updateAllTasks();
+        new TaskController().updateAllTasks();
         //update goal
     }
-    
+
     public void updateDatabaseAllDataById(UUID id) {
         new AgenceController().updateAgenceNameById(id);
         new ServiceController().updateServicesById(id);
@@ -47,10 +47,10 @@ public class Updater {
         new TicketController().updateAllTicketsById(id);
         new WindowStatusController().updateWindowStatusById(id);
         new LoginLogController().updateAllLoginLogsById(id);
-                new TaskController().updateTasksById(id);
+        new TaskController().updateTasksById(id);
         //update goal
     }
-    
+
     public void updateDatabaseAllData() {
         new AgenceController().updateAllAgenceName();
         new ServiceController().updateServices();
@@ -59,7 +59,7 @@ public class Updater {
         new TicketController().updateAllTickets();
         new WindowStatusController().updateWindowStatus();
         new LoginLogController().updateAllLoginLogs();
-        //new TaskController().updateAllTasks();
+        new TaskController().updateAllTasks();
         //update goal
     }
 

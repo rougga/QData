@@ -42,7 +42,7 @@ public class TaskController {
         }
     }
 
-    public ArrayList<ma.rougga.nst.modal.Task> getTasks( Statement s) {
+    public ArrayList<ma.rougga.nst.modal.Task> getTasks(Statement s) {
         ArrayList<ma.rougga.nst.modal.Task> taches = new ArrayList<>();
         String SQL = "SELECT id,name,id_service FROM rougga_task order by id_service;";
         try {
@@ -157,13 +157,14 @@ public class TaskController {
 
                 PgConnection scon = new PgConnection();
                 PgMultiConnection con = new PgMultiConnection(a.getHost(), String.valueOf(a.getPort()), a.getDatabase(), a.getUsername(), a.getPassword());
-                List<ma.rougga.nst.modal.Task> tks = getTasks( con.getStatement());
-                clearTasksFromDb(a.getId());
-                for (int index = 0; index < tks.size(); index++) {
-                    addToCentral(tks.get(index),db_id);
-                }
+                List<ma.rougga.nst.modal.Task> tks = getTasks(con.getStatement());
+
                 String SQL = "select * from rougga_ticket_task";
                 ResultSet r = con.getStatement().executeQuery(SQL);
+                clearTasksFromDb(a.getId());
+                for (int index = 0; index < tks.size(); index++) {
+                    addToCentral(tks.get(index), db_id);
+                }
                 while (r.next()) {
                     String SQL2 = "INSERT INTO rougga_ticket_task values (?,?,?,?)";
                     try (PreparedStatement ps = scon.getStatement().getConnection().prepareCall(SQL2)) {
@@ -202,6 +203,43 @@ public class TaskController {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
             return false;
+        }
+    }
+
+    public void updateAllTasks() {
+        List<Agence> ag = new AgenceController().getAllAgence();
+        for (Agence a : ag) {
+            try {
+                PgConnection scon = new PgConnection();
+                PgMultiConnection con = new PgMultiConnection(a.getHost(), String.valueOf(a.getPort()), a.getDatabase(), a.getUsername(), a.getPassword());
+                List<ma.rougga.nst.modal.Task> tks = getTasks(con.getStatement());
+
+                String SQL = "select * from rougga_ticket_task";
+                ResultSet r = con.getStatement().executeQuery(SQL);
+                clearTasksFromDb(a.getId());
+                for (int index = 0; index < tks.size(); index++) {
+                    addToCentral(tks.get(index), a.getId());
+                }
+                while (r.next()) {
+                    String SQL2 = "INSERT INTO rougga_ticket_task values (?,?,?,?)";
+                    try (PreparedStatement ps = scon.getStatement().getConnection().prepareCall(SQL2)) {
+                        ps.setString(1, r.getString("id_ticket"));
+                        ps.setString(2, r.getString("id_task"));
+                        ps.setInt(3, r.getInt("quantity"));
+                        ps.setString(4, a.getId().toString());
+                        ps.execute();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
+                    }
+                }
+                System.out.println("-- Tasks for "+a.getName()+" updated.");
+                con.closeConnection();
+
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
+            }
+
+            System.out.println("-- Tasks updated.");
         }
     }
 }

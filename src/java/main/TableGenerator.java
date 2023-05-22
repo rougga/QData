@@ -6262,7 +6262,7 @@ public class TableGenerator {
 
                     String gblSQL2 = "select "
                             + "b.id as biz_id,"
-                            + "tt.id_task,"
+                            + "tt.id_task as id_task,"
                             + "b.name as service,"
                             + "tch.name as task,"
                             + "(SELECT COUNT(*) FROM rougga_ticket_task tt2 , t_ticket t2 WHERE tt2.id_task=tt.id_task and tt2.id_ticket=t2.id " + dateCon + ") AS NB_TT,"
@@ -6275,13 +6275,22 @@ public class TableGenerator {
                             + "order by service "
                             + ";";
 
-                    String subTotalSQL = "";
+                    String subTotalSQL = "select "
+                            + " count(*) as nb_tsk, "
+                            + "(SELECT COUNT(*) FROM rougga_ticket_task tt2 , t_ticket t2 WHERE  tt2.id_ticket=t2.id " + dateCon + ") AS NB_TT,"
+                            + "(SELECT sum(tt2.quantity) FROM rougga_ticket_task tt2 , t_ticket t2 WHERE  tt2.id_ticket=t2.id " + dateCon + " ) AS NB_QTT "
+                            + "from "
+                            + "rougga_task tch, rougga_ticket_task tt, t_biz_type b , t_ticket t "
+                            + "where "
+                            + "tch.id_service=b.id and tt.id_task=tch.id and tt.id_ticket = t.id and to_date(to_char(t.ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE('" + date1 + "','YYYY-MM-DD') AND TO_DATE('" + date2 + "','YYYY-MM-DD') and t.db_id='" + a.getId() + "' "
+                            + " order by nb_tsk "
+                            + ";";
                     ResultSet r = con.getStatement().executeQuery(gblSQL2);
                     table.clear();
                     while (r.next()) {
                         ArrayList row = new ArrayList<>();
-//            row.add(r.getString("biz_id"));
-//            row.add(r.getString("id_task"));
+                        row.add(a.getId().toString());
+                        row.add(r.getString("id_task"));
                         row.add(a.getName());
                         row.add(r.getString("service"));
                         row.add(r.getString("task"));
@@ -6290,26 +6299,18 @@ public class TableGenerator {
                         table.add(row);
                     }
 
-                    // r = con.getStatement().executeQuery(subTotalSQL);
-//        while (r.next()) {
-//            ArrayList<String> row = new ArrayList<>();
-//            row.add("Sous-Totale");
-//            row.add(r.getLong("nb_t") + "");
-//            row.add(r.getLong("nb_tt") + "");
-//            row.add(r.getLong("nb_a") + "");
-//            row.add(r.getLong("nb_tl1") + "");
-//            row.add(r.getLong("nb_sa") + "");
-//            row.add(r.getFloat("perApT") + "%");
-//            row.add(r.getFloat("PERTL1pt") + "%");
-//            row.add(r.getFloat("perSApT") + "%");
-//            row.add(getFormatedTime(r.getFloat("avgSec_A")));
-//            row.add("--");
-//            row.add("--%");
-//            row.add(getFormatedTime(r.getFloat("avgSec_T")));
-//            row.add("--");
-//            row.add("-%");
-//            table.add(row);
-//        }
+                    r = con.getStatement().executeQuery(subTotalSQL);
+                    while (r.next()) {
+                        ArrayList<String> row = new ArrayList<>();
+                        row.add(a.getId().toString());
+                        row.add("");
+                        row.add(a.getName());
+                        row.add("Sous-Totale");
+                        row.add("Sous-Totale");
+                        row.add(r.getLong("NB_TT") + "");
+                        row.add(r.getLong("NB_QTT") + "");
+                        table.add(row);
+                    }
                     con.closeConnection();
 
                 } catch (Exception ex) {
@@ -6457,7 +6458,7 @@ public class TableGenerator {
                 setTitle(th.getTaskTitle());
                 setCols(getTaskCols());
                 setType(type);
-                setDefaultHTML();
+                setDateHTML();
                 break;
             default:
                 T2 = generateGblTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
@@ -6887,7 +6888,62 @@ public class TableGenerator {
                 + "</script>"
                 + "</div>";
     }
+    
+    public void setDateHTML() {
+        this.topHTML = "<div class='div-wrapper d-flex justify-content-center align-items-center'>"
+                + "<form class='form-inline' id='filterForm'  action=''>"
+                + "<label class='m-1' for='date1'>Du: </label>"
+                + "<input type='date' class='form-control mb-2 mr-sm-2' id='date1' name='date1' value='" + getDate1() + "' max='" + format.format(new Date()) + "'>"
+                + "<label class='m-1' for='date2'>Au: </label>"
+                + "<input type='date' class='form-control mb-2 mr-sm-2' id='date2' name='date2' value='" + getDate2() + "' >"
+                + "<input type='hidden' value='" + getType() + "' name='type'>"
+                + "<div class='btn-group dropright mb-2 mr-4'>"
+                + "  <button type='button' class='btn btn-secondary dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"
+                + "    Intervalle"
+                + "  </button>"
+                + "  <div class='dropdown-menu '>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='today'>Aujourd'hui</a>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='yesterday'>Hier</a>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='cWeek'>Semaine en cours</a>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='lWeek'>Dernier semaine</a>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='cMonth'>Mois en cours</a>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='lMonth'>Mois dernier</a>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='cYear'>Année en cours</a>"
+                + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='lYear'>Année dernier</a>"
+                + "  </div>"
+                + "</div>"
+                + "<div class='btn-group dropright mb-2 mr-4'>"
+                + "  <button type='button' class='btn btn-warning font-weight-bold dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"
+                + "    Agences"
+                + "  </button>"
+                + "  <div class='dropdown-menu ' id='agences'>"
+                + "<span class='dropdown-item font-weight-bold  agence'>"
+                + "<input type='checkbox'  class='mr-1 form-check-input check' id='selectAll'><span id='textSelect'>Toutes les agences.</span>"
+                + ""
+                + "</span>";
+        List<Agence> agences = new AgenceController().getAllAgence();
+        if (agences != null && agences.size() > 0) {
+            for (int i = 0; i < agences.size(); i++) {
+                this.topHTML += "<span class='dropdown-item font-weight-bold appHover agence'>"
+                        + "<input type='checkbox' name='agences' class='mr-1 form-check-input check' value='" + agences.get(i).getId().toString() + "' checked>"
+                        + "<span class='ck-text' data-id='" + agences.get(i).getId().toString() + "'>" + agences.get(i).getName() + "</span>"
+                        + "</span>";
+            }
 
+        }
+
+        this.topHTML += "  </div>"
+                + "</div>"
+                + "<button type='button' class='btn btn-primary mb-2' id='refresh'><img src='./img/icon/reload.png'/> Actualiser</button>"
+                + "<input type='hidden' name='format' value='' id='format'>"
+                + "</form>"
+                + "<script>"
+                + "</script>"
+                + "</div>";
+        this.bottomHTML = "";
+    }
+
+    
     public SimpleDateFormat getFormat3() {
         return format3;
     }
