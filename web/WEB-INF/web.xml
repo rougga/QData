@@ -76,6 +76,14 @@
         <servlet-name>UpdateAgence</servlet-name>
         <servlet-class>main.api.UpdateAgence</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddZone</servlet-name>
+        <servlet-class>main.servlets.AddZone</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteZone</servlet-name>
+        <servlet-class>main.servlets.Deletezone</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Settings</servlet-name>
         <url-pattern>/Settings</url-pattern>
@@ -181,6 +189,14 @@
     <servlet-mapping>
         <servlet-name>UpdateAgence</servlet-name>
         <url-pattern>/UpdateAgence</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddZone</servlet-name>
+        <url-pattern>/AddZone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteZone</servlet-name>
+        <url-pattern>/DeleteZone</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -1,3 +1,5 @@
+<%@page import="main.modal.Zone"%>
+<%@page import="main.controller.ZoneController"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="main.modal.Agence"%>
 <%@page import="java.util.List"%>
@@ -7,7 +9,7 @@
     if (!Objects.equals(session.getAttribute("grade"), "adm")) {
         response.sendRedirect("./home.jsp");
     }
-    
+
 %>
 <!DOCTYPE html>
 <html>
@@ -33,8 +35,7 @@
                 </script>
             </div>
             <div class="mt-4 pt-4">
-                <%                     
-                    String err=request.getParameter("err");
+                <%                    String err = request.getParameter("err");
                     if (err != "" && err != null) {
 
                 %>
@@ -56,6 +57,7 @@
                     <table class="table table-bordered table-light table-responsive-md border-dark"  id="dbTable">
                         <thead class="appColor border-dark">
                             <tr>
+                                <th scope="col">Zone</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Host:port</th>
                                 <th scope="col">DB</th>
@@ -69,36 +71,37 @@
 
                         <tbody class="font-weight-bold">
                             <%
-                               AgenceController ac =new AgenceController();
-                              List<Agence> table=ac.getAllAgence();
-                              if(table!=null){
-                                  for(int i =0;i<table.size();i++){
+                                AgenceController ac = new AgenceController();
+                                List<Agence> table = ac.getAllAgence();
+                                if (table != null) {
+                                    for (int i = 0; i < table.size(); i++) {
                             %>
                             <tr class="clickable-row5 border-dark">
-                                <td class="border-dark align-middle"><%=table.get(i).getName() %></td>
-                                <td class="border-dark align-middle"><%=table.get(i).getHost()+":"+table.get(i).getPort() %></td>
-                                <td class="border-dark align-middle"><%=table.get(i).getDatabase() %></td>
-                                <td class="border-dark align-middle"><%=table.get(i).getUsername() %></td>
-                                <td class="border-dark align-middle"><%=table.get(i).getPassword() %></td>
-                                <td class="border-dark align-middle status" data-id="<%= table.get(i).getId() %>">
+                                <td class="border-dark align-middle" data-zone="<%= ac.getAgenceZoneByAgenceId(table.get(i).getId()).getId()%>"><%= ac.getAgenceZoneByAgenceId(table.get(i).getId()).getName()%></td>
+                                <td class="border-dark align-middle"><%=table.get(i).getName()%></td>
+                                <td class="border-dark align-middle"><%=table.get(i).getHost() + ":" + table.get(i).getPort()%></td>
+                                <td class="border-dark align-middle"><%=table.get(i).getDatabase()%></td>
+                                <td class="border-dark align-middle"><%=table.get(i).getUsername()%></td>
+                                <td class="border-dark align-middle"><%=table.get(i).getPassword()%></td>
+                                <td class="border-dark align-middle status" data-id="<%= table.get(i).getId()%>">
                                     <div class="spinner-border" role="status">
                                         <span class="sr-only text-center text-white bg-secondary p-1">UNK</span>
                                     </div>
                                 </td>
                                 <td class="border-dark align-middle"><%= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(ac.getLastUpdate(table.get(i).getId()))%></td>
                                 <td class="border-dark align-middle">
-                                    <a class="btn btn-secondary m-0 dbUpdateToday disabled" data-id="<%= table.get(i).getId() %>" href="/QData/TodayUpdateAgence?id=<%= table.get(i).getId() %>" title="Mise à jour d'aujourd'hui"><img src="/QData/img/icon/24-hours.png" class=""></a>
-                                    <a class="btn btn-secondary m-0 dbUpdateAll disabled" data-id="<%= table.get(i).getId() %>" href="/QData/UpdateAgence?id=<%= table.get(i).getId() %>" title="Mise à jour Globale"><img src="/QData/img/icon/maj.png"></a>
-                                    <!--<a class="btn btn-primary m-0 disabled dbEdit" data-id="<%= table.get(i).getId() %>" data-id="<%= table.get(i).getId() %>" title="Modifier"><img src="/QData/img/icon/pencil.png"></a>-->
-                                    <a class="btn btn-danger m-0 dbDlt" data-id="<%= table.get(i).getId() %>" href="/QData/DeleteDatabase?id=<%= table.get(i).getId() %>" title="Supprimer"><img src="/QData/img/icon/trash.png"></a>
+                                    <a class="btn btn-secondary m-0 dbUpdateToday disabled" data-id="<%= table.get(i).getId()%>" href="/QData/TodayUpdateAgence?id=<%= table.get(i).getId()%>" title="Mise à jour d'aujourd'hui"><img src="/QData/img/icon/24-hours.png" class=""></a>
+                                    <a class="btn btn-secondary m-0 dbUpdateAll disabled" data-id="<%= table.get(i).getId()%>" href="/QData/UpdateAgence?id=<%= table.get(i).getId()%>" title="Mise à jour Globale"><img src="/QData/img/icon/maj.png"></a>
+                                    <!--<a class="btn btn-primary m-0 disabled dbEdit" data-id="<%= table.get(i).getId()%>" data-id="<%= table.get(i).getId()%>" title="Modifier"><img src="/QData/img/icon/pencil.png"></a>-->
+                                    <a class="btn btn-danger m-0 dbDlt" data-id="<%= table.get(i).getId()%>" href="/QData/DeleteDatabase?id=<%= table.get(i).getId()%>" title="Supprimer"><img src="/QData/img/icon/trash.png"></a>
                                 </td>
                             </tr>
                             <%
-                                 }
-                               }else{
+                                }
+                            } else {
                             %><%="<h4 class='text-center text-danger'>No database</h4>"%><%
                                 }
-                                
+
                             %>
 
                         </tbody>
@@ -121,6 +124,28 @@
                                     <div class="form-group">
                                         <label for="agence">Agence:</label>
                                         <input type="text" class="form-control" id="agence" name="name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="agence">Zone:</label>
+                                        <select class="form-control" id="zone" name="zone">
+
+                                            <%                                     
+                                                ZoneController zc = new ZoneController();
+                                                List<Zone> zones = zc.getAllZones();
+                                                if (zones != null) {
+                                                    for (int i = 0; i < zones.size(); i++) {
+                                            %>
+
+                                            <option class="" value="<%=zones.get(i).getId()%>"><%=zones.get(i).getName()%></option>
+
+                                            <%
+                                                }
+                                            } else {
+                                            %><%="<h4 class='text-center text-danger'>No Zones</h4>"%><%
+                                                }
+
+                                            %>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="host">Hôte:</label>

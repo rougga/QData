@@ -19,8 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.ParserConfigurationException;
 import main.controller.AgenceController;
 import main.controller.CibleController;
+import main.controller.ZoneController;
 import main.handler.TitleHandler;
 import main.modal.Agence;
+import main.modal.Zone;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -6690,6 +6692,28 @@ public class TableGenerator {
                 + "    <a class='dropdown-item font-weight-bold appHover' href='#' id='lYear'>Année dernier</a>"
                 + "  </div>"
                 + "</div>"
+                + "<div class='btn-group dropright mb-2 mr-1'>"
+                + "  <button type='button' class='btn btn-light font-weight-bold dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"
+                + "    Zones"
+                + "  </button>"
+                + "  <div class='dropdown-menu ' id='zones'>"
+                + "<span class='dropdown-item font-weight-bold  zone'>"
+                + "<input type='checkbox'  class='mr-1 form-check-input zoneCheckbox' id='selectAllZones'><span id='textSelect'>Toutes les agences.</span>"
+                + ""
+                + "</span>";
+        List<Zone> zones = new ZoneController().getAllZones();
+        if (zones != null && zones.size() > 0) {
+            for (int i = 0; i < zones.size(); i++) {
+                this.topHTML += "<span class='dropdown-item font-weight-bold appHover zone'>"
+                        + "<input type='checkbox' name='agences' class='mr-1 form-check-input zoneCheckbox' value='" + zones.get(i).getId().toString() + "' checked>"
+                        + "<span class='zone-ck-text' data-id='" + zones.get(i).getId().toString() + "'>" + zones.get(i).getName() + "</span>"
+                        + "</span>";
+            }
+
+        }
+
+        this.topHTML += "  </div>"
+                + "</div>"
                 + "<div class='btn-group dropright mb-2 mr-4'>"
                 + "  <button type='button' class='btn btn-warning font-weight-bold dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"
                 + "    Agences"
@@ -6888,7 +6912,7 @@ public class TableGenerator {
                 + "</script>"
                 + "</div>";
     }
-    
+
     public void setDateHTML() {
         this.topHTML = "<div class='div-wrapper d-flex justify-content-center align-items-center'>"
                 + "<form class='form-inline' id='filterForm'  action=''>"
@@ -6943,7 +6967,6 @@ public class TableGenerator {
         this.bottomHTML = "";
     }
 
-    
     public SimpleDateFormat getFormat3() {
         return format3;
     }

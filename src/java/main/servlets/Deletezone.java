@@ -10,46 +10,35 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import main.controller.AgenceController;
-import main.modal.Agence;
+import main.controller.ZoneController;
 import org.apache.commons.lang3.StringUtils;
 
-public class AddDatabase extends HttpServlet {
+public class Deletezone extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             if (Objects.equals(request.getSession().getAttribute("user"), null)) {
                 response.sendRedirect("./index.jsp");
             } else {
                 if (Objects.equals(request.getSession().getAttribute("grade"), "adm")) {
-                    request.setCharacterEncoding("UTF-8");
-                    String name = request.getParameter("name");
-                    String host = request.getParameter("host");
-                    String port = request.getParameter("port");
-                    String database = request.getParameter("database");
-                    String username = request.getParameter("username");
-                    String password = request.getParameter("password");
-                    String zoneId = request.getParameter("zone");
-                    int status = 1;
-                    if (StringUtils.isNoneBlank(name,host,port,database,username,password,zoneId)) {
-                        Agence a = new Agence(name, host, Integer.parseInt(port), database, username, password, status);
-                        AgenceController ac =new AgenceController();
-                        if (ac.addAgence(a) == 1) {
-                            ac.setZone(a.getId(), UUID.fromString(zoneId));
-                            response.sendRedirect("./setting/agences.jsp?err=" + URLEncoder.encode("la base de données est ajoutée", "UTF-8"));
+
+                    String id = request.getParameter("id");
+                    if (!StringUtils.isBlank(id)) {
+                        if (new ZoneController().deleteZoneById(UUID.fromString(id))) {
+                            response.sendRedirect("./setting/zones.jsp?err=" + URLEncoder.encode("la base de données est supprimé", "UTF-8"));
                         } else {
-                            response.sendRedirect("./setting/agences.jsp?err=" + URLEncoder.encode("la base de données n'est pas ajoutée", "UTF-8"));
+                            response.sendRedirect("./settings/zones.jsp?err=" + URLEncoder.encode("la base de données n'est pas supprimé", "UTF-8"));
                         }
                     } else {
-                        response.sendRedirect("./setting/agences.jsp?err=" + URLEncoder.encode("un champ est vide", "UTF-8"));
+                        response.sendRedirect("./setting/zones.jsp?err=" + URLEncoder.encode("un champ est vide", "UTF-8"));
                     }
-                }else{
+                } else {
                     response.sendRedirect("./home.jsp?err=" + URLEncoder.encode("vous avez besoin des privilèges d'administrateur", "UTF-8"));
+
                 }
             }
-
         }
     }
 

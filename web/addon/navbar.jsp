@@ -85,6 +85,7 @@
                     <a class="dropdown-item font-weight-bold navHover disabled" href="/QData/settings.jsp" >Paramètres</a>
                     <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/cibles.jsp" >Cibles</a>
                     <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/users.jsp" >Utilisateurs</a>
+                    <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/zones.jsp" >Zones</a>
                     <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/agences.jsp" >Agences</a>
                     <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/titles.jsp" >Titres</a>
                     <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/maj.jsp" >MaJ GBL</a>
