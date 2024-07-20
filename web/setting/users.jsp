@@ -1,3 +1,4 @@
+<%@page import="main.controller.ZoneController"%>
 <%@page import="main.controller.UtilisateurController"%>
 <%@page import="main.modal.Utilisateur"%>
 <%@page import="java.util.List"%>
@@ -57,6 +58,7 @@
                                 <th scope="col">Nom D'utilisateur</th>
                                 <th scope="col">Nom Complet</th>
                                 <th scope="col">Grade</th>
+                                <th scope="col">Zone</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -65,7 +67,9 @@
 
 
                             <%
-                                List<Utilisateur> utilisateur = new UtilisateurController(request).getAllUtilisateur();
+                                UtilisateurController uc = new UtilisateurController(request);
+                                List<Utilisateur> utilisateur = uc.getAllUtilisateur();
+                                
                                 if(utilisateur!=null){
                                     for(int i=0;i<utilisateur.size();i++){
                             %>
@@ -73,6 +77,7 @@
                                 <th scope='row'  class="border-dark align-middle"> <%=utilisateur.get(i).getUsername() %></th>
                                 <td class="border-dark align-middle" ><b><%=utilisateur.get(i).getLastName() + " " + utilisateur.get(i).getFirstName() %></b></td>
                                 <td class="border-dark align-middle" data-grade="<%=utilisateur.get(i).getGrade() %>"><b> <%=getGrade(utilisateur.get(i).getGrade()) %></b></td>
+                                <td class="border-dark align-middle" data-zone><b> <%= uc.getUtilisateurZone(utilisateur.get(i).getId()).getName() %></b></td>
                                 <td class="border-dark align-middle">
                                     <a class="btn btn-danger m-0" href="/QData/Delete?type=user&username=<%=utilisateur.get(i).getUsername()%>"><img src="/QData/img/icon/trash.png"></a>
                                 </td>

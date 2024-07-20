@@ -2,8 +2,10 @@
 package main.modal;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class Utilisateur {
+    private UUID id;
     private String username;
     private String password;
     private String grade;
@@ -13,6 +15,7 @@ public class Utilisateur {
     private String sponsor;
 
     public Utilisateur(String username, String password, String grade, String firstName, String lastName, Date date, String sponsor) {
+        this.id=UUID.randomUUID();
         this.username = username;
         this.password = password;
         this.grade = grade;
@@ -22,6 +25,23 @@ public class Utilisateur {
         this.sponsor = sponsor;
     }
 
+    public Utilisateur(UUID id, String username, String password, String grade, String firstName, String lastName, Date date, String sponsor) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.grade = grade;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.date = date;
+        this.sponsor = sponsor;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+    
+    
+    
     public void setUsername(String username) {
         this.username = username;
     }
@@ -48,6 +68,10 @@ public class Utilisateur {
 
     public void setSponsor(String sponsor) {
         this.sponsor = sponsor;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public String getUsername() {

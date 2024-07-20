@@ -3,11 +3,15 @@ package main.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +23,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import main.CfgHandler;
 import main.PasswordAuthentication;
+import main.PgConnection;
+import main.modal.Agence;
 import main.modal.Utilisateur;
+import main.modal.Zone;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,31 +49,28 @@ public class UtilisateurController {
     public List<Utilisateur> getAllUtilisateur() {
         try {
             List<Utilisateur> utilisateurs = new ArrayList();
-            CfgHandler cfg = new CfgHandler(getRequest());
-            String path = cfg.getUserFile();
-            Document doc = cfg.getXml(path);
-            NodeList nList = doc.getElementsByTagName("user");
-            for (int i = 0; i < nList.getLength(); i++) {
-                ArrayList row = new ArrayList();
-                Node nNode = nList.item(i);
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-                    utilisateurs.add(new Utilisateur(
-                            eElement.getElementsByTagName("username").item(0).getTextContent(),
-                            eElement.getElementsByTagName("password").item(0).getTextContent(),
-                            eElement.getElementsByTagName("grade").item(0).getTextContent(),
-                            eElement.getElementsByTagName("firstName").item(0).getTextContent(),
-                            eElement.getElementsByTagName("lastName").item(0).getTextContent(),
-                            new SimpleDateFormat("yyyy-MM-dd").parse(eElement.getElementsByTagName("date").item(0).getTextContent()),
-                            eElement.getElementsByTagName("sponsor").item(0).getTextContent())
-                    );
-                }
+            PgConnection con = new PgConnection();
+            ResultSet r = con.getStatement().executeQuery("select * from rougga_user order by date;");
+            while (r.next()) {
+                utilisateurs.add(
+                        new Utilisateur(
+                                UUID.fromString(r.getString("id")),
+                                r.getString("username"),
+                                r.getString("password"),
+                                r.getString("grade"),
+                                r.getString("first_name"),
+                                r.getString("last_name"),
+                                CfgHandler.getFormatedDateAsDate(r.getString("date")),
+                                r.getString("sponsor"))
+                );
             }
+            con.closeConnection();
             return utilisateurs;
-        } catch (Exception ex) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             return null;
         }
+
     }
 
     public int AddUtilisateur(Utilisateur utilisateur) {
@@ -117,7 +121,8 @@ public class UtilisateurController {
             return 1;
 
         } catch (IOException | ParserConfigurationException | DOMException | SAXException | TransformerException e) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(AgenceController.class
+                    .getName()).log(Level.SEVERE, null, e);
             return 0;
         }
     }
@@ -145,9 +150,29 @@ public class UtilisateurController {
             StreamResult result = new StreamResult(new File(path));
             transformer.transform(source, result);
             return 1;
+
         } catch (IOException | ParserConfigurationException | TransformerException | DOMException | SAXException e) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(AgenceController.class
+                    .getName()).log(Level.SEVERE, null, e);
             return 0;
+        }
+    }
+
+    public Zone getUtilisateurZone(UUID id) {
+        try {
+            Zone z = null;
+            PgConnection con = new PgConnection();
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("select id_zone from rougga_user_zone where id_user=?;");
+            p.setString(1, id.toString());
+            ResultSet r = p.executeQuery();
+            if (r.next()) {
+                z = new ZoneController().getZoneById(UUID.fromString(r.getString("id_zone")));
+            }
+            con.closeConnection();
+            return z;
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UtilisateurController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            return null;
         }
     }
 

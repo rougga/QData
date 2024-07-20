@@ -6,12 +6,18 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import main.controller.TicketController;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -19,15 +25,15 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class CfgHandler {
-    
+
     //MetaData
-    public  static final String APP = "QData";
+    public static final String APP = "QData";
     public static final String VERSION = "0.5";
     public static final String COMPANY = "ROUGGA";
     public static final String CLIENT = "NST-Maroc";
-    public static final int APP_PORT=8989;
-    public static String APP_NODE="QStates";
-    
+    public static final int APP_PORT = 8989;
+    public static String APP_NODE = "QStates";
+
     //Data
     private final String cfgFile = "\\cfg\\cfg.properties";
     private final String userFile = "\\cfg\\db\\users.xml";
@@ -35,7 +41,7 @@ public class CfgHandler {
     private final String extraFile = "\\cfg\\db\\extra.xml";
     private final String dbFile = "\\cfg\\db\\db.xml";
     private final String titleFile = "\\cfg\\db\\title.xml";
-    
+
     //Excel
     private final String tempxls = "\\cfg\\excel\\temp.xls";
     private final String gblTempExcel = "\\cfg\\excel\\gbltemp.xlsx";
@@ -46,13 +52,12 @@ public class CfgHandler {
     private final String ndtTempExcel = "\\cfg\\excel\\ndttemp.xlsx";
     private final String glaTempExcel = "\\cfg\\excel\\glatemp.xlsx";
     private final String gltTempExcel = "\\cfg\\excel\\glttemp.xlsx";
-    
-    //Pages
 
+    //Pages
     public static String PAGE_HOME = "/QData/home.jsp";
     public static String PAGE_REPORT = "/QData/report.jsp";
     public static String PAGE_TASK = "/QData/setting/taches.jsp";
-    
+
     //Pars
     private Properties prop = null;
     private String url;
@@ -60,6 +65,29 @@ public class CfgHandler {
     private HttpServletRequest request;
     private OutputStream output;
     private FileReader FR = null;
+
+    public static String getFormatedDateAsString(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (date != null) {
+            return format.format(date);
+        } else {
+            return null;
+        }
+    }
+
+    public static Date getFormatedDateAsDate(String date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (date != null) {
+            try {
+                return format.parse(date);
+            } catch (ParseException ex) {
+                Logger.getLogger(CfgHandler.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
 
     public CfgHandler(HttpServletRequest r) throws FileNotFoundException, IOException {
         this.request = r;
@@ -100,7 +128,7 @@ public class CfgHandler {
     public int getCibleA(String id) throws FileNotFoundException, IOException, ParserConfigurationException, SAXException {
 
         int cibleA = 0;
-        String path= getCibleFile();
+        String path = getCibleFile();
         Document doc = getXml(path);
         Node cibles = doc.getFirstChild();
         NodeList nList = cibles.getChildNodes();
@@ -118,9 +146,9 @@ public class CfgHandler {
     }
 
     public int getCibleT(String id) throws FileNotFoundException, IOException, ParserConfigurationException, SAXException {
-        
+
         int cibleT = 0;
-        String path= getCibleFile();
+        String path = getCibleFile();
         Document doc = getXml(path);
         Node cibles = doc.getFirstChild();
         NodeList nList = cibles.getChildNodes();
@@ -148,6 +176,7 @@ public class CfgHandler {
     public String getTempxls() {
         return tempxls;
     }
+
     public String getCfgFile() {
         return request.getServletContext().getRealPath(cfgFile);
     }
@@ -163,7 +192,8 @@ public class CfgHandler {
     public String getExtraFile() {
         return request.getServletContext().getRealPath(extraFile);
     }
-     public String getGblTempExcel() {
+
+    public String getGblTempExcel() {
         return request.getServletContext().getRealPath(gblTempExcel);
     }
 
@@ -196,12 +226,11 @@ public class CfgHandler {
     }
 
     public String getDbFile() {
-        return  request.getServletContext().getRealPath(dbFile);
+        return request.getServletContext().getRealPath(dbFile);
     }
 
     public String getTitleFile() {
         return request.getServletContext().getRealPath(titleFile);
     }
-
 
 }
