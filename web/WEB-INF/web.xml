@@ -84,6 +84,14 @@
         <servlet-name>DeleteZone</servlet-name>
         <servlet-class>main.servlets.Deletezone</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddUtilisateur</servlet-name>
+        <servlet-class>main.servlets.AddUtilisateur</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteUtilisateur</servlet-name>
+        <servlet-class>main.servlets.DeleteUtilisateur</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Settings</servlet-name>
         <url-pattern>/Settings</url-pattern>
@@ -197,6 +205,14 @@
     <servlet-mapping>
         <servlet-name>DeleteZone</servlet-name>
         <url-pattern>/DeleteZone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddUtilisateur</servlet-name>
+        <url-pattern>/AddUtilisateur</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteUtilisateur</servlet-name>
+        <url-pattern>/DeleteUtilisateur</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

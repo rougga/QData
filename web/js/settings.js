@@ -168,7 +168,7 @@ $(document).ready(function () {
         $("#userEdit").removeAttr("data-toggle");
         $("#userEdit").removeAttr("data-target");
         $("#grade").val("0");
-        $("#userForm").attr("action", "./Add");
+        $("#userForm").attr("action", "/QData/AddUtilisateur");
 
     });
     $("#userEdit").on('click', function () {

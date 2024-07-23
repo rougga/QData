@@ -1,50 +1,20 @@
 package main.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URLEncoder;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import main.CfgHandler;
-import main.PasswordAuthentication;
 import main.PgConnection;
-import main.modal.Agence;
 import main.modal.Utilisateur;
 import main.modal.Zone;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 public class UtilisateurController {
 
-    HttpServletRequest request;
-
-    public UtilisateurController(HttpServletRequest request) {
-        this.request = request;
-    }
-
-    public HttpServletRequest getRequest() {
-        return request;
-    }
 
     public List<Utilisateur> getAllUtilisateur() {
         try {
@@ -67,97 +37,109 @@ public class UtilisateurController {
             con.closeConnection();
             return utilisateurs;
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            Logger.getLogger(UtilisateurController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             return null;
         }
 
     }
-
-    public int AddUtilisateur(Utilisateur utilisateur) {
+    
+    
+    public Utilisateur getUtilisateurById(UUID id){
+        Utilisateur u = null;
         try {
-            CfgHandler cfg = new CfgHandler(request);
-            String path = cfg.getUserFile();
-
-            Document doc = cfg.getXml(path);
-            Node users = doc.getFirstChild();
-
-            Element user = doc.createElement("user");
-            users.appendChild(user);
-
-            Element usernameE = doc.createElement("username");
-            usernameE.appendChild(doc.createTextNode(utilisateur.getUsername()));
-            user.appendChild(usernameE);
-
-            PasswordAuthentication pa = new PasswordAuthentication();
-            Element passwordE = doc.createElement("password");
-            passwordE.appendChild(doc.createTextNode(utilisateur.getPassword()));
-            user.appendChild(passwordE);
-
-            Element gradeE = doc.createElement("grade");
-            gradeE.appendChild(doc.createTextNode(utilisateur.getGrade()));
-            user.appendChild(gradeE);
-
-            Element firstNameE = doc.createElement("firstName");
-            firstNameE.appendChild(doc.createTextNode(utilisateur.getFirstName()));
-            user.appendChild(firstNameE);
-
-            Element lastNameE = doc.createElement("lastName");
-            lastNameE.appendChild(doc.createTextNode(utilisateur.getLastName()));
-            user.appendChild(lastNameE);
-
-            Element dateAdded = doc.createElement("date");
-            dateAdded.appendChild(doc.createTextNode(new SimpleDateFormat("yyyy-MM-dd").format(utilisateur.getDate())));
-            user.appendChild(dateAdded);
-
-            Element sponsor = doc.createElement("sponsor");
-            sponsor.appendChild(doc.createTextNode(utilisateur.getSponsor()));
-            user.appendChild(sponsor);
-
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(path));
-            transformer.transform(source, result);
-            return 1;
-
-        } catch (IOException | ParserConfigurationException | DOMException | SAXException | TransformerException e) {
-            Logger.getLogger(AgenceController.class
-                    .getName()).log(Level.SEVERE, null, e);
-            return 0;
-        }
-    }
-
-    public int deleteUtilisateurByUsername(String username) {
-        try {
-            CfgHandler cfg = new CfgHandler(request);
-            String path = cfg.getUserFile();
-            Document doc = cfg.getXml(path);
-            Node users = doc.getFirstChild();
-            NodeList nList = users.getChildNodes();
-            for (int i = 0; i < nList.getLength(); i++) {
-                Node nNode = nList.item(i);
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-                    if (Objects.equals(eElement.getElementsByTagName("username").item(0).getTextContent(), username)) {
-                        users.removeChild(nNode);
-                    }
-                }
-
+            PgConnection con = new PgConnection();
+            PreparedStatement ps = con.getStatement().getConnection().prepareStatement("select * from rougga_user where id=?;");
+            ps.setString(1, id.toString());
+            ResultSet r = ps.executeQuery();
+            if (r.next()) {
+                u = new Utilisateur(
+                                UUID.fromString(r.getString("id")),
+                                r.getString("username"),
+                                r.getString("password"),
+                                r.getString("grade"),
+                                r.getString("first_name"),
+                                r.getString("last_name"),
+                                CfgHandler.getFormatedDateAsDate(r.getString("date")),
+                                r.getString("sponsor"));
             }
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(path));
-            transformer.transform(source, result);
-            return 1;
+            con.closeConnection();
+            return u;
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UtilisateurController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            return null;
+        }
+    }
+    
+    public Utilisateur getUtilisateurByUsername(String username){
+        Utilisateur u = null;
+        try {
+            PgConnection con = new PgConnection();
+            PreparedStatement ps = con.getStatement().getConnection().prepareStatement("select id from rougga_user where username=?;");
+            ps.setString(1, username);
+            ResultSet r = ps.executeQuery();
+            if (r.next()) {
+                u = getUtilisateurById(UUID.fromString(r.getString("id")));
+            }
+            con.closeConnection();
+            return u;
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UtilisateurController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            return null;
+        }
+    }
+    
+    
+    public boolean AddUtilisateur(Utilisateur u) {
+          try {
+            PgConnection con = new PgConnection();
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into rougga_user (id,username,password,grade,first_name,last_name,sponsor) values(?,?,?,?,?,?,?);");
+            p.setString(1, u.getId().toString());
+            p.setString(2, u.getUsername());
+            p.setString(3, u.getPassword());
+            p.setString(4, u.getGrade());
+            p.setString(5, u.getFirstName());
+            p.setString(6, u.getLastName());
+            p.setString(7, u.getSponsor());
+            p.execute();
+            con.closeConnection();
+            return true;
 
-        } catch (IOException | ParserConfigurationException | TransformerException | DOMException | SAXException e) {
-            Logger.getLogger(AgenceController.class
-                    .getName()).log(Level.SEVERE, null, e);
-            return 0;
+        } catch (Exception ex) {
+            Logger.getLogger(UtilisateurController.class.getName()).log(Level.SEVERE, "error in adding utilisateur", ex);
+            return false;
         }
     }
 
+    public boolean deleteUtilisateurById(UUID id) {
+       try {
+            PgConnection con = new PgConnection();
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("delete from rougga_user where id=?;");
+            p.setString(1, id.toString());
+            p.execute();
+            con.closeConnection();
+            return true;
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UtilisateurController.class.getName()).log(Level.SEVERE, "error deleting utilisateur", ex);
+            return false;
+        }
+    }
+
+    public boolean setZone(UUID id_user, UUID id_zone){
+        try {
+            PgConnection con = new PgConnection();
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into rougga_user_zone values(?,?);");
+            p.setString(1, id_user.toString());
+            p.setString(2, id_zone.toString());
+            p.execute();
+            con.closeConnection();
+            return true;
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UtilisateurController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            return false;
+        }
+    }
+    
     public Zone getUtilisateurZone(UUID id) {
         try {
             Zone z = null;
