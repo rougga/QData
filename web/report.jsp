@@ -466,7 +466,7 @@
                     }
 
                 };
-                var checkCheckBoxes = function () {
+                var checkZoneCheckBoxes = function () {
                     var arr = JSON.parse(sessionStorage.getItem("selectedZones"));
                     if (arr === null) {
                         $(".zoneCheckbox").prop("checked", true);
@@ -486,6 +486,7 @@
 
                 };
                 checkCheckBoxes();
+                checkZoneCheckBoxes();
                 setDates();
                 updateLinks();
             });

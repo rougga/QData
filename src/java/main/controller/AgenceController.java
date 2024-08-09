@@ -37,6 +37,27 @@ public class AgenceController {
         }
     }
 
+    public List<Agence> getAgencesByZone(UUID id_zone) {
+        try {
+            List<Agence> agences = new ArrayList();
+            PgConnection con = new PgConnection();
+            PreparedStatement ps = con.getStatement()
+                    .getConnection()
+                    .prepareStatement("select id_agence from rougga_agence_zone where id_zone=?;");
+            
+            ps.setString(1, id_zone.toString());
+            ResultSet r = ps.executeQuery();
+            while (r.next()) {
+                agences.add(this.getAgenceById(UUID.fromString(r.getString("id_agence"))));
+            }
+            con.closeConnection();
+            return agences;
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            return null;
+        }
+    }
+    
     public int addAgence(Agence a) {
         try {
             PgConnection con = new PgConnection();

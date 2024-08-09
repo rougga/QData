@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.ParserConfigurationException;
 import main.controller.AgenceController;
 import main.controller.CibleController;
+import main.controller.UtilisateurController;
 import main.controller.ZoneController;
 import main.handler.TitleHandler;
 import main.modal.Agence;
@@ -6336,41 +6337,48 @@ public class TableGenerator {
         Map data = new HashMap();
         List<ArrayList<String>> T = null;
         List<ArrayList> T2 = null;
+        AgenceController ac = new AgenceController();
+        UtilisateurController uc = new UtilisateurController();
+        List<Agence> agences = ac.getAgencesByZone(uc.getUtilisateurZoneByUsername(request.getSession().getAttribute("user").toString()).getId());
+        //set all agences and zones for admin 
+        
+        List<Zone> zones = new ArrayList<>();
+        zones.add(uc.getUtilisateurZoneByUsername(request.getSession().getAttribute("user").toString()));
         switch (type) {
             case "gbl":
                 T2 = generateGblTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
                 setTitle(th.getGblTitle());
                 setCols(getGblCols());
                 setType(type);
-                setDefaultHTML();
+                setDefaultHTML(agences,zones);
                 break;
             case "emp":
                 T2 = generateEmpTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
                 setTitle(th.getEmpTitle());
                 setCols(getEmpCols());
                 setType(type);
-                setDefaultHTML();
+                setDefaultHTML(agences,zones);
                 break;
             case "empser":
                 T2 = generateEmpServiceTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
                 setTitle(th.getEmpSerTitle());
                 setCols(getEmpServiceCols());
                 setType(type);
-                setDefaultHTML();
+                setDefaultHTML(agences,zones);
                 break;
             case "gch":
                 T2 = generateGchTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
                 setTitle(th.getGchTitle());
                 setCols(getGchCols());
                 setType(type);
-                setDefaultHTML();
+                setDefaultHTML(agences,zones);
                 break;
             case "gchserv":
                 T2 = generateGchServiceTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
                 setTitle(th.getGchServTitle());
                 setCols(getGchServiceCols());
                 setType(type);
-                setDefaultHTML();
+                setDefaultHTML(agences,zones);
                 break;
             case "ndt":
                 T2 = generateNdtTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
@@ -6378,7 +6386,7 @@ public class TableGenerator {
                 setTitle(th.getNdtTitle());
                 setCols(getNdtCols());
                 setType(type);
-                setChartHTML("false");
+                setChartHTML("false",agences,zones);
                 break;
             case "ndtt":
                 T2 = generateNdttTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
@@ -6386,7 +6394,7 @@ public class TableGenerator {
                 setTitle(th.getNdttTitle());
                 setCols(getNdtCols());
                 setType(type);
-                setChartHTML("false");
+                setChartHTML("false",agences,zones);
                 break;
             case "ndta":
                 T2 = generateNdtaTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
@@ -6394,7 +6402,7 @@ public class TableGenerator {
                 setTitle(th.getNdtaTitle());
                 setCols(getNdtCols());
                 setType(type);
-                setChartHTML("false");
+                setChartHTML("false",agences,zones);
                 break;
             case "ndtsa":
                 T2 = generateNdtsaTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
@@ -6402,7 +6410,7 @@ public class TableGenerator {
                 setTitle(th.getNdtsaTitle());
                 setCols(getNdtCols());
                 setType(type);
-                setChartHTML("false");
+                setChartHTML("false",agences,zones);
 
                 break;
             case "cnx":
@@ -6410,7 +6418,7 @@ public class TableGenerator {
                 setTitle(th.getCnxTitle());
                 setCols(getCnxCols());
                 setType(type);
-                setDefaultHTML();
+                setDefaultHTML(agences,zones);
                 this.bottomHTML = "";
                 break;
             case "remp":
@@ -6418,56 +6426,56 @@ public class TableGenerator {
                 setTitle(th.getRempTitle());
                 setCols(getEmpCols());
                 setType(type);
-                setDefaultHTML();
+                setDefaultHTML(agences,zones);
                 break;
             case "ser":
                 T2 = generateSerTable2(null, null);
                 setTitle(th.getSerTitle());
                 setCols(getSerCols());
                 setType(type);
-                setTimerHTML();
+                setTimerHTML(agences,zones);
                 break;
             case "sgch":
                 T2 = generateSgchTable2();
                 setTitle(th.getSgchTitle());
                 setCols(getSgchCols());
                 setType(type);
-                setTimerHTML();
+                setTimerHTML(agences,zones);
                 break;
             case "apl":
                 T = generateAplTable(request, request.getParameter("date1"), request.getParameter("date2"), request.getSession().getAttribute("db") + "");
                 setTitle(th.getAplTitle());
                 setCols(getAplCols());
                 setType(type);
-                setDefaultHTML();
+                setDefaultHTML(agences,zones);
                 break;
             case "gla":
                 T2 = generateGlaTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
                 setTitle(th.getGlaTitle());
                 setCols(getGlaCols());
                 setType(type);
-                setChartHTML("true");
+                setChartHTML("true",agences,zones);
                 break;
             case "glt":
                 T2 = generateGltTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
                 setTitle(th.getGltTitle());
                 setCols(getGltCols());
                 setType(type);
-                setChartHTML("true");
+                setChartHTML("true",agences,zones);
                 break;
             case "tch":
                 T2 = generateTaskTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
                 setTitle(th.getTaskTitle());
                 setCols(getTaskCols());
                 setType(type);
-                setDateHTML();
+                setDateHTML(agences,zones);
                 break;
             default:
                 T2 = generateGblTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
                 setTitle(th.getGblTitle());
                 setCols(getGblCols());
                 setType(type);
-                setDefaultHTML();
+                setDefaultHTML(agences,zones);
         }
         data.put("table", T2);
         data.put("table2", T);
@@ -6669,7 +6677,7 @@ public class TableGenerator {
 
     }
 
-    public void setDefaultHTML() {
+    public void setDefaultHTML(List<Agence> agences,List<Zone> zones) {
         this.topHTML = "<div class='div-wrapper d-flex justify-content-center align-items-center'>"
                 + "<form class='form-inline' id='filterForm'  action=''>"
                 + "<label class='m-1' for='date1'>Du: </label>"
@@ -6723,7 +6731,7 @@ public class TableGenerator {
                 + "<input type='checkbox'  class='mr-1 form-check-input check' id='selectAll'><span id='textSelect'>Toutes les agences.</span>"
                 + ""
                 + "</span>";
-        List<Agence> agences = new AgenceController().getAllAgence();
+       
         if (agences != null && agences.size() > 0) {
             for (int i = 0; i < agences.size(); i++) {
                 this.topHTML += "<span class='dropdown-item font-weight-bold appHover agence'>"
@@ -6755,7 +6763,7 @@ public class TableGenerator {
                 + "</div>";
     }
 
-    public void setChartHTML(String bol) throws ParseException {
+    public void setChartHTML(String bol,List<Agence> agences,List<Zone> zones) throws ParseException {
         this.topHTML = "<div class='div-wrapper d-flex justify-content-center align-items-center'>"
                 + "<form class='form-inline' id='filterForm' action=''>"
                 + "<label class='m-1' for='date1'>Du: </label>"
@@ -6786,7 +6794,7 @@ public class TableGenerator {
                 + "<span class='dropdown-item font-weight-bold appHover agence'>"
                 + "<input type='checkbox'  class='mr-1 form-check-input check' id='selectAll'>Toutes les agences."
                 + "</span>";
-        List<Agence> agences = new AgenceController().getAllAgence();
+       
         if (agences != null && agences.size() > 0) {
             for (int i = 0; i < agences.size(); i++) {
                 this.topHTML += "<span class='dropdown-item font-weight-bold appHover agence'>"
@@ -6888,7 +6896,7 @@ public class TableGenerator {
                 + "                </script>";
     }
 
-    public void setTimerHTML() {
+    public void setTimerHTML(List<Agence> agences,List<Zone> zones) {
         this.topHTML = "<div class='div-wrapper d-flex justify-content-center align-items-center'>"
                 + ""
                 + "</div>";
@@ -6913,7 +6921,7 @@ public class TableGenerator {
                 + "</div>";
     }
 
-    public void setDateHTML() {
+    public void setDateHTML(List<Agence> agences,List<Zone> zones) {
         this.topHTML = "<div class='div-wrapper d-flex justify-content-center align-items-center'>"
                 + "<form class='form-inline' id='filterForm'  action=''>"
                 + "<label class='m-1' for='date1'>Du: </label>"
@@ -6945,7 +6953,7 @@ public class TableGenerator {
                 + "<input type='checkbox'  class='mr-1 form-check-input check' id='selectAll'><span id='textSelect'>Toutes les agences.</span>"
                 + ""
                 + "</span>";
-        List<Agence> agences = new AgenceController().getAllAgence();
+       
         if (agences != null && agences.size() > 0) {
             for (int i = 0; i < agences.size(); i++) {
                 this.topHTML += "<span class='dropdown-item font-weight-bold appHover agence'>"

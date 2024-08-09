@@ -1,23 +1,15 @@
 package main.servlets;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import main.CfgHandler;
 import main.PasswordAuthentication;
 import main.controller.UtilisateurController;
 import main.modal.Utilisateur;
 import org.apache.commons.lang3.StringUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public class Login extends HttpServlet {
 
@@ -43,8 +35,8 @@ public class Login extends HttpServlet {
                         request.getSession().setAttribute("user", username);
                         request.getSession().setAttribute("grade", u.getGrade());
                         response.sendRedirect("./home.jsp");
-
-                    }
+                        pwFalse = false;
+                    } 
                 }
 
                 if (!isFound) {

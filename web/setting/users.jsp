@@ -77,7 +77,7 @@
 
 
                             <%
-                                UtilisateurController uc = new UtilisateurController(request);
+                                UtilisateurController uc = new UtilisateurController();
                                 List<Utilisateur> utilisateur = uc.getAllUtilisateur();
                                 
                                 if(utilisateur!=null){

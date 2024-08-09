@@ -22,7 +22,7 @@ public class DeleteUtilisateur extends HttpServlet {
             response.sendRedirect("./index.jsp");
         } else {
             if (Objects.equals(request.getSession().getAttribute("grade"), "adm")) {
-                UtilisateurController uc = new UtilisateurController(request);
+                UtilisateurController uc = new UtilisateurController();
                 String id = request.getParameter("id");
                 if (StringUtils.isNotBlank(id)) {
                     if (uc.deleteUtilisateurById(UUID.fromString(id))) {

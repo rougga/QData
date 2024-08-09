@@ -157,5 +157,9 @@ public class UtilisateurController {
             return null;
         }
     }
-
+    
+    public Zone getUtilisateurZoneByUsername(String username) {
+        Zone z = this.getUtilisateurZone(this.getUtilisateurByUsername(username).getId());
+        return z;
+    }
 }
