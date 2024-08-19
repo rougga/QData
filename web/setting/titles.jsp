@@ -1,8 +1,15 @@
+<%@page import="java.net.URLEncoder"%>
 <%@page import="main.handler.TitleHandler"%>
 <%@page import="main.modal.Agence"%>
 <%@page import="java.util.List"%>
 <%@page import="main.controller.AgenceController"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    if (!Objects.equals(session.getAttribute("grade"), "adm")) {
+        response.sendRedirect("/"+CfgHandler.APP+"/home.jsp?err="+ URLEncoder.encode("vous avez besoin des privilèges d'administrateur", "UTF-8"));
+    }
+
+%>
 <!DOCTYPE html>
 <html>
     <head>

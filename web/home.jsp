@@ -36,7 +36,18 @@ Map chart= stat.getTotalDealChart();
             <div>
                 <%@include file="./addon/navbar.jsp" %>
             </div>
+            <div>
+                                    <%                    String err = request.getParameter("err");
+                    if (err != "" && err != null) {
 
+                %>
+                <%= "<div class='alert alert-danger alert-dismissible fade show' role='alert'><b>"
+                        + err
+                        + "</b><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"%>
+                <%
+                    }
+                %>
+            </div>
             <div class="row">
                 <div class="col-12 col-md-6 mt-4 pt-4">
                     <div class="border border-white rounded p-2">
@@ -186,7 +197,7 @@ Map chart= stat.getTotalDealChart();
                         agencesLink+= "&agences="+ids[i];
                     }
                 }
-                agencesLink+="&date1="+date1+"$date2="+date2;
+                agencesLink+="&date1="+date1+"&date2="+date2;
                 $.each($(".d"),function(i,v) {
                     var link=$(v).attr("href");
                     link= link.substring(0,link.indexOf("d=d")+3);

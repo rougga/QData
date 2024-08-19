@@ -13,7 +13,7 @@ public class Listener implements ServletContextListener {
     final Runnable myRunnable = new Runnable() {
         @Override
         public void run() {
-            System.out.println("-- OffReport Data Update Starting.....");
+            System.out.println("-- "+CfgHandler.APP+" v"+CfgHandler.VERSION+" Data Update Starting.....");
             new Updater().updateDatabase();
             System.out.println("-- Last Updated: " + new Date().toString());
         }

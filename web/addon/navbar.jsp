@@ -83,11 +83,20 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item font-weight-bold navHover disabled" href="/QData/settings.jsp" >Paramètres</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/cibles.jsp" >Cibles</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/users.jsp" >Utilisateurs</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/zones.jsp" >Zones</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/agences.jsp" >Agences</a>
-                    <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/titles.jsp" >Titres</a>
+                    <div class="dropdown-divider border-dark"></div>
+                    
+                    <%
+                        if(Objects.equals(session.getAttribute("grade"), "adm")){
+                    %>
+                            <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/cibles.jsp" >Cibles</a>
+                            <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/users.jsp" >Utilisateurs</a>
+                            <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/zones.jsp" >Zones</a>
+                            <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/agences.jsp" >Agences</a>
+                            <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/titles.jsp" >Titres</a>
+                    <%
+                        }
+                    %>
+                    
                     <a class="dropdown-item font-weight-bold navHover" href="/QData/setting/maj.jsp" >MaJ GBL</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item font-weight-bold navHover" href="/QData/Logoff">

@@ -53,60 +53,60 @@
         <div class="container-xl bg-dark h-100 p-0">
 
             <div class="head">
-                <%@include file="./addon/navbar.jsp" %>
+<%@include file="./addon/navbar.jsp" %>
                 <script>
                     $("#home").removeClass("active");
                     $(".<%=type%>").addClass("active");
                 </script>
             </div>
             <div class="body">
-                <%                     if (request.getParameter("err") != "" && request.getParameter("err") != null) {
+<%                     if (request.getParameter("err") != "" && request.getParameter("err") != null) {
 
-                %>
-                <%= "<div class='alert alert-danger alert-dismissible fade show' role='alert'><b>"
-                        + request.getParameter("err")
-                        + "</b><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"%>
-                <%
-                    }
+%>
+<%= "<div class='alert alert-danger alert-dismissible fade show' role='alert'><b>"
+        + request.getParameter("err")
+        + "</b><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"%>
+<%
+    }
 
-                    Map data = gbl.getTable(request, request.getParameter("date1"), request.getParameter("date2"), request.getParameterValues("agences"), type);
-                    table2 = (List) data.get("table");
-                    Title = (String) data.get("title");
-                    cols = (String[]) data.get("cols");
+    Map data = gbl.getTable(request, request.getParameter("date1"), request.getParameter("date2"), request.getParameterValues("agences"), type);
+    table2 = (List) data.get("table");
+    Title = (String) data.get("title");
+    cols = (String[]) data.get("cols");
 
 
-                %>
+%>
 
 
                 <h2 class="text-center p-4"><%= Title%></h2>
 
-                <%= data.get("top")%>
+<%= data.get("top")%>
                 <table class="table table-light table-bordered table-striped  table-responsive">
                     <a class="float-right btn btn-link text-white" id="plus">PLUS >></a>
                     <thead class="appColor ">
                         <tr class="">
-                            <c:forEach var="col" items="<%=cols%>" varStatus="status">
+<c:forEach var="col" items="<%=cols%>" varStatus="status">
                                 <th class="col ${status.index} text-wrap text-center align-middle"><c:out value="${col}"/></th>
-                                </c:forEach>
+</c:forEach>
                         </tr>
                     </thead>
                     <tbody  class="font-weight-bold ">
 
-                        <%
-                            if (!table2.isEmpty() && table2 != null) {
-                                for (int i = 0; i < table2.size(); i++) {
-                        %>
+<%
+    if (!table2.isEmpty() && table2 != null) {
+        for (int i = 0; i < table2.size(); i++) {
+%>
                         <tr class="">
                             <th scope="row" class="text-center align-middle border-dark 0 db col" data-id="<%= table2.get(i).get(0)%>"><%= table2.get(i).get(2)%></th>
                             <td class="text-left border-dark 1 <%= table2.get(i).get(3)%>"><%= table2.get(i).get(3)%></td>
-                            <% for (int j = 4; j < table2.get(i).size(); j++) {%>
+<% for (int j = 4; j < table2.get(i).size(); j++) {%>
                             <td class="text-left border-dark <%= j - 2%>" class=""><%= table2.get(i).get(j)%></td>
-                            <%}%>
+<%}%>
                         </tr>
-                        <%
-                                }
-                            }
-                        %>
+<%
+        }
+    }
+%>
 
 
                     </tbody>
@@ -114,7 +114,7 @@
 
             </div>
             <div class="footer">
-                <%= data.get("bottom")%>
+<%= data.get("bottom")%>
             </div>
         </div>
         <script>
@@ -290,7 +290,6 @@
                     addDateToSessionStorage();
                     updateLinks();
                 });
-
                 $("#cWeek").on('click', function () {
                     $("#date1").val(moment().startOf('week').format('YYYY-MM-DD'));
                     $("#date2").val(moment().endOf('week').format('YYYY-MM-DD'));
@@ -377,82 +376,70 @@
                         $(v).attr("href", link);
                     });
                     sessionStorage.setItem("dbs", JSON.stringify(ids));
+                    sessionStorage.setItem("selectedZones", JSON.stringify(checkedZonesIds));
                     console.log("agences ids:");
                     console.log(ids);
                     console.log("zone ids:");
                     console.log(checkedZonesIds);
                 };
-                $(".check").on('change', function () {
-                    sessionStorage.setItem("dbs", JSON.stringify(getCheckedBoxes()));
-                    updateLinks();
-                });
-                $(".zoneCheckbox").on('change', function () {
+                
+                let refreshSelectAllZonesCheckbox = function () {
+                    if($(".check").length === $(".check:checked").length && $(".zoneCheckbox").length === $(".zoneCheckbox:checked").length){
+                        $("#selectAllZones").prop("checked",true);
+                    }else{
+                        $("#selectAllZones").prop("checked",false);
+                    }
+                };
+                
+                $("#zones").on('change',".check", function () {
+                    let id_zone = $(this).attr("data-zoneId");
+                    let agencesInZone = $("input[data-zoneId=" + id_zone + "]");
+                    let agencesSelectedInZone = $("input[data-zoneId=" + id_zone + "]:checked");
+                    if(agencesInZone.length === agencesSelectedInZone.length){
+                        $("input[value=" + id_zone + "]").prop("checked",true);
+                    }else{
+                        $("input[value=" + id_zone + "]").prop("checked",false);
+                    }
                     sessionStorage.setItem("selectedZones", JSON.stringify(getCheckedZones()));
-                    // change selected agences
+                    sessionStorage.setItem("dbs", JSON.stringify(getCheckedBoxes()));
+                    refreshSelectAllZonesCheckbox();
+                    updateLinks();
                     
+                });
+                $("#zones").on('change',".zoneCheckbox", function () {
+                    let selectedZones = getCheckedZones();
+                    // change selected agences
+                    let $checkbox = $(this);
+                    if($checkbox.prop("checked")){
+                        let id_zone = $checkbox.val();
+                        $("input[data-zoneId=" + id_zone + "]").prop("checked",true);
+                    }else{
+                        let id_zone = $checkbox.val();
+                        $("input[data-zoneId=" + id_zone + "]").prop("checked",false);
+                    }
+                    sessionStorage.setItem("selectedZones", JSON.stringify(getCheckedZones()));
+                    sessionStorage.setItem("dbs", JSON.stringify(getCheckedBoxes()));
+                    refreshSelectAllZonesCheckbox();
                     updateLinks();
                 });
                 $(".ck-text").on('click', function () {
-                    var id = $(this).attr("data-id");
-                    var check = $("input[value=" + id + "]");
-                    if ($(check).prop("checked")) {
-                        $(check).prop("checked", false);
-                        sessionStorage.setItem("dbs", JSON.stringify(getCheckedBoxes()));
-                        updateLinks();
-                    } else {
-                        $(check).prop("checked", true);
-                        sessionStorage.setItem("dbs", JSON.stringify(getCheckedBoxes()));
-                        updateLinks();
-                    }
+                   
                 });
                 
                 $(".zone-ck-text").on('click', function () {
-                    var id = $(this).attr("data-id");
-                    var check = $("input[value=" + id + "]");
-                    if ($(check).prop("checked")) {
-                        $(check).prop("checked", false);
-                        sessionStorage.setItem("selectedZones", JSON.stringify(getCheckedZones()));
-                        // change selected agences
-                 
-                        updateLinks();
-                    } else {
-                        $(check).prop("checked", true);
-                        sessionStorage.setItem("selectedZones", JSON.stringify(getCheckedZones()));
-                        // change selected agences
-                        
-                        updateLinks();
-                    }
-                });
-                $("#selectAll").on('change', function () {
-                    if ($(this).prop("checked")) {
-                        $(".check").prop("checked", true);
-                        sessionStorage.setItem("dbs", JSON.stringify(getCheckedBoxes()));
-
-                        console.log(getCheckedBoxes());
-                        updateLinks();
-                    } else {
-                        $(".check").prop("checked", false);
-                        sessionStorage.setItem("dbs", JSON.stringify(getCheckedBoxes()));
-                        updateLinks();
-
-                        console.log(getCheckedBoxes());
-                    }
+                    
                 });
                 $("#selectAllZones").on('change', function () {
                     if ($(this).prop("checked")) {
                         $(".zoneCheckbox").prop("checked", true);
-                        sessionStorage.setItem("selectedZones", JSON.stringify(getCheckedZones()));
-                        // change selected agences
-                        console.log(getCheckedZones());
-                        updateLinks();
+                        $(".check").prop("checked", true);
                     } else {
                         $(".zoneCheckbox").prop("checked", false);
-                        sessionStorage.setItem("selectedZones", JSON.stringify(getCheckedZones()));
-                        // change selected agences
-                        updateLinks();
-
-                        console.log(getCheckedZones());
+                        $(".check").prop("checked", false);
                     }
+                    sessionStorage.setItem("selectedZones", JSON.stringify(getCheckedZones()));
+                    sessionStorage.setItem("dbs", JSON.stringify(getCheckedBoxes()));
+                    updateLinks();
                 });
                 var checkCheckBoxes = function () {
                     var arr = JSON.parse(sessionStorage.getItem("dbs"));
@@ -489,6 +476,7 @@
                 checkZoneCheckBoxes();
                 setDates();
                 updateLinks();
+                refreshSelectAllZonesCheckbox();
             });
 
         </script>

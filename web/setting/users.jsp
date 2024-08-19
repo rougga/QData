@@ -1,9 +1,16 @@
+<%@page import="java.net.URLEncoder"%>
 <%@page import="main.modal.Zone"%>
 <%@page import="main.controller.ZoneController"%>
 <%@page import="main.controller.UtilisateurController"%>
 <%@page import="main.modal.Utilisateur"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    if (!Objects.equals(session.getAttribute("grade"), "adm")) {
+        response.sendRedirect("/"+CfgHandler.APP+"/home.jsp?err="+ URLEncoder.encode("vous avez besoin des privilèges d'administrateur", "UTF-8"));
+    }
+
+%>
 <%!
     public String getFormatedTime(Float Sec) {
         int hours = (int) (Sec / 3600);

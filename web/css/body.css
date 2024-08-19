@@ -47,3 +47,7 @@ footer a, footer a:link {
     color: #fff;
     text-decoration: none;
 }
+input[type=checkbox]{
+    height: 15px;
+    width: 15px;
+}
