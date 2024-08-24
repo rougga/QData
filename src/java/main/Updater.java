@@ -15,7 +15,7 @@ public class Updater {
     public Updater() {
     }
 
-    public synchronized  void updateDatabaseById(UUID id) {
+    public void updateDatabaseById(UUID id) {
         new AgenceController().updateAgenceNameById(id);
         new ServiceController().updateServicesById(id);
         new WindowController().updateWindowsById(id);
@@ -27,7 +27,7 @@ public class Updater {
         //update goal
     }
 
-    public synchronized  void updateDatabase() {
+    public void updateDatabase() {
         new AgenceController().updateAllAgenceName();
         new ServiceController().updateServices();
         new WindowController().updateWindows();
@@ -39,7 +39,7 @@ public class Updater {
         //update goal
     }
 
-    public synchronized  void updateDatabaseAllDataById(UUID id) {
+    public void updateDatabaseAllDataById(UUID id) {
         new AgenceController().updateAgenceNameById(id);
         new ServiceController().updateServicesById(id);
         new WindowController().updateWindowsById(id);
@@ -51,7 +51,7 @@ public class Updater {
         //update goal
     }
 
-    public synchronized  void updateDatabaseAllData() {
+    public void updateDatabaseAllData() {
         new AgenceController().updateAllAgenceName();
         new ServiceController().updateServices();
         new WindowController().updateWindows();

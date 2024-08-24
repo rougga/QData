@@ -61,9 +61,6 @@
                                 <th scope="col">Zone</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Host:port</th>
-                                <th scope="col">DB</th>
-                                <th scope="col">User</th>
-                                <th scope="col">Mot de passe</th>
                                 <th scope="col">Statut</th>
                                 <th scope="col">Dernière mise à jour</th>
                                 <th scope="col"></th>
@@ -81,9 +78,6 @@
                                 <td class="border-dark align-middle" data-zone="<%= ac.getAgenceZoneByAgenceId(table.get(i).getId()).getId()%>"><%= ac.getAgenceZoneByAgenceId(table.get(i).getId()).getName()%></td>
                                 <td class="border-dark align-middle"><%=table.get(i).getName()%></td>
                                 <td class="border-dark align-middle"><%=table.get(i).getHost() + ":" + table.get(i).getPort()%></td>
-                                <td class="border-dark align-middle"><%=table.get(i).getDatabase()%></td>
-                                <td class="border-dark align-middle"><%=table.get(i).getUsername()%></td>
-                                <td class="border-dark align-middle"><%=table.get(i).getPassword()%></td>
                                 <td class="border-dark align-middle status" data-id="<%= table.get(i).getId()%>">
                                     <div class="spinner-border" role="status">
                                         <span class="sr-only text-center text-white bg-secondary p-1">UNK</span>

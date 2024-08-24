@@ -92,6 +92,8 @@
                                     String zoneName = "-";
                                     if(uc.getUtilisateurZone(utilisateur.get(i).getId())!= null){
                                          zoneName = uc.getUtilisateurZone(utilisateur.get(i).getId()).getName() ; 
+                                    }else{
+                                        continue;
                                     }
                             %>
                             <tr class=' clickable-row3 '>
