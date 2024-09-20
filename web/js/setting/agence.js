@@ -6,7 +6,7 @@ $(document).ready(function () {
             console.log(data.status);
             if (data.status) {
                 $stat.html("<span class='text-center bg-success text-white p-1'>Online</span>");
-                
+
                 $(".dbUpdateToday[data-id='" + $stat.attr("data-id") + "']").removeClass("disabled");
                 $(".dbUpdateAll[data-id='" + $stat.attr("data-id") + "']").removeClass("disabled");
             } else {
