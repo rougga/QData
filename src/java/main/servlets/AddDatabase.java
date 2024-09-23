@@ -33,11 +33,13 @@ public class AddDatabase extends HttpServlet {
                     String password = request.getParameter("password");
                     String zoneId = request.getParameter("zone");
                     int status = 1;
-                    if (StringUtils.isNoneBlank(name,host,port,database,username,password,zoneId)) {
+                    if (StringUtils.isNoneBlank(name, host, port, database, username, password)) {
                         Agence a = new Agence(name, host, Integer.parseInt(port), database, username, password, status);
-                        AgenceController ac =new AgenceController();
+                        AgenceController ac = new AgenceController();
                         if (ac.addAgence(a) == 1) {
-                            ac.setZone(a.getId(), UUID.fromString(zoneId));
+                            if (zoneId!=null) {
+                                ac.setZone(a.getId(), UUID.fromString(zoneId));
+                            }
                             response.sendRedirect("./setting/agences.jsp?err=" + URLEncoder.encode("la base de données est ajoutée", "UTF-8"));
                         } else {
                             response.sendRedirect("./setting/agences.jsp?err=" + URLEncoder.encode("la base de données n'est pas ajoutée", "UTF-8"));
@@ -45,7 +47,7 @@ public class AddDatabase extends HttpServlet {
                     } else {
                         response.sendRedirect("./setting/agences.jsp?err=" + URLEncoder.encode("un champ est vide", "UTF-8"));
                     }
-                }else{
+                } else {
                     response.sendRedirect("./home.jsp?err=" + URLEncoder.encode("vous avez besoin des privilèges d'administrateur", "UTF-8"));
                 }
             }

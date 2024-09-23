@@ -49,7 +49,7 @@
 
                 <div class="w-100" id="dbTbl">
                     <h1 class="text-white text_center pl-2">
-                        Les bases de données :
+                        Les agences :
                         <span class=" float-right">
                             <a class="btn btn-success" id="dbAdd" data-toggle="modal" data-target="#dbModal"><img src="/QData/img/icon/plus.png"> Ajouter</a>
 
@@ -73,12 +73,22 @@
                                 List<Agence> table = ac.getAllAgence();
                                 if (table != null) {
                                     for (int i = 0; i < table.size(); i++) {
+                                        Zone z = ac.getAgenceZoneByAgenceId(table.get(i).getId());
+                                        String zoneName , id_zone;
+                                        if(z==null){
+                                             zoneName = "--";
+                                             id_zone = "";
+                                        }else{
+                                             zoneName = z.getName() ;
+                                             id_zone = z.getId().toString();
+                                        }
+                                    
                             %>
                             <tr class="clickable-row5 border-dark">
-                                <td class="border-dark align-middle" data-zone="<%= ac.getAgenceZoneByAgenceId(table.get(i).getId()).getId()%>"><%= ac.getAgenceZoneByAgenceId(table.get(i).getId()).getName()%></td>
-                                <td class="border-dark align-middle"><%=table.get(i).getName()%></td>
-                                <td class="border-dark align-middle"><%=table.get(i).getHost() + ":" + table.get(i).getPort()%></td>
-                                <td class="border-dark align-middle status" data-id="<%= table.get(i).getId()%>">
+                                <td class="border-dark align-middle agenceZone" data-zone="<%= id_zone %>"><%= zoneName %></td>
+                                <td class="border-dark align-middle agenceName"><%=table.get(i).getName()%></td>
+                                <td class="border-dark align-middle agenceHost"><%=table.get(i).getHost() + ":" + table.get(i).getPort()%></td>
+                                <td class="border-dark align-middle status " data-id="<%= table.get(i).getId()%>">
                                     <div class="spinner-border" role="status">
                                         <span class="sr-only text-center text-white bg-secondary p-1">UNK</span>
                                     </div>
@@ -87,9 +97,14 @@
                                 <td class="border-dark align-middle">
                                     <a class="btn btn-secondary m-0 dbUpdateToday disabled" data-id="<%= table.get(i).getId()%>" href="/QData/TodayUpdateAgence?id=<%= table.get(i).getId()%>" title="Mise à jour d'aujourd'hui"><img src="/QData/img/icon/24-hours.png" class=""></a>
                                     <a class="btn btn-secondary m-0 dbUpdateAll disabled" data-id="<%= table.get(i).getId()%>" href="/QData/UpdateAgence?id=<%= table.get(i).getId()%>" title="Mise à jour Globale"><img src="/QData/img/icon/maj.png"></a>
-                                    <!--<a class="btn btn-primary m-0 disabled dbEdit" data-id="<%= table.get(i).getId()%>" data-id="<%= table.get(i).getId()%>" title="Modifier"><img src="/QData/img/icon/pencil.png"></a>-->
+                                    <a class="btn btn-warning m-0 dbEdit" data-id="<%= table.get(i).getId()%>" href="#" title="Modifier">
+                                        <img src="/QData/img/icon/pencil.png">
+                                    </a>
                                     <a class="btn btn-danger m-0 dbDlt" data-id="<%= table.get(i).getId()%>" href="/QData/DeleteDatabase?id=<%= table.get(i).getId()%>" title="Supprimer"><img src="/QData/img/icon/trash.png"></a>
                                 </td>
+                                <td class="d-none agenceDb"><%= table.get(i).getDatabase() %></td>
+                                <td class="d-none agenceUser"><%= table.get(i).getUsername() %></td>
+                                <td class="d-none agencePass"><%= table.get(i).getPassword() %></td>
                             </tr>
                             <%
                                 }
@@ -123,7 +138,7 @@
                                     <div class="form-group">
                                         <label for="agence">Zone:</label>
                                         <select class="form-control" id="zone" name="zone">
-
+                                            <option class="disabled" selected disabled>Selectionez Zone</option>
                                             <%                                     
                                                 ZoneController zc = new ZoneController();
                                                 List<Zone> zones = zc.getAllZones();
@@ -166,11 +181,14 @@
                                     <div class="form-group">
                                         <input type="hidden" class="form-control" id="type" name="type" value="db">
                                     </div>
-
+                                        
+                                    <div class="form-group">
+                                        <input type="hidden" class="form-control" id="id" name="id_agence" value="">
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
-                                    <button type="submit" class="btn appBg text-white hover">Ajouter</button>
+                                    <button type="submit" class="btn appBg text-white hover" id="dbAddButton">Ajouter</button>
                                 </div>
                             </form>
                         </div>

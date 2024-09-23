@@ -17,4 +17,37 @@ $(document).ready(function () {
 
         });
     }
+    
+    
+    $("#dbAdd").on("click", function () {
+        $("#dbForm").attr("action", "/QData/AddDatabase");
+        $("#exampleModalLabel").text("Ajouter une Agence:");
+        $("#agence").val("");
+        $("#zone").val("");
+        $("#host").val("localhost");
+        $("#port").val("5434");
+        $("#db").val("postgres");
+        $("#user").val("honyi");
+        $("#pass").val("honyi123");
+        $("#id").val("");
+        $("button:submit").text("Ajouter");
+        $("#dbModal").modal('toggle');
+        $("#dbModal").modal('toggle');
+    });
+
+    $("table").on("click", ".dbEdit", function () {
+        $("#dbForm").attr("action", "/QData/EditDatabase");
+        $("#exampleModalLabel").text("Modifier l'Agence:");
+        $("#agence").val($(this).parent().parent().children(".agenceName").text());
+        $("#zone").val($(this).parent().parent().children(".agenceZone").attr("data-zone"));
+        $("#host").val($(this).parent().parent().children(".agenceHost").text().split(":")[0]);
+        $("#port").val($(this).parent().parent().children(".agenceHost").text().split(":")[1]);
+        $("#db").val($(this).parent().parent().children(".agenceDb").text());
+        $("#user").val($(this).parent().parent().children(".agenceUser").text());
+        $("#pass").val($(this).parent().parent().children(".agencePass").text());
+        $("#id").val($(this).attr("data-id"));
+        $("button:submit").text("Modifier");
+        $("#dbModal").modal('toggle');
+        console.log();
+    });
 });
