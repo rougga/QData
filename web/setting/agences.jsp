@@ -155,6 +155,7 @@
                                                 }
 
                                             %>
+                                            <option class="bg-danger text-white" value="" >No Zone</option>
                                         </select>
                                     </div>
                                     <div class="form-group">

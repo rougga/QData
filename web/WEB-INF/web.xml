@@ -96,6 +96,10 @@
         <servlet-name>EditZone</servlet-name>
         <servlet-class>main.servlets.EditZone</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditDatabase</servlet-name>
+        <servlet-class>main.servlets.EditDatabase</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Settings</servlet-name>
         <url-pattern>/Settings</url-pattern>
@@ -221,6 +225,10 @@
     <servlet-mapping>
         <servlet-name>EditZone</servlet-name>
         <url-pattern>/EditZone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditDatabase</servlet-name>
+        <url-pattern>/EditDatabase</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

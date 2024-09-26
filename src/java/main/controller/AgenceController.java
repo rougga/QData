@@ -44,7 +44,7 @@ public class AgenceController {
             PreparedStatement ps = con.getStatement()
                     .getConnection()
                     .prepareStatement("select id_agence from rougga_agence_zone where id_zone=?;");
-            
+
             ps.setString(1, id_zone.toString());
             ResultSet r = ps.executeQuery();
             while (r.next()) {
@@ -57,7 +57,7 @@ public class AgenceController {
             return null;
         }
     }
-    
+
     public int addAgence(Agence a) {
         try {
             PgConnection con = new PgConnection();
@@ -81,6 +81,33 @@ public class AgenceController {
         } catch (Exception ex) {
             Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
             return 0;
+        }
+    }
+
+    public boolean editAgence(Agence a) {
+        try {
+            PgConnection con = new PgConnection();
+            String SQL = "update agence set name=?,host=?,port=?,database=?,username=?,password=?,status=? where id=?;";
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement(SQL);
+            p.setString(1, a.getName());
+            p.setString(2, a.getHost());
+            p.setInt(3, a.getPort());
+            p.setString(4, a.getDatabase());
+            p.setString(5, a.getUsername());
+            p.setString(6, a.getPassword());
+            p.setInt(7, a.getStatus());
+            p.setString(8, a.getId().toString());
+            p.execute();
+            p = con.getStatement().getConnection().prepareStatement("update lastupdate set last_update=to_timestamp(?,'YYYY-MM-DD HH24:MI:SS') where id_db=?;");
+            p.setString(1, getFormatedDateAsString(new Date()));
+            p.setString(2, a.getId().toString());
+            p.execute();
+            con.closeConnection();
+            return true;
+
+        } catch (Exception ex) {
+            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
     }
 
@@ -189,8 +216,8 @@ public class AgenceController {
             Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
-    
-    public void setZone(UUID id_agence, UUID id_zone){
+
+    public void setZone(UUID id_agence, UUID id_zone) {
         try {
             PgConnection con = new PgConnection();
             PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into rougga_agence_zone values(?,?);");
@@ -204,7 +231,34 @@ public class AgenceController {
         }
     }
 
-    public Zone getAgenceZoneByAgenceId(UUID id_agence){
+    public void editZone(UUID id_agence, UUID id_zone) {
+        try {
+            PgConnection con = new PgConnection();
+            if (this.getAgenceZoneByAgenceId(id_agence) != null) {
+                String SQL = "";
+                PreparedStatement p;
+                if (id_zone != null) {
+                    SQL = "update rougga_agence_zone set id_zone=? where  id_agence=?;";
+                    p = con.getStatement().getConnection().prepareStatement(SQL);
+                    p.setString(2, id_agence.toString());
+                    p.setString(1, id_zone.toString());
+                } else {
+                    SQL = "delete from rougga_agence_zone where id_agence=?";
+                    p = con.getStatement().getConnection().prepareStatement(SQL);
+                    p.setString(1, id_agence.toString());
+                }
+                p.execute();
+                con.closeConnection();
+            } else {
+                this.setZone(id_agence, id_zone);
+            }
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        }
+    }
+
+    public Zone getAgenceZoneByAgenceId(UUID id_agence) {
         try {
             Zone a;
             PgConnection con = new PgConnection();
@@ -224,7 +278,7 @@ public class AgenceController {
             return null;
         }
     }
-    
+
     public void updateAllAgenceName() {
         List<Agence> agences = new AgenceController().getAllAgence();
         if (agences != null) {
@@ -290,9 +344,8 @@ public class AgenceController {
                 Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
             }
 
-            System.out.println("-- Agence "+a.getName()+" updated.");
+            System.out.println("-- Agence " + a.getName() + " updated.");
         }
     }
-    
-    
+
 }
