@@ -154,6 +154,49 @@ public class LoginLogController {
 
     }
 
+    public int updateTodayLoginLogsFromLastUpdateToNow() {
+        AgenceController ac =new AgenceController();
+        List<Agence> agences = ac.getAllAgence();
+        if (agences != null) {
+            System.out.println("-- Updating Today t_login_log....");
+            for (int i = 0; i < agences.size(); i++) {
+                try {
+                    PgMultiConnection con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
+                    String SQL = "select * from t_login_log where to_date(to_char(login_time,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')  >= TO_DATE(?,'YYYY-MM-DD HH24:MI:SS') ;";
+                    PreparedStatement p = con.getStatement().getConnection().prepareStatement(SQL);
+                    p.setString(1, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(ac.getLastUpdate(agences.get(i).getId())));
+                    ResultSet r = p.executeQuery();
+                    //clearTodayLoginLog(agences.get(i).getId());
+                    while (r.next()) {
+                        addLoginLog(
+                                new LoginLog(r.getString("id"),
+                                        getFormatedDateAsDate(r.getString("login_time")),
+                                        r.getString("login_type"),
+                                        r.getString("user_id"),
+                                        r.getString("account"),
+                                        null,
+                                        null,
+                                        r.getString("login_ip"),
+                                        null,
+                                        r.getInt("successed"),
+                                        agences.get(i).getId().toString())
+                        );
+                    }
+                    con.closeConnection();
+
+                } catch (Exception ex) {
+                    Logger.getLogger(LoginLogController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
+                }
+            }
+            System.out.println("-- Today t_login_log updated.");
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
+    
     public int updateAllLoginLogs() {
         List<Agence> agences = new AgenceController().getAllAgence();
         if (agences != null) {

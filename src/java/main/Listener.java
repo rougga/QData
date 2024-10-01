@@ -9,12 +9,13 @@ import javax.servlet.ServletContextListener;
 
 public class Listener implements ServletContextListener {
 
-    private volatile ScheduledExecutorService executor;
-    final Runnable myRunnable = new Runnable() {
+    private static volatile ScheduledExecutorService executor;
+    static final Runnable myRunnable = new Runnable() {
         @Override
         public void run() {
-            System.out.println("-- "+CfgHandler.APP+" v"+CfgHandler.VERSION+" Data Update Starting.....");
-            new Updater().updateDatabase();
+            System.out.println("-- "+CfgHandler.APP+" v"+CfgHandler.VERSION+" Today Data Update Starting.....");
+            //new Updater().updateDatabase();
+            new Updater().updateDatabaseFromLastUpdateToNow();
             System.out.println("-- Last Updated: " + new Date().toString());
         }
     };
@@ -35,4 +36,9 @@ public class Listener implements ServletContextListener {
         }
     }
 
+    public static void changeRefreshTime(long time){
+        executor.shutdown();
+        executor = Executors.newScheduledThreadPool(2);
+        executor.scheduleAtFixedRate(myRunnable, 0, time, TimeUnit.MINUTES);
+    }
 }

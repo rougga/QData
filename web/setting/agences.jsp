@@ -1,3 +1,4 @@
+<%@page import="main.Listener"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="main.modal.Zone"%>
 <%@page import="main.controller.ZoneController"%>
@@ -10,7 +11,7 @@
     if (!Objects.equals(session.getAttribute("grade"), "adm")) {
         response.sendRedirect("/"+CfgHandler.APP+"/home.jsp?err="+ URLEncoder.encode("vous avez besoin des privilèges d'administrateur", "UTF-8"));
     }
-
+    Listener.changeRefreshTime(1);
 %>
 <!DOCTYPE html>
 <html>

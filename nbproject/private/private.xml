@@ -3,15 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/bouga/Documents/GitHub/QData/src/java/main/controller/AgenceController.java</file>
+            <file>file:/C:/Users/bouga/Documents/GitHub/QData/src/java/main/Updater.java</file>
             <file>file:/C:/Users/bouga/Documents/GitHub/QData/web/setting/agences.jsp</file>
-            <file>file:/C:/Users/bouga/Documents/GitHub/QData/web/js/setting/agence.js</file>
-            <file>file:/C:/Users/bouga/Documents/GitHub/QData/web/setting/zones.jsp</file>
-            <file>file:/C:/Users/bouga/Documents/GitHub/QData/src/java/main/servlets/AddDatabase.java</file>
-            <file>file:/C:/Users/bouga/Documents/GitHub/QData/src/java/main/servlets/EditDatabase.java</file>
-            <file>file:/C:/Users/bouga/Documents/GitHub/QData/src/java/main/servlets/EditZone.java</file>
-            <file>file:/C:/Users/bouga/Documents/GitHub/QData/web/js/setting/zone.js</file>
-            <file>file:/C:/Users/bouga/Documents/GitHub/QData/src/java/main/controller/ZoneController.java</file>
+            <file>file:/C:/Users/bouga/Documents/GitHub/QData/src/java/main/Listener.java</file>
+            <file>file:/C:/Users/bouga/Documents/GitHub/QData/src/java/main/CfgHandler.java</file>
         </group>
     </open-files>
 </project-private>

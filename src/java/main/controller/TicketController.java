@@ -145,6 +145,55 @@ public class TicketController {
         }
     }
 
+    public void updateTodayTicketsFromLastUpdateToNow() {
+        AgenceController ac = new AgenceController();
+        List<Agence> agences = ac.getAllAgence();
+        if (agences != null) {
+            System.out.println("-- Updating Today t_ticket ....");
+            for (int i = 0; i < agences.size(); i++) {
+                try {
+                    PgMultiConnection con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
+                    String SQL = "select * from t_ticket where to_date(to_char(ticket_time,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')  >= TO_DATE(?,'YYYY-MM-DD HH24:MI:SS') ;";
+                    PreparedStatement p = con.getStatement().getConnection().prepareStatement(SQL);
+                    p.setString(1, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(ac.getLastUpdate(agences.get(i).getId())));
+                    ResultSet r = p.executeQuery();
+                    //clearTodayTickets(agences.get(i).getId());
+                    while (r.next()) {
+                        addTicket(
+                                new Ticket(
+                                        r.getString("id"),
+                                        r.getString("biz_type_id"),
+                                        r.getString("ticket_id"),
+                                        r.getString("evaluation_id"),
+                                        r.getString("ticket_type"),
+                                        r.getInt("status"),
+                                        r.getString("deal_win"),
+                                        r.getString("transfer_win"),
+                                        r.getString("deal_user"),
+                                        r.getString("id_card_info_id"),
+                                        getFormatedDateAsDate(r.getString("ticket_time")),
+                                        getFormatedDateAsDate(r.getString("call_time")),
+                                        getFormatedDateAsDate(r.getString("start_time")),
+                                        getFormatedDateAsDate(r.getString("finish_time")),
+                                        r.getString("call_type"),
+                                        r.getString("branch_id"),
+                                        r.getString("id_card_name"),
+                                        agences.get(i).getId()
+                                )
+                        );
+                    }
+                    con.closeConnection();
+
+                } catch (Exception ex) {
+                    Logger.getLogger(TicketController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
+                }
+            }
+            System.out.println("-- Today t_ticket updated.");
+        }
+    }
+
+    
+    
     public void updateAllTickets() {
         List<Agence> agences = new AgenceController().getAllAgence();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

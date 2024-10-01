@@ -31,7 +31,7 @@ public class CfgHandler {
     public static final String COMPANY = "ROUGGA";
     public static final String CLIENT = "NST-Maroc";
     public static final int APP_PORT = 8989;
-    public static String APP_NODE = "QStates";
+    public static final String APP_NODE = "QStates";
     public static long AUTOUPDATE_REFRESHTIME = 10;
 
     //Data

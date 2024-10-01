@@ -39,6 +39,20 @@ public class Updater {
         //update goal
     }
 
+    public void updateDatabaseFromLastUpdateToNow() {
+////        new AgenceController().updateAllAgenceName();
+////        new ServiceController().updateServices();
+////        new WindowController().updateWindows();
+////        new UserController().updateUsers();
+////        new TicketController().updateTodayTicketsFromLastUpdateToNow();
+////        new WindowStatusController().updateWindowStatus();
+////        new LoginLogController().updateTodayLoginLogsFromLastUpdateToNow();
+////        new TaskController().updateAllTasks();
+        System.err.println("updateDatabaseFromLastUpdateToNow() Finished! .");
+        System.err.println("RefreshTime = "+CfgHandler.AUTOUPDATE_REFRESHTIME);
+        //update goal
+    }
+    
     public void updateDatabaseAllDataById(UUID id) {
         new AgenceController().updateAgenceNameById(id);
         new ServiceController().updateServicesById(id);
