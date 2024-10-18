@@ -15,7 +15,7 @@ public class Listener implements ServletContextListener {
         public void run() {
             System.out.println("-- "+CfgHandler.APP+" v"+CfgHandler.VERSION+" Today Data Update Starting.....");
             //new Updater().updateDatabase();
-            new Updater().updateDatabaseFromLastUpdateToNow();
+            new Updater().updateDatabase();
             System.out.println("-- Last Updated: " + new Date().toString());
         }
     };
