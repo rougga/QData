@@ -82,13 +82,17 @@
                                              zoneName = z.getName() ;
                                              id_zone = z.getId().toString();
                                         }
+                                        String host = table.get(i).getHost() + ":" + table.get(i).getPort();
                                     
                             %>
                             <tr class="clickable-row5 border-dark">
                                 <td class="border-dark align-middle agenceZone" data-zone="<%= id_zone %>"><%= zoneName %></td>
                                 <td class="border-dark align-middle agenceName"><%=table.get(i).getName()%></td>
-                                <td class="border-dark align-middle agenceHost"><%=table.get(i).getHost() + ":" + table.get(i).getPort()%></td>
-                                <td class="border-dark align-middle status " data-id="<%= table.get(i).getId()%>">
+                                <td class="border-dark align-middle agenceHost"><%=host%></td>
+                                <td class="border-dark align-middle status " 
+                                    data-id="<%= table.get(i).getId()%>" 
+                                    data-ip="<%= host %>"
+                                    >
                                     <div class="spinner-border" role="status">
                                         <span class="sr-only text-center text-white bg-secondary p-1">UNK</span>
                                     </div>

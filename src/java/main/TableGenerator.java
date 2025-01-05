@@ -20,6 +20,7 @@ import main.controller.AgenceController;
 import main.controller.CibleController;
 import main.controller.UtilisateurController;
 import main.controller.ZoneController;
+import main.controller.report.GblTableController;
 import main.handler.TitleHandler;
 import main.modal.Agence;
 import main.modal.Zone;
@@ -6350,7 +6351,8 @@ public class TableGenerator {
 
         switch (type) {
             case "gbl":
-                T2 = generateGblTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
+//                T2 = generateGblTable(request.getParameter("date1"), request.getParameter("date2"), dbs);
+                T2 = new GblTableController().getTable(request.getParameter("date1"), request.getParameter("date2"), agences);
                 setTitle(th.getGblTitle());
                 setCols(getGblCols());
                 setType(type);

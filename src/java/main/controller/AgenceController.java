@@ -11,10 +11,13 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import main.CfgHandler;
 import main.PgConnection;
 import main.PgMultiConnection;
 import main.modal.Agence;
 import main.modal.Zone;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class AgenceController {
 
@@ -161,6 +164,25 @@ public class AgenceController {
             } catch (ClassNotFoundException | SQLException ex) {
                 return false;
             }
+
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isOnlineJson(UUID id) {
+        Agence a = getAgenceById(id);
+        if (a != null) {
+            String url = "http://" + a.getHost()
+                    + ":" + a.getPort()
+                    + "/" + CfgHandler.API_CHECK_STATUS;
+            System.out.println("URL = " + url);
+            JSONObject json = UpdateController.getJsonFromUrl(url);
+            if (json != null) {
+                String result = json.get("isOnline").toString();
+                return Boolean.parseBoolean(result);
+            }
+            return false;
 
         } else {
             return false;
@@ -346,6 +368,17 @@ public class AgenceController {
 
             System.out.println("-- Agence " + a.getName() + " updated.");
         }
+    }
+
+    public List<Agence> getAgencesFromStringArray(String[] agences) {
+       List<Agence> dbs = new ArrayList<>();
+       for(String a : agences){
+           Agence agence = this.getAgenceById(UUID.fromString(a));
+           if(agence!=null){
+               dbs.add(agence);
+           }
+       }
+       return dbs;
     }
 
 }

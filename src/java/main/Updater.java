@@ -77,4 +77,7 @@ public class Updater {
         //update goal
     }
 
+    public void updateTodayDatabaseFromJson(){
+        
+    }
 }

@@ -2,13 +2,19 @@ package main;
 
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
 import main.controller.AgenceController;
 import main.controller.CibleController;
+import main.controller.UtilisateurController;
+import main.controller.ZoneController;
+import main.handler.TitleHandler;
 import main.modal.Agence;
+import main.modal.Zone;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -16,7 +22,12 @@ public class JsonGenerator {
 
     private String date1;
     private String date2;
+    private AgenceController ac = new AgenceController();
+    private ZoneController zc = new ZoneController();
+    private UtilisateurController uc = new UtilisateurController();
     
+
+
     private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     public String getFormatedTime(Float Sec) {
@@ -26,13 +37,21 @@ public class JsonGenerator {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
-    public JSONObject generateSimpleGblTable(String d1, String d2) {
+    public JSONObject generateSimpleGblTable(String d1, String d2, String[] dbs,HttpServletRequest request) {
 
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
-        AgenceController ac = new AgenceController();
-        List<Agence> agences = ac.getAllAgence();
         CibleController cc = new CibleController();
+        List<Zone> zones = new ArrayList<>();
+        Zone loggedUtilisateurZone = uc.getUtilisateurZoneByUsername(request.getSession().getAttribute("user").toString());
+        List<Agence> agences;
+        if (loggedUtilisateurZone != null) {
+            agences = ac.getAgencesByZone(loggedUtilisateurZone.getId());
+            zones.add(loggedUtilisateurZone);
+        } else {
+            agences = ac.getAllAgence();
+            zones = zc.getAllZones();
+        }
         JSONObject all = new JSONObject();
         JSONArray result = new JSONArray();
         if (agences != null) {
@@ -170,14 +189,14 @@ public class JsonGenerator {
         }
         return all;
     }
-    
-    public JSONObject getAgencesJson(){
+
+    public JSONObject getAgencesJson() {
         AgenceController ac = new AgenceController();
         List<Agence> agences = ac.getAllAgence();
         JSONObject all = new JSONObject();
         JSONArray result = new JSONArray();
-         if (agences != null) {
-            for(int i = 0; i < agences.size(); i++) {
+        if (agences != null) {
+            for (int i = 0; i < agences.size(); i++) {
                 JSONObject agenceO = new JSONObject();
                 agenceO.put("id", agences.get(i).getId().toString());
                 agenceO.put("name", agences.get(i).getName());
@@ -186,7 +205,7 @@ public class JsonGenerator {
                 result.add(agenceO);
             }
             all.put("result", result);
-         }
-         return all;
+        }
+        return all;
     }
 }
