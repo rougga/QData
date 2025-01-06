@@ -371,14 +371,26 @@ public class AgenceController {
     }
 
     public List<Agence> getAgencesFromStringArray(String[] agences) {
-       List<Agence> dbs = new ArrayList<>();
-       for(String a : agences){
-           Agence agence = this.getAgenceById(UUID.fromString(a));
-           if(agence!=null){
-               dbs.add(agence);
-           }
-       }
-       return dbs;
+        List<Agence> dbs = new ArrayList<>();
+        if (agences != null) {
+            for (String a : agences) {
+                Agence agence = this.getAgenceById(UUID.fromString(a));
+                if (agence != null) {
+                    dbs.add(agence);
+                }
+            }
+        }
+        return dbs;
+    }
+    
+    public String[] putAgencesToStringArray(List<Agence> dbs) {
+        String[] agences = new String[0];
+        if (dbs != null) {
+            for (Agence a : dbs) {
+                agences[agences.length] = a.getId().toString();
+            }
+        }
+        return agences;
     }
 
 }

@@ -24,7 +24,7 @@
                     <span class=""></span> Rapport
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownR" >
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=gbl&d=d">RAPPORT GLOBALE</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="/<%=CfgHandler.APP%>/report/gbl.jsp">RAPPORT GLOBALE</a>
                     <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=emp&d=d">RAPPORT EMPLOYE</a>
                     <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=empser&d=d">RAPPORT EMPLOYE (service)</a>
                     <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=gch&d=d">RAPPORT GUICHET</a>
@@ -33,9 +33,7 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=gla&d=d">Grille attente</a>
                     <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=glt&d=d">Grille traitement</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item font-weight-bold navHover disabled d" href="<%=CfgHandler.PAGE_REPORT%>?type=apl&d=d">Détail des appels</a>
-                </div>
+                    </div>
             </li> 
             <li class="nav-item dropdown" id="tranche">
                 <a class="nav-link dropdown-toggle font-weight-bold ndt ndtt ndta ndtsa" href="#" id="navbarDropdownRe" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -47,27 +45,7 @@
                     <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=ndta&d=d">Nombre de tickets absents</a>
                     <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=ndtsa&d=d">Nombre de tickets sans affectation</a>
                 </div>
-            </li>
-            <li class="nav-item dropdown" id="topics">
-                <a class="nav-link font-weight-bold dropdown-toggle cnx remp"  href="#" id="rend" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="far fa-file-alt"></span> Rendement
-                </a>
-                <div class="dropdown-menu" aria-labelledby="rend" >
-                    <a class="dropdown-item  font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=cnx&d=d">Connexions</a>
-                    <a class="dropdown-item  font-weight-bold navHover d disabled" href="<%=CfgHandler.PAGE_REPORT%>?type=gbl&d=d">Pauses</a>
-                    <a class="dropdown-item  font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=remp&d=d">Employés</a>
-                </div>
             </li> 
-            <li class="nav-item dropdown" id="topics">
-                <a class="nav-link font-weight-bold dropdown-toggle ser sgch" href="#" id="superV" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="far"></span> Supervision
-                </a>
-                <div class="dropdown-menu" aria-labelledby="superV" >
-                    <a class="dropdown-item  font-weight-bold navHover" href="<%=CfgHandler.PAGE_HOME %>">Flash journée</a>
-                    <a class="dropdown-item  font-weight-bold navHover" href="<%=CfgHandler.PAGE_REPORT%>?type=sgch">Guichets - Employés</a>
-                    <a class="dropdown-item  font-weight-bold navHover" href="<%=CfgHandler.PAGE_REPORT%>?type=ser">Services</a>
-                </div>
-            </li>  
             <li class="nav-item" id="topics">
                 <a class="nav-link font-weight-bold" href="javascript:alert('QData v<%= CfgHandler.VERSION %>');">
                     <span class="far fa-file-alt"></span> Aide

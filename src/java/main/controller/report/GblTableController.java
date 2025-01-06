@@ -12,7 +12,6 @@ import java.util.UUID;
 import main.CfgHandler;
 import main.PgConnection;
 import main.controller.AgenceController;
-import main.controller.CibleController;
 import main.controller.UpdateController;
 import main.modal.Agence;
 import main.modal.GblRow;
@@ -21,6 +20,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class GblTableController {
+
+    AgenceController ac = new AgenceController();
 
     public GblTableController() {
     }
@@ -263,9 +264,11 @@ public class GblTableController {
 
     public GblRow getTotaleRow(String date1, String date2, String[] agences) {
         GblRow row = new GblRow();
-
         try {
             // Establish connection
+            if (agences.length == 0) {
+                agences = ac.putAgencesToStringArray(ac.getAllAgence());
+            }
             PgConnection con = new PgConnection();
             StringBuilder sqlBuilder = new StringBuilder(" AND  id_agence IN (");
             for (int i = 0; i < agences.length; i++) {
@@ -464,21 +467,20 @@ public class GblTableController {
 
         return row;
     }
-    
+
     // to be globale for all tables
-    public String prepareTableJsonUrl(String host,int port, String apiPoint,String date1,String date2){
+    public String prepareTableJsonUrl(String host, int port, String apiPoint, String date1, String date2) {
         String url = "http://" + host
-                        + ":" + port
-                        + "/" + apiPoint
-                        + "?date1=" + date1
-                        + "&date2=" + date2
-                ;
+                + ":" + port
+                + "/" + apiPoint
+                + "?date1=" + date1
+                + "&date2=" + date2;
         return url;
     }
-    
+
     public void updateFromJson(String date1, String date2) {
         List<Agence> agences = new AgenceController().getAllAgence();
-        if(StringUtils.isAnyBlank(date1,date2)){
+        if (StringUtils.isAnyBlank(date1, date2)) {
             date1 = date2 = CfgHandler.format.format(new Date());
         }
         if (agences != null) {
@@ -488,7 +490,7 @@ public class GblTableController {
                 String url = prepareTableJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_GBL_TABLE_JSON, date1, date2);
                 System.out.println("URL = " + url + " - " + a.getName());
                 JSONObject json = UpdateController.getJsonFromUrl(url);
-                
+
                 if (json != null) {
                     JSONArray result = (JSONArray) json.get("result");
                     for (Object s : result) {
@@ -553,9 +555,9 @@ public class GblTableController {
         List<Map> result = new ArrayList<>();
         date1 = (date1 == null) ? CfgHandler.format.format(new Date()) : date1;
         date2 = (date2 == null) ? CfgHandler.format.format(new Date()) : date2;
-        AgenceController ac = new AgenceController();
+
         List<Agence> dbs = ac.getAgencesFromStringArray(agences);
-        if (dbs.isEmpty()) {
+        if (dbs.isEmpty() || dbs == null) {
             dbs = ac.getAllAgence();
         }
         for (Agence a : dbs) {
@@ -567,10 +569,12 @@ public class GblTableController {
         }
 
         //adding totale
+        List<GblRow> services = new ArrayList<>();
         Map<String, Object> newAgence = new HashMap<>();
-        newAgence.put("id_agence", null);
+        newAgence.put("id_agence", "Totale");
         newAgence.put("agence_name", "Totale");
-        newAgence.put("services", this.getTotaleRow(date1, date2, agences));
+        services.add(this.getTotaleRow(date1, date2, agences));
+        newAgence.put("services", services);
         result.add(newAgence);
         return result;
 
@@ -597,15 +601,13 @@ public class GblTableController {
             return false;
         }
     }
-    
-    public void restoreOldRows(){
-        
+
+    public void restoreOldRows() {
+
         //loop on agences
-            //get the oldest ticket's date
-            //loop from the oldest date to now by days
-                //get json of that day 
-                //insert to database
-                
-        
+        //get the oldest ticket's date
+        //loop from the oldest date to now by days
+        //get json of that day 
+        //insert to database
     }
 }

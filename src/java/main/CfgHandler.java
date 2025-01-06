@@ -95,6 +95,15 @@ public class CfgHandler {
             return null;
         }
     }
+    public static String getFormatedTimeFromSeconds(Double Sec) {
+        if(Sec==null){
+            Sec = Double.valueOf("0");
+        }
+        int hours = (int) (Sec / 3600);
+        int minutes = (int) ((Sec % 3600) / 60);
+        int seconds = (int) (Sec % 60);
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
 
     public CfgHandler(HttpServletRequest r) throws FileNotFoundException, IOException {
         this.request = r;

@@ -1,3 +1,4 @@
+<%@page import="main.modal.GblRow"%>
 <%@page import="main.handler.TitleHandler"%>
 <%@page import="main.controller.report.GblTableController"%>
 <%@page import="java.util.Map"%>
@@ -25,7 +26,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     String type = "gbl";
-    String[] agences = request.getParameterValues("agences");
+    String[] agences =(request.getParameterValues("agences") != null) ? request.getParameterValues("agences"): new String[0];
     String Title = new TitleHandler(request).getTitle(type);
     String date1 = (request.getParameter("date1") == null) ? CfgHandler.format.format(new Date()) : request.getParameter("date1");
     String date2 = (request.getParameter("date2") == null) ?CfgHandler.format.format(new Date()) : request.getParameter("date2");
@@ -46,19 +47,22 @@
         <script src="/<%= CfgHandler.APP %>/js/echarts-en.min.js"></script>
         <script src="/<%= CfgHandler.APP %>/js/moment.min.js"></script>
         <style>
+            .db{
+                max-width: 35%;
+            }
         </style>
     </head>
     <body>
-        <div class="container-xl bg-dark h-100 p-0">
+        <div class=" bg-dark h-100 p-0">
 
             <div class="head">
-            <%@include file="../addon/navbar.jsp" %>
+<%@include file="../addon/navbar.jsp" %>
                 <script>
                     $("#home").removeClass("active");
                     $(".<%=type%>").addClass("active");
                 </script>
             </div>
-            <div class="body">
+            <div class="body  px-4">
 <%                     if (request.getParameter("err") != "" && request.getParameter("err") != null) {
 
 %>
@@ -71,14 +75,12 @@
 
 
                 <h2 class="text-center p-4"><%= Title%></h2>
-
-<%= data.get("top")%>
-                <table class="table table-light table-bordered table-striped  table-responsive">
+                <div class="table-responsive">
+                <table class="table table-light table-bordered table-striped  ">
                     <a class="float-right btn btn-link text-white" id="plus">PLUS >></a>
-                    <thead class="appColor ">
+                    <thead class="appColor">
                         <tr class="">
-
-                                <th class="col 0 text-wrap text-center align-middle" style="">Site</th>
+                                <th class="col 0 text-wrap text-center align-middle db" style="">Site</th>
 
                                 <th class="col 1 text-wrap text-center align-middle" style="">Service</th>
 
@@ -115,15 +117,48 @@
                     <tbody  class="font-weight-bold ">
 
 <%
-    if (!table2.isEmpty() && table2 != null) {
-        for (int i = 0; i < table2.size(); i++) {
+    if (!table.isEmpty() && table != null) {
+        
+        for (Map agence : table) {
 %>
-                        <tr class="">
-                            <th scope="row" class="text-center align-middle border-dark 0 db col" data-id="<%= table2.get(i).get(0)%>"><%= table2.get(i).get(2)%></th>
-                            <td class="text-left border-dark 1 <%= table2.get(i).get(3)%>"><%= table2.get(i).get(3)%></td>
-<% for (int j = 4; j < table2.get(i).size(); j++) {%>
-                            <td class="text-left border-dark <%= j - 2%>" class=""><%= table2.get(i).get(j)%></td>
-<%}%>
+                <% 
+Object servicesObj = agence.get("services");  
+if (servicesObj instanceof List<?>) {  
+    List<GblRow> services = (ArrayList<GblRow>) agence.get("services");
+    for (GblRow service : services ) {
+%>                      <tr class="">
+                            <th scope="row" class="text-center align-middle border-dark 0 db " data-id="<%= agence.get("id_agence") %>"><%= agence.get("agence_name") %></th>
+
+                             <th class="col 1 text-wrap text-center align-middle " style=""><%= service.getServiceName() %></th>
+
+                                <th class="col 2 text-wrap text-center align-middle" style=""><%= service.getNbT() %></th>
+
+                                <th class="col 3 text-wrap text-center align-middle" style=""><%= service.getNbTt() %></th>
+
+                                <th class="col 4 text-wrap text-center align-middle" style=""><%= service.getNbA() %></th>
+
+                                <th class="col 5 text-wrap text-center align-middle" style=""><%= service.getNbTl1() %></th>
+
+                                <th class="col 6 text-wrap text-center align-middle" style=""><%= service.getNbSa() %></th>
+
+                                <th class="col 7 text-wrap text-center align-middle" style=""><%= service.getPerApT() %>%</th>
+
+                                <th class="col 8 text-wrap text-center align-middle" style=""><%= service.getPertl1Pt() %>%</th>
+
+                                <th class="col 9 text-wrap text-center align-middle" style=""><%= service.getPerSaPt() %>%</th>
+
+                                <th class="col 10 text-wrap text-center align-middle" style=""><%= CfgHandler.getFormatedTimeFromSeconds(service.getAvgSecA()) %></th>
+
+                                <th class="col 11 text-wrap text-center align-middle" style=""><%= service.getNbCa() %></th>
+
+                                <th class="col 12 text-wrap text-center align-middle" style=""><%= service.getPercapt() %>%</th>
+
+                                <th class="col 13 text-wrap text-center align-middle" style=""><%= CfgHandler.getFormatedTimeFromSeconds(service.getAvgSecT()) %></th>
+
+                                <th class="col 14 text-wrap text-center align-middle" style=""><%= service.getNbCt() %></th>
+
+                                <th class="col 15 text-wrap text-center align-middle" style=""><%= service.getPerctPt() %>%</th>
+<%}}%>
                         </tr>
 <%
         }
@@ -133,10 +168,10 @@
 
                     </tbody>
                 </table>
-
+</div>
             </div>
             <div class="footer">
-<%= data.get("bottom")%>
+
             </div>
         </div>
         <script>
