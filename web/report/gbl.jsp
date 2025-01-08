@@ -26,7 +26,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     String type = "gbl";
-    String[] agences =(request.getParameterValues("agences") != null) ? request.getParameterValues("agences"): new String[0];
+    String[] agences = request.getParameterValues("agences");
     String Title = new TitleHandler(request).getTitle(type);
     String date1 = (request.getParameter("date1") == null) ? CfgHandler.format.format(new Date()) : request.getParameter("date1");
     String date2 = (request.getParameter("date2") == null) ?CfgHandler.format.format(new Date()) : request.getParameter("date2");
@@ -75,6 +75,9 @@
 
 
                 <h2 class="text-center p-4"><%= Title%></h2>
+                <div>
+                    <%@include file="../addon/report/defaulthtml.jsp" %>
+                </div>
                 <div class="table-responsive">
                 <table class="table table-light table-bordered table-striped  ">
                     <a class="float-right btn btn-link text-white" id="plus">PLUS >></a>
@@ -121,11 +124,11 @@
         
         for (Map agence : table) {
 %>
-                <% 
+<% 
 Object servicesObj = agence.get("services");  
 if (servicesObj instanceof List<?>) {  
-    List<GblRow> services = (ArrayList<GblRow>) agence.get("services");
-    for (GblRow service : services ) {
+List<GblRow> services = (ArrayList<GblRow>) agence.get("services");
+for (GblRow service : services ) {
 %>                      <tr class="">
                             <th scope="row" class="text-center align-middle border-dark 0 db " data-id="<%= agence.get("id_agence") %>"><%= agence.get("agence_name") %></th>
 

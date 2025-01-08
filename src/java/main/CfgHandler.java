@@ -58,7 +58,8 @@ public class CfgHandler {
     public static String PAGE_HOME = "/QData/home.jsp";
     public static String PAGE_REPORT = "/QData/report.jsp";
     public static String PAGE_TASK = "/QData/setting/taches.jsp";
-    
+    public static String PAGE_GBL_REPORT = "/QData/report/gbl.jsp";
+
     //API URL
     public static String API_GBL_TABLE_JSON = "QStates/getglobaletable";
     public static String API_CHECK_STATUS = "QStates/onlinecheck";
@@ -69,9 +70,9 @@ public class CfgHandler {
     private HttpServletRequest request;
     private OutputStream output;
     private FileReader FR = null;
-    
+
     public final static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    
+
     public static String getFormatedDateAsString(Date date) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (date != null) {
@@ -79,7 +80,7 @@ public class CfgHandler {
         } else {
             return null;
         }
-        
+
     }
 
     public static Date getFormatedDateAsDate(String date) {
@@ -95,8 +96,9 @@ public class CfgHandler {
             return null;
         }
     }
+
     public static String getFormatedTimeFromSeconds(Double Sec) {
-        if(Sec==null){
+        if (Sec == null) {
             Sec = Double.valueOf("0");
         }
         int hours = (int) (Sec / 3600);

@@ -24,7 +24,7 @@
                     <span class=""></span> Rapport
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownR" >
-                    <a class="dropdown-item font-weight-bold navHover d" href="/<%=CfgHandler.APP%>/report/gbl.jsp">RAPPORT GLOBALE</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_GBL_REPORT%>?d=d"">RAPPORT GLOBALE</a>
                     <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=emp&d=d">RAPPORT EMPLOYE</a>
                     <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=empser&d=d">RAPPORT EMPLOYE (service)</a>
                     <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=gch&d=d">RAPPORT GUICHET</a>

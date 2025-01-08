@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import main.CfgHandler;
 import main.PgConnection;
 import main.controller.AgenceController;
@@ -81,8 +83,8 @@ public class GblTableController {
                 return false;
             }
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException | SQLException e) {
+            Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
             return false;
         }
     }
@@ -143,7 +145,7 @@ public class GblTableController {
             }
 
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
+            Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
             return false;
         }
     }
@@ -190,7 +192,7 @@ public class GblTableController {
                 System.out.println("No row found for id: " + id);
             }
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
+            Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
         }
 
         return row;
@@ -257,7 +259,7 @@ public class GblTableController {
             }
             con.closeConnection();
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("Error fetching row: " + e.getMessage());
+            Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
         }
         return row;
     }
@@ -266,18 +268,22 @@ public class GblTableController {
         GblRow row = new GblRow();
         try {
             // Establish connection
-            if (agences.length == 0) {
+            if (agences == null || agences.length <= 0) {
                 agences = ac.putAgencesToStringArray(ac.getAllAgence());
             }
+
             PgConnection con = new PgConnection();
-            StringBuilder sqlBuilder = new StringBuilder(" AND  id_agence IN (");
-            for (int i = 0; i < agences.length; i++) {
-                sqlBuilder.append("?");
-                if (i < agences.length - 1) {
-                    sqlBuilder.append(", ");
+            StringBuilder sqlBuilder = new StringBuilder("");
+            if (agences.length > 0) {
+                sqlBuilder.append(" AND  id_agence IN (");
+                for (int i = 0; i < agences.length; i++) {
+                    sqlBuilder.append("?");
+                    if (i < agences.length - 1) {
+                        sqlBuilder.append(", ");
+                    }
                 }
+                sqlBuilder.append(");");
             }
-            sqlBuilder.append(")");
 
             String agenceCondition = sqlBuilder.toString();
 
@@ -302,7 +308,6 @@ public class GblTableController {
                     + "WHERE TO_DATE(TO_CHAR(date, 'YYYY-MM-DD'), 'YYYY-MM-DD') "
                     + "BETWEEN TO_DATE(?, 'YYYY-MM-DD') AND TO_DATE(?, 'YYYY-MM-DD') "
                     + agenceCondition;
-
             // Prepare statement
             PreparedStatement pstmt = con.getStatement().getConnection().prepareStatement(sql);
             pstmt.setString(1, date1);  // Start date
@@ -339,7 +344,7 @@ public class GblTableController {
 
             con.closeConnection();
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("Error fetching row: " + e.getMessage());
+            Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
         }
         return row;
     }
@@ -405,10 +410,14 @@ public class GblTableController {
                 row.setIdAgence(id_agence);
                 services.add(row);
             }
+            if (services.size() <= 0) {
+                con.closeConnection();
+                return services;
+            }
             services.add(this.getTotaleRowByAgence(id_agence, date1, date2)); // adding subtotale row as a service 
             con.closeConnection();
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("Error fetching row: " + e.getMessage());
+            Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
         }
 
         return services;
@@ -462,7 +471,7 @@ public class GblTableController {
                         + " id_service = " + id_service);
             }
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("Error fetching row: " + e.getMessage());
+            Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
         }
 
         return row;
@@ -557,25 +566,32 @@ public class GblTableController {
         date2 = (date2 == null) ? CfgHandler.format.format(new Date()) : date2;
 
         List<Agence> dbs = ac.getAgencesFromStringArray(agences);
-        if (dbs.isEmpty() || dbs == null) {
+        if (dbs == null || dbs.isEmpty()) {
             dbs = ac.getAllAgence();
         }
         for (Agence a : dbs) {
-            Map<String, Object> newAgence = new HashMap<>();
-            newAgence.put("id_agence", a.getId().toString());
-            newAgence.put("agence_name", a.getName());
-            newAgence.put("services", this.getRowsByIdAgenceBetweenDates(a.getId().toString(), date1, date2));
-            result.add(newAgence);
+            List<GblRow> services = this.getRowsByIdAgenceBetweenDates(a.getId().toString(), date1, date2);
+            if (!services.isEmpty()) {
+                Map<String, Object> newAgence = new HashMap<>();
+                newAgence.put("id_agence", a.getId().toString());
+                newAgence.put("agence_name", a.getName());
+                newAgence.put("services", services);
+                result.add(newAgence);
+            }
+
         }
 
         //adding totale
-        List<GblRow> services = new ArrayList<>();
-        Map<String, Object> newAgence = new HashMap<>();
-        newAgence.put("id_agence", "Totale");
-        newAgence.put("agence_name", "Totale");
-        services.add(this.getTotaleRow(date1, date2, agences));
-        newAgence.put("services", services);
-        result.add(newAgence);
+        if (!result.isEmpty()) {
+            List<GblRow> services = new ArrayList<>();
+            Map<String, Object> newAgence = new HashMap<>();
+            newAgence.put("id_agence", "Totale");
+            newAgence.put("agence_name", "Totale");
+            services.add(this.getTotaleRow(date1, date2, agences));
+            newAgence.put("services", services);
+            result.add(newAgence);
+        }
+
         return result;
 
     }
@@ -597,7 +613,7 @@ public class GblTableController {
             ResultSet rst = pstmt.executeQuery();
             return rst.next();
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
+            Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
             return false;
         }
     }

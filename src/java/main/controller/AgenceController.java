@@ -382,15 +382,17 @@ public class AgenceController {
         }
         return dbs;
     }
-    
+
     public String[] putAgencesToStringArray(List<Agence> dbs) {
-        String[] agences = new String[0];
+
         if (dbs != null) {
-            for (Agence a : dbs) {
-                agences[agences.length] = a.getId().toString();
+            String[] agences = new String[dbs.size()];
+            for (int i = 0; i < dbs.size(); i++) {
+                agences[i] = dbs.get(i).getId().toString();
             }
+            return agences;
         }
-        return agences;
+        return new String[0];
     }
 
 }
