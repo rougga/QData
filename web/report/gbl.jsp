@@ -53,7 +53,7 @@
         </style>
     </head>
     <body>
-        <div class=" bg-dark h-100 p-0">
+        <div class=" bg-dark container h-100 p-0">
 
             <div class="head">
 <%@include file="../addon/navbar.jsp" %>
@@ -62,7 +62,7 @@
                     $(".<%=type%>").addClass("active");
                 </script>
             </div>
-            <div class="body  px-4">
+            <div class="body ">
 <%                     if (request.getParameter("err") != "" && request.getParameter("err") != null) {
 
 %>

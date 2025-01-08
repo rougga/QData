@@ -13,6 +13,9 @@ public class Agence {
     private String password;
     private int status;
 
+    public Agence() {
+    }
+
     public Agence(String name, String host, int port, String database, String username, String password,int status) {
         this.id=UUID.randomUUID();
         this.name = name;
