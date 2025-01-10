@@ -100,6 +100,14 @@
         <servlet-name>EditDatabase</servlet-name>
         <servlet-class>main.servlets.EditDatabase</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UpdateAgencesAllData</servlet-name>
+        <servlet-class>main.api.UpdateAgencesAllData</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateAgencesTodayData</servlet-name>
+        <servlet-class>main.api.UpdateAgencesTodayData</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Settings</servlet-name>
         <url-pattern>/Settings</url-pattern>
@@ -229,6 +237,14 @@
     <servlet-mapping>
         <servlet-name>EditDatabase</servlet-name>
         <url-pattern>/EditDatabase</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateAgencesAllData</servlet-name>
+        <url-pattern>/updateagencesalldata</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateAgencesTodayData</servlet-name>
+        <url-pattern>/updateagencestodaydata</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

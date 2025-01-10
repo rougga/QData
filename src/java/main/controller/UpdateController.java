@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
+import java.util.UUID;
+import main.controller.report.GblTableController;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -21,7 +24,7 @@ public class UpdateController {
 
             // Open connection
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestProperty("Accept-Charset", "UTF-8"); 
+            connection.setRequestProperty("Accept-Charset", "UTF-8");
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/json");
 
@@ -29,7 +32,7 @@ public class UpdateController {
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 // Read the response
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(),"UTF-8"));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
                 StringBuilder response2 = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -42,17 +45,33 @@ public class UpdateController {
                 return ob;
             } else {
                 System.out.println("GET request failed with Response Code: " + responseCode);
-                
+
             }
 
             // Disconnect
             connection.disconnect();
             return null;
         } catch (IOException | ParseException e) {
-           System.out.println("UpdateController.getJsonFromUrl: " + e.getMessage());
-           return null;
+            System.out.println("UpdateController.getJsonFromUrl: " + e.getMessage());
+            return null;
         }
     }
-    
-    
+
+    public boolean restoreAllAgenceDataById(UUID id_agence) {
+
+        boolean isSuccessful = false;
+        isSuccessful = new GblTableController().restoreOldRowsByAgenceId(id_agence);
+        // restore other tables
+
+        return isSuccessful;
+    }
+
+    public String updateAgencesTodayData(UUID id_agence) {
+        String error = null;
+        error = new GblTableController().updateAgenceFromJson(null, null, id_agence);
+        // restore other tables
+
+        return error;
+    }
+
 }
