@@ -69,9 +69,15 @@ public class UpdateController {
     public String updateAgencesTodayData(UUID id_agence) {
         String error = null;
         error = new GblTableController().updateAgenceFromJson(null, null, id_agence);
-        // restore other tables
+        // update other tables
 
         return error;
     }
-
+    
+    public void updateAllAgencesTodayData(){
+        new GblTableController().updateFromJson(null, null);
+        // update other tables
+        System.err.println("updateAllAgencesTodayData() Finished! .");
+    }
+    
 }

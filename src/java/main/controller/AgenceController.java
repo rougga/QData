@@ -395,4 +395,8 @@ public class AgenceController {
         return new String[0];
     }
 
+    public Date getOldesTicketDate(UUID id_agence) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

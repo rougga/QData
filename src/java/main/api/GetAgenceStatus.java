@@ -26,10 +26,11 @@ public class GetAgenceStatus extends HttpServlet {
             String id = req.getParameter("id");
             if (StringUtils.isBlank(id)) {
                 JSONObject all = new JSONObject();
+                all.put("status", "false");
                 all.put("error", "blank id");
                 out.print(all);
             } else {
-                boolean status= new AgenceController().isOnlineJson(UUID.fromString(id));
+                boolean status = new AgenceController().isOnlineJson(UUID.fromString(id));
                 JSONObject all = new JSONObject();
                 all.put("status", status);
                 out.print(all);

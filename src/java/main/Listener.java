@@ -6,7 +6,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import main.controller.report.GblTableController;
+import main.controller.UpdateController;
 
 public class Listener implements ServletContextListener {
 
@@ -16,6 +16,7 @@ public class Listener implements ServletContextListener {
         public void run() {
             System.out.println("-- "+CfgHandler.APP+" v"+CfgHandler.VERSION+" Today Data Update Starting.....");
             //new Updater().updateDatabase();
+            new UpdateController().updateAllAgencesTodayData();
             System.out.println("-- Last Updated: " + new Date().toString());
         }
     };

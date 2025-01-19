@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -633,8 +634,8 @@ public class GblTableController {
 
             }
 
-        }else{
-            error+= "updateAgenceFromJson: json null;";
+        } else {
+            error += "updateAgenceFromJson: json null;";
             return error;
         }
         System.out.println(new Date().toString() + " --  GBL Table Updated. ");
@@ -702,23 +703,37 @@ public class GblTableController {
         }
     }
 
-    public boolean restoreOldRowsForAllAgences() {
-
-        //loop on agences
-        //get the oldest ticket's date
-        //loop from the oldest date to now by days
-        //get json of that day 
-        //insert to database
-        return false;
+    public void restoreOldRowsForAllAgences() {
+        for (Agence a : ac.getAllAgence()) {
+            //add error handling
+            this.restoreOldRowsByAgenceId(a.getId());
+        }
     }
 
     public boolean restoreOldRowsByAgenceId(UUID id_agence) {
+        Agence a = ac.getAgenceById(id_agence);
+        if (a == null) {
+            return false;
+        }
+        Date oldestDate = ac.getOldesTicketDate(a.getId());
 
-        //get the oldest ticket's date
-        //loop from the oldest date to now by days
-        //get json of that day 
-        //insert to database
-        return false;
+        while (new Date().compareTo(oldestDate) > 0) {
+            System.out.println("Restoring GBL table data of "
+                    + a.getName()
+                    + " for date:"
+                    + CfgHandler.getFormatedDateAsString(oldestDate)
+            );
+            this.updateAgenceFromJson(
+                    CfgHandler.getFormatedDateAsString(oldestDate),
+                    CfgHandler.getFormatedDateAsString(oldestDate),
+                    id_agence);
+            Calendar c = Calendar.getInstance();
+            c.setTime(oldestDate);
+            c.add(Calendar.DATE, 1);
+            oldestDate = c.getTime();
+        }
+        //add error handling
+        return true;
     }
 
 }

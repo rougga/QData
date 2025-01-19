@@ -79,5 +79,6 @@ public class Updater {
 
     public void updateTodayDatabaseFromJson(){
         
+        System.err.println("updateTodayDatabaseFromJson() Finished! .");
     }
 }
