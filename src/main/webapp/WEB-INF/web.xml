@@ -2,111 +2,111 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
         <servlet-name>Settings</servlet-name>
-        <servlet-class>main.servlets.Settings</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.Settings</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Login</servlet-name>
-        <servlet-class>main.servlets.Login</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.Login</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Logoff</servlet-name>
-        <servlet-class>main.servlets.Logoff</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.Logoff</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Delete</servlet-name>
-        <servlet-class>main.servlets.Delete</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.Delete</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>GetTables</servlet-name>
-        <servlet-class>main.api.GetTables</servlet-class>
+        <servlet-class>ma.rougga.qdata.api.GetTables</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Add</servlet-name>
-        <servlet-class>main.servlets.Add</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.Add</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Edit</servlet-name>
-        <servlet-class>main.servlets.Edit</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.Edit</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Print</servlet-name>
-        <servlet-class>main.servlets.Print</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.Print</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AddDatabase</servlet-name>
-        <servlet-class>main.servlets.AddDatabase</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.AddDatabase</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DeleteDatabase</servlet-name>
-        <servlet-class>main.servlets.DeleteDatabase</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.DeleteDatabase</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>GetAgences</servlet-name>
-        <servlet-class>main.api.GetAgences</servlet-class>
+        <servlet-class>ma.rougga.qdata.api.GetAgences</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>EditTitles</servlet-name>
-        <servlet-class>main.servlets.EditTitles</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.EditTitles</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DeleteCible</servlet-name>
-        <servlet-class>main.servlets.DeleteCible</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.DeleteCible</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateNow</servlet-name>
-        <servlet-class>main.api.UpdateNow</servlet-class>
+        <servlet-class>ma.rougga.qdata.api.UpdateNow</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateAllTickets</servlet-name>
-        <servlet-class>main.api.UpdateAllTickets</servlet-class>
+        <servlet-class>ma.rougga.qdata.api.UpdateAllTickets</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateAllLoginLog</servlet-name>
-        <servlet-class>main.api.UpdateAllLoginLog</servlet-class>
+        <servlet-class>ma.rougga.qdata.api.UpdateAllLoginLog</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>GetAgenceStatus</servlet-name>
-        <servlet-class>main.api.GetAgenceStatus</servlet-class>
+        <servlet-class>ma.rougga.qdata.api.GetAgenceStatus</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TodayUpdateAgence</servlet-name>
-        <servlet-class>main.api.TodayUpdateAgence</servlet-class>
+        <servlet-class>ma.rougga.qdata.api.TodayUpdateAgence</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateAgence</servlet-name>
-        <servlet-class>main.api.UpdateAgence</servlet-class>
+        <servlet-class>ma.rougga.qdata.api.UpdateAgence</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AddZone</servlet-name>
-        <servlet-class>main.servlets.AddZone</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.AddZone</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DeleteZone</servlet-name>
-        <servlet-class>main.servlets.Deletezone</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.Deletezone</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AddUtilisateur</servlet-name>
-        <servlet-class>main.servlets.AddUtilisateur</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.AddUtilisateur</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DeleteUtilisateur</servlet-name>
-        <servlet-class>main.servlets.DeleteUtilisateur</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.DeleteUtilisateur</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>EditZone</servlet-name>
-        <servlet-class>main.servlets.EditZone</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.EditZone</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>EditDatabase</servlet-name>
-        <servlet-class>main.servlets.EditDatabase</servlet-class>
+        <servlet-class>ma.rougga.qdata.servlets.EditDatabase</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateAgencesAllData</servlet-name>
-        <servlet-class>main.api.UpdateAgencesAllData</servlet-class>
+        <servlet-class>ma.rougga.qdata.api.UpdateAgencesAllData</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateAgencesTodayData</servlet-name>
-        <servlet-class>main.api.UpdateAgencesTodayData</servlet-class>
+        <servlet-class>ma.rougga.qdata.api.UpdateAgencesTodayData</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Settings</servlet-name>
@@ -252,6 +252,6 @@
         </session-timeout>
     </session-config>
     <listener>
-        <listener-class>main.Listener</listener-class>
+        <listener-class>ma.rougga.qdata.Listener</listener-class>
     </listener>
 </web-app>
