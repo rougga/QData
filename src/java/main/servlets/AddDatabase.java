@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import main.CfgHandler;
 import main.controller.AgenceController;
 import main.modal.Agence;
 import org.apache.commons.lang3.StringUtils;
@@ -28,13 +29,15 @@ public class AddDatabase extends HttpServlet {
                     String name = request.getParameter("name");
                     String host = request.getParameter("host");
                     String port = request.getParameter("port");
-                    String database = request.getParameter("database");
-                    String username = request.getParameter("username");
-                    String password = request.getParameter("password");
                     String zoneId = request.getParameter("zone");
                     int status = 1;
-                    if (StringUtils.isNoneBlank(name, host, port, database, username, password)) {
-                        Agence a = new Agence(name, host, Integer.parseInt(port), database, username, password, status);
+                    if (StringUtils.isNoneBlank(name, host, port)) {
+                        Agence a = new Agence(
+                                name,
+                                host,
+                                Integer.parseInt(port),
+                                "1999-12-20 00:00:00",
+                                status);
                         AgenceController ac = new AgenceController();
                         if (ac.addAgence(a) == 1) {
                             if (zoneId!=null) {

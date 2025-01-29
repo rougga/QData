@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Date;
 import java.util.UUID;
 import main.controller.report.GblTableController;
 import org.json.simple.JSONObject;
@@ -45,7 +44,6 @@ public class UpdateController {
                 return ob;
             } else {
                 System.out.println("GET request failed with Response Code: " + responseCode);
-
             }
 
             // Disconnect
@@ -70,12 +68,17 @@ public class UpdateController {
         String error = null;
         error = new GblTableController().updateAgenceFromJson(null, null, id_agence);
         // update other tables
-
+        
         return error;
     }
     
     public void updateAllAgencesTodayData(){
         new GblTableController().updateFromJson(null, null);
+        
+        
+        
+        
+        
         // update other tables
         System.err.println("updateAllAgencesTodayData() Finished! .");
     }

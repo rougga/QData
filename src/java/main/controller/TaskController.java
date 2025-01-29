@@ -150,6 +150,7 @@ public class TaskController {
         }
     }
 
+    /*
     public void updateTasksById(UUID db_id) {
         Agence a = new AgenceController().getAgenceById(db_id);
         if (a != null) {
@@ -189,7 +190,7 @@ public class TaskController {
             System.out.println("-- TAsks not updated updated.");
         }
     }
-
+     */
     private boolean clearTasksFromDb(UUID db_id) {
         try {
             String SQL = "delete from rougga_task WHERE db_id=?";
@@ -205,7 +206,7 @@ public class TaskController {
             return false;
         }
     }
-
+    /*
     public void updateAllTasks() {
         List<Agence> ag = new AgenceController().getAllAgence();
         for (Agence a : ag) {
@@ -242,4 +243,6 @@ public class TaskController {
             System.out.println("-- Tasks updated.");
         }
     }
+    
+     */
 }

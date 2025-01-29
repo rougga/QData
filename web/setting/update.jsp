@@ -5,15 +5,14 @@
 <%@page import="main.controller.AgenceController"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-  String id_agence = request.getParameter("id_agence");
-  Agence agence = new Agence();
-  AgenceController ac = new AgenceController();
-  if(StringUtils.isNotBlank(id_agence)){
-    agence = ac.getAgenceById(UUID.fromString(id_agence)); 
-  }
-    
-    
-    
+    String id_agence = request.getParameter("id_agence");
+    Agence agence = new Agence();
+    AgenceController ac = new AgenceController();
+    if (StringUtils.isNotBlank(id_agence)) {
+        agence = ac.getAgenceById(UUID.fromString(id_agence));
+    }
+
+
 %>
 <!DOCTYPE html>
 <html>
@@ -25,6 +24,7 @@
         <script src="../js/jquery.js"></script>
         <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <script src="../js/bootstrap.bundle.min.js"></script>
+        <link href="../css/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
         <link href="../css/navbar.css" rel="stylesheet" type="text/css"/> 
         <link href="../css/body.css" rel="stylesheet" type="text/css"/>
         <script src="../js/settings.js"></script>
@@ -32,46 +32,50 @@
     <body>
         <div class="container-lg">
             <div class="head">
-<%@include file="../addon/navbar.jsp" %>
+                <%@include file="../addon/navbar.jsp" %>
                 <script>
                     $("#home").removeClass("active");
                 </script>
             </div>
             <div class="mt-4 pt-4">
-<%                     
-    String err=request.getParameter("err");
-    if (err != "" && err != null) {
+                <%    String err = request.getParameter("err");
+                    if (err != "" && err != null) {
 
-%>
-<%= "<div class='alert alert-danger alert-dismissible fade show' role='alert'><b>"
-        + err
-        + "</b><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"%>
-<%
-    }
-%>
+                %>
+                <%= "<div class='alert alert-danger alert-dismissible fade show' role='alert'><b>"
+                        + err
+                        + "</b><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"%>
+                <%
+                    }
+                %>
 
                 <div class="w-100" id="dbTbl">
                     <h1 class="text-white text-center">
                         Mise a jour de l'agence: <%= agence.getName()%>
                     </h1>
                     <h5 class="text-white text-center">
-                        Dernière mise à jour: <%= CfgHandler.getFormatedDateAsString(ac.getLastUpdate(agence.getId())) %>
+                        Dernière mise à jour: <%= CfgHandler.getFormatedDateAsString(ac.getLastUpdate(agence.getId()))%>
                     </h5>
-                    <div class="w-50 mx-auto mt-4">
-                        <form action="" class="d-flex justify-content-center flex-column">
-                            <a class="btn btn-secondary m-1" id="majNowBtn" href="/<%=CfgHandler.APP%>/updateagencestodaydata?id_agence=<%=agence.getId().toString()%>">
-                                <img src="/QData/img/icon/maj.png">
-                                Forcer la mise à jour d'aujourd'hui
-                            </a>
-                            <a class="btn btn-secondary m-1" id="majTBtn"  href="/<%=CfgHandler.APP%>/updateagencesalldata?id_agence=<%=agence.getId().toString()%>" >
-                                <img src="/QData/img/icon/maj.png">
-                                Mettre à jour toutes les données de l'agence
-                            </a>
-                        </form>
+                    <div class="col-6 d-flex mt-4 flex-column mx-auto align-items-center">
+                        <a class="btn btn-secondary m-1 " id="majNowBtn" href="/<%=CfgHandler.APP%>/updateagencestodaydata?id_agence=<%=agence.getId().toString()%>">
+                            <i class="fa fa-cloud-download" aria-hidden="true"></i>
+                            <span>Forcer la mise à jour d'aujourd'hui</span>
+                        </a>
+                        <a class="btn btn-secondary m-1" id="majTBtn"  href="/<%=CfgHandler.APP%>/updateagencesalldata?id_agence=<%=agence.getId().toString()%>" >
+                            <i class="fa fa-cloud-download" aria-hidden="true"></i>
+                            Mettre à jour toutes les données de l'agence
+                        </a>
+                        <a class="btn btn-danger mt-5 col-4" id="majTBtn"  href="/<%=CfgHandler.APP%>/setting/agences.jsp" >
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                            RETOURNER
+                        </a>
                     </div>
                 </div>
             </div>
             <div class="footer">
             </div>
     </body>
+    <script>
+         history.replaceState({page: 1}, 'title', "?id_agence=<%= id_agence%>&err=");
+    </script>
 </html>

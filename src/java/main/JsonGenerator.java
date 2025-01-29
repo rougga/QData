@@ -175,7 +175,7 @@ public class JsonGenerator {
                         table2.add(service);
                     }
 
-                    site.put("isOnline", ac.isOnline(a.getId()));
+                    site.put("isOnline", ac.isOnlineJson(a.getId()));
                     site.put("table", table2);
                     result.add(site);
                     con.closeConnection();
@@ -200,7 +200,7 @@ public class JsonGenerator {
                 JSONObject agenceO = new JSONObject();
                 agenceO.put("id", agences.get(i).getId().toString());
                 agenceO.put("name", agences.get(i).getName());
-                agenceO.put("isOnline", ac.isOnline(agences.get(i).getId()));
+                agenceO.put("isOnline", ac.isOnlineJson(agences.get(i).getId()));
                 agenceO.put("lastUpdate", ac.getLastUpdate(agences.get(i).getId()).toString());
                 result.add(agenceO);
             }

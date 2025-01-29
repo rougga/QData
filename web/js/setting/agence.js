@@ -7,12 +7,10 @@ $(document).ready(function () {
             if (data.status) {
                 $stat.html("<span class='text-center bg-success text-white p-1'>Online</span>");
 
-                $(".dbUpdateToday[data-id='" + $stat.attr("data-id") + "']").removeClass("disabled");
-                $(".dbUpdateAll[data-id='" + $stat.attr("data-id") + "']").removeClass("disabled");
+                $(".updateBtn[data-id='" + $stat.attr("data-id") + "']").removeClass("disabled");
             } else {
                 $stat.html("<span class='text-center bg-danger text-white p-1'>Offline</span>");
-                $(".dbUpdateToday[data-id='" + $stat.attr("data-id") + "']").addClass("disabled");
-                $(".dbUpdateAll[data-id='" + $stat.attr("data-id") + "']").addClass("disabled");
+                $(".updateBtn[data-id='" + $stat.attr("data-id") + "']").addClass("disabled");
             }
 
         });
@@ -24,11 +22,8 @@ $(document).ready(function () {
         $("#exampleModalLabel").text("Ajouter une Agence:");
         $("#agence").val("");
         $("#zone").val("");
-        $("#host").val("localhost");
-        $("#port").val("5434");
-        $("#db").val("postgres");
-        $("#user").val("honyi");
-        $("#pass").val("honyi123");
+        $("#host").val("127.0.0.1");
+        $("#port").val("8888");
         $("#id").val("");
         $("button:submit").text("Ajouter");
         $("#dbModal").modal('toggle');
@@ -40,9 +35,6 @@ $(document).ready(function () {
         $("#exampleModalLabel").text("Modifier l'Agence:");
         $("#agence").val($(this).parent().parent().children(".agenceName").text());
         $("#zone").val($(this).parent().parent().children(".agenceZone").attr("data-zone"));
-        $("#host").val($(this).parent().parent().children(".agenceHost").text().split(":")[0]);
-        $("#port").val($(this).parent().parent().children(".agenceHost").text().split(":")[1]);
-        $("#db").val($(this).parent().parent().children(".agenceDb").text());
         $("#user").val($(this).parent().parent().children(".agenceUser").text());
         $("#pass").val($(this).parent().parent().children(".agencePass").text());
         $("#id").val($(this).attr("data-id"));

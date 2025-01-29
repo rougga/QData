@@ -51,3 +51,6 @@ input[type=checkbox]{
     height: 15px;
     width: 15px;
 }
+.qstates-bg{
+    background-color: #b83dba;
+}

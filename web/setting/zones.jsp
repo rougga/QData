@@ -143,4 +143,7 @@
                             
                            
     </body>
+     <script>
+       history.replaceState({page:1},'title',"?err=");
+    </script>
 </html>

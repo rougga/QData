@@ -1,6 +1,5 @@
-<%@page import="main.modal.GblRow"%>
+<%@page import="main.modal.EmpRow"%>
 <%@page import="main.handler.TitleHandler"%>
-<%@page import="main.controller.report.GblTableController"%>
 <%@page import="java.util.Map"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="main.TableGenerator"%>
@@ -25,12 +24,12 @@
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    String type = "gbl";
+    String type = "emp";
     String[] agences = request.getParameterValues("agences");
     String Title = new TitleHandler(request).getTitle(type);
     String date1 = (request.getParameter("date1") == null) ? CfgHandler.format.format(new Date()) : request.getParameter("date1");
-    String date2 = (request.getParameter("date2") == null) ?CfgHandler.format.format(new Date()) : request.getParameter("date2");
-    List<Map> table = new GblTableController().getTableAsList(date1, date2, agences);
+    String date2 = (request.getParameter("date2") == null) ? CfgHandler.format.format(new Date()) : request.getParameter("date2");
+    List<Map> table = new EmpTableController().getTableAsList(date1, date2, agences);
 %>
 <!DOCTYPE html>
 <html>
@@ -38,14 +37,14 @@
         <meta charset="utf-8"/>
         <title>QData - <%= Title %></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/png" href="/<%= CfgHandler.APP %>/img/favicon-32x32.png">
-        <script src="/<%= CfgHandler.APP %>/js/jquery.js"></script>
-        <link href="/<%= CfgHandler.APP %>/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <script src="/<%= CfgHandler.APP %>/js/bootstrap.bundle.min.js"></script>
-        <link href="/<%= CfgHandler.APP %>/css/navbar.css" rel="stylesheet" type="text/css"/> 
-        <link href="/<%= CfgHandler.APP %>/css/body.css" rel="stylesheet" type="text/css"/>
-        <script src="/<%= CfgHandler.APP %>/js/echarts-en.min.js"></script>
-        <script src="/<%= CfgHandler.APP %>/js/moment.min.js"></script>
+        <link rel="icon" type="image/png" href="/<%= CfgHandler.APP%>/img/favicon-32x32.png">
+        <script src="/<%= CfgHandler.APP%>/js/jquery.js"></script>
+        <link href="/<%= CfgHandler.APP%>/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <script src="/<%= CfgHandler.APP%>/js/bootstrap.bundle.min.js"></script>
+        <link href="/<%= CfgHandler.APP%>/css/navbar.css" rel="stylesheet" type="text/css"/> 
+        <link href="/<%= CfgHandler.APP%>/css/body.css" rel="stylesheet" type="text/css"/>
+        <script src="/<%= CfgHandler.APP%>/js/echarts-en.min.js"></script>
+        <script src="/<%= CfgHandler.APP%>/js/moment.min.js"></script>
         <style>
             .db{
                 max-width: 35%;
@@ -56,122 +55,121 @@
         <div class=" bg-dark container h-100 p-0">
 
             <div class="head">
-<%@include file="../addon/navbar.jsp" %>
+                <%@include file="../addon/navbar.jsp" %>
                 <script>
                     $("#home").removeClass("active");
                     $(".<%=type%>").addClass("active");
                 </script>
             </div>
             <div class="body ">
-<%                     if (request.getParameter("err") != "" && request.getParameter("err") != null) {
+                <%                     if (request.getParameter("err") != "" && request.getParameter("err") != null) {
 
-%>
-<%= "<div class='alert alert-danger alert-dismissible fade show' role='alert'><b>"
-        + request.getParameter("err")
-        + "</b><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"%>
-<%
-    }
-%>
+                %>
+                <%= "<div class='alert alert-danger alert-dismissible fade show' role='alert'><b>"
+                        + request.getParameter("err")
+                        + "</b><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"%>
+                <%
+                    }
+                %>
 
 
-                <h2 class="text-center p-4"><%= Title%></h2>
+                <h2 class="text-center p-4"><%= Title %></h2>
                 <div>
                     <%@include file="../addon/report/defaulthtml.jsp" %>
                 </div>
                 <div class="table-responsive">
-                <table class="table table-light table-bordered table-striped  ">
-                    <a class="float-right btn btn-link text-white" id="plus">PLUS >></a>
-                    <thead class="appColor">
-                        <tr class="">
-                                <th class="col 0 text-wrap text-center align-middle db" style="">Site</th>
+                    <table class="table table-light table-bordered table-striped  ">
+                        <a class="float-right btn btn-link text-white" id="plus">PLUS >></a>
+                        <thead class="appColor">
+                            <tr class="">
 
-                                <th class="col 1 text-wrap text-center align-middle" style="">Service</th>
+                                <th class="col 0 text-wrap text-center align-middle" style="">Site</th>
 
-                                <th class="col 2 text-wrap text-center align-middle" style="">Nb. Tickets</th>
+                                <th class="col 1 text-wrap text-center align-middle" style="">Employé</th>
 
-                                <th class="col 3 text-wrap text-center align-middle" style="">Nb. Traités</th>
+                                <th class="col 2 text-wrap text-center align-middle" style="">Nb. Traités</th>
 
-                                <th class="col 4 text-wrap text-center align-middle" style="">Nb. Absents</th>
+                                <th class="col 3 text-wrap text-center align-middle" style="">Nb. Absents</th>
 
-                                <th class="col 5 text-wrap text-center align-middle" style="">Nb. Traités &lt;1mn</th>
+                                <th class="col 4 text-wrap text-center align-middle" style="">Nb. Traités &lt;1mn</th>
 
-                                <th class="col 6 text-wrap text-center align-middle" style="">Nb. Sans affectation</th>
+                                <th class="col 5 text-wrap text-center align-middle" style="">Nb. Sans affectation</th>
 
-                                <th class="col 7 text-wrap text-center align-middle" style="">Absents/Nb. Tickets(%)</th>
+                                <th class="col 6 text-wrap text-center align-middle" style="">Absents/Nb. Tickets(%)</th>
 
-                                <th class="col 8 text-wrap text-center align-middle" style="">Traités&lt;1mn/Nb. Tickets(%)</th>
+                                <th class="col 7 text-wrap text-center align-middle" style="">Traités&lt;1mn/Nb. Tickets(%)</th>
 
-                                <th class="col 9 text-wrap text-center align-middle" style="">Sans affect/Nb. Tickets(%)</th>
+                                <th class="col 8 text-wrap text-center align-middle" style="">Sans affect/Nb. Tickets(%)</th>
 
-                                <th class="col 10 text-wrap text-center align-middle" style="">Moyenne d'attente</th>
+                                <th class="col 9 text-wrap text-center align-middle" style="">Moyenne d'attente</th>
 
-                                <th class="col 11 text-wrap text-center align-middle" style="">&gt;Cible</th>
+                                <th class="col 10 text-wrap text-center align-middle" style="">&gt;Cible</th>
 
-                                <th class="col 12 text-wrap text-center align-middle" style="">%Cible</th>
+                                <th class="col 11 text-wrap text-center align-middle" style="">%Cible</th>
 
-                                <th class="col 13 text-wrap text-center align-middle" style="">Moyenne Traitement</th>
+                                <th class="col 12 text-wrap text-center align-middle" style="">Moyenne Traitement</th>
 
-                                <th class="col 14 text-wrap text-center align-middle" style="">&gt;Cible</th>
+                                <th class="col 13 text-wrap text-center align-middle" style="">&gt;Cible</th>
 
-                                <th class="col 15 text-wrap text-center align-middle" style="">%Cible</th>
+                                <th class="col 14 text-wrap text-center align-middle" style="">%Cible</th>
 
-                        </tr>
-                    </thead>
-                    <tbody  class="font-weight-bold ">
+                            </tr>
+                        </thead>
+                        <tbody  class="font-weight-bold ">
 
-<%
-    if (!table.isEmpty() && table != null) {
-        
-        for (Map agence : table) {
-%>
-<% 
-Object servicesObj = agence.get("services");  
-if (servicesObj instanceof List<?>) {  
-List<GblRow> services = (ArrayList<GblRow>) agence.get("services");
-for (GblRow service : services ) {
-%>                      <tr class="">
-                            <th scope="row" class="text-center align-middle border-dark 0 db " data-id="<%= agence.get("id_agence") %>"><%= agence.get("agence_name") %></th>
+                            <%    if (!table.isEmpty() && table != null) {
 
-                             <th class="col 1 text-wrap text-center align-middle " style=""><%= service.getServiceName() %></th>
+                                    for (Map agence : table) {
+                            %>
+                            <%
+                                Object servicesObj = agence.get("services");
+                                if (servicesObj instanceof List<?>) {
+                                    List<EmpRow> services = (ArrayList<EmpRow>) agence.get("services");
+                                    for (EmpRow service : services) {
+                            %>                      <tr class="">
+                                <th scope="row" class="text-center align-middle border-dark 0 db " data-id="<%= agence.get("id_agence")%>"><%= agence.get("agence_name")%></th>
 
-                                <th class="col 2 text-wrap text-center align-middle" style=""><%= service.getNbT() %></th>
+                                <th class="col 1 text-wrap text-center align-middle " style=""><%= service.getServiceName()%></th>
 
-                                <th class="col 3 text-wrap text-center align-middle" style=""><%= service.getNbTt() %></th>
+                                <th class="col 2 text-wrap text-center align-middle" style=""><%= service.getNbT()%></th>
 
-                                <th class="col 4 text-wrap text-center align-middle" style=""><%= service.getNbA() %></th>
+                                <th class="col 3 text-wrap text-center align-middle" style=""><%= service.getNbTt()%></th>
 
-                                <th class="col 5 text-wrap text-center align-middle" style=""><%= service.getNbTl1() %></th>
+                                <th class="col 4 text-wrap text-center align-middle" style=""><%= service.getNbA()%></th>
 
-                                <th class="col 6 text-wrap text-center align-middle" style=""><%= service.getNbSa() %></th>
+                                <th class="col 5 text-wrap text-center align-middle" style=""><%= service.getNbTl1()%></th>
 
-                                <th class="col 7 text-wrap text-center align-middle" style=""><%= service.getPerApT() %>%</th>
+                                <th class="col 6 text-wrap text-center align-middle" style=""><%= service.getNbSa()%></th>
 
-                                <th class="col 8 text-wrap text-center align-middle" style=""><%= service.getPertl1Pt() %>%</th>
+                                <th class="col 7 text-wrap text-center align-middle" style=""><%= service.getPerApT()%>%</th>
 
-                                <th class="col 9 text-wrap text-center align-middle" style=""><%= service.getPerSaPt() %>%</th>
+                                <th class="col 8 text-wrap text-center align-middle" style=""><%= service.getPertl1Pt()%>%</th>
 
-                                <th class="col 10 text-wrap text-center align-middle" style=""><%= CfgHandler.getFormatedTimeFromSeconds(service.getAvgSecA()) %></th>
+                                <th class="col 9 text-wrap text-center align-middle" style=""><%= service.getPerSaPt()%>%</th>
 
-                                <th class="col 11 text-wrap text-center align-middle" style=""><%= service.getNbCa() %></th>
+                                <th class="col 10 text-wrap text-center align-middle" style=""><%= CfgHandler.getFormatedTimeFromSeconds(service.getAvgSecA())%></th>
 
-                                <th class="col 12 text-wrap text-center align-middle" style=""><%= service.getPercapt() %>%</th>
+                                <th class="col 11 text-wrap text-center align-middle" style=""><%= service.getNbCa()%></th>
 
-                                <th class="col 13 text-wrap text-center align-middle" style=""><%= CfgHandler.getFormatedTimeFromSeconds(service.getAvgSecT()) %></th>
+                                <th class="col 12 text-wrap text-center align-middle" style=""><%= service.getPercapt()%>%</th>
 
-                                <th class="col 14 text-wrap text-center align-middle" style=""><%= service.getNbCt() %></th>
+                                <th class="col 13 text-wrap text-center align-middle" style=""><%= CfgHandler.getFormatedTimeFromSeconds(service.getAvgSecT())%></th>
 
-                                <th class="col 15 text-wrap text-center align-middle" style=""><%= service.getPerctPt() %>%</th>
-<%}}%>
-                        </tr>
-<%
-        }
-    }
-%>
+                                <th class="col 14 text-wrap text-center align-middle" style=""><%= service.getNbCt()%></th>
+
+                                <th class="col 15 text-wrap text-center align-middle" style=""><%= service.getPerctPt()%>%</th>
+                                    <%}
+                                        }%>
+                            </tr>
+                            <%
+                                    }
+                                }
+                            %>
 
 
-                    </tbody>
-                </table>
-</div>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="footer">
 
@@ -442,40 +440,40 @@ for (GblRow service : services ) {
                     console.log("zone ids:");
                     console.log(checkedZonesIds);
                 };
-                
+
                 let refreshSelectAllZonesCheckbox = function () {
-                    if($(".check").length === $(".check:checked").length && $(".zoneCheckbox").length === $(".zoneCheckbox:checked").length){
-                        $("#selectAllZones").prop("checked",true);
-                    }else{
-                        $("#selectAllZones").prop("checked",false);
+                    if ($(".check").length === $(".check:checked").length && $(".zoneCheckbox").length === $(".zoneCheckbox:checked").length) {
+                        $("#selectAllZones").prop("checked", true);
+                    } else {
+                        $("#selectAllZones").prop("checked", false);
                     }
                 };
-                
-                $("#zones").on('change',".check", function () {
+
+                $("#zones").on('change', ".check", function () {
                     let id_zone = $(this).attr("data-zoneId");
                     let agencesInZone = $("input[data-zoneId=" + id_zone + "]");
                     let agencesSelectedInZone = $("input[data-zoneId=" + id_zone + "]:checked");
-                    if(agencesInZone.length === agencesSelectedInZone.length){
-                        $("input[value=" + id_zone + "]").prop("checked",true);
-                    }else{
-                        $("input[value=" + id_zone + "]").prop("checked",false);
+                    if (agencesInZone.length === agencesSelectedInZone.length) {
+                        $("input[value=" + id_zone + "]").prop("checked", true);
+                    } else {
+                        $("input[value=" + id_zone + "]").prop("checked", false);
                     }
                     sessionStorage.setItem("selectedZones", JSON.stringify(getCheckedZones()));
                     sessionStorage.setItem("dbs", JSON.stringify(getCheckedBoxes()));
                     refreshSelectAllZonesCheckbox();
                     updateLinks();
-                    
+
                 });
-                $("#zones").on('change',".zoneCheckbox", function () {
+                $("#zones").on('change', ".zoneCheckbox", function () {
                     let selectedZones = getCheckedZones();
                     // change selected agences
                     let $checkbox = $(this);
-                    if($checkbox.prop("checked")){
+                    if ($checkbox.prop("checked")) {
                         let id_zone = $checkbox.val();
-                        $("input[data-zoneId=" + id_zone + "]").prop("checked",true);
-                    }else{
+                        $("input[data-zoneId=" + id_zone + "]").prop("checked", true);
+                    } else {
                         let id_zone = $checkbox.val();
-                        $("input[data-zoneId=" + id_zone + "]").prop("checked",false);
+                        $("input[data-zoneId=" + id_zone + "]").prop("checked", false);
                     }
                     sessionStorage.setItem("selectedZones", JSON.stringify(getCheckedZones()));
                     sessionStorage.setItem("dbs", JSON.stringify(getCheckedBoxes()));
@@ -483,11 +481,11 @@ for (GblRow service : services ) {
                     updateLinks();
                 });
                 $(".ck-text").on('click', function () {
-                   
+
                 });
-                
+
                 $(".zone-ck-text").on('click', function () {
-                    
+
                 });
                 $("#selectAllZones").on('change', function () {
                     if ($(this).prop("checked")) {

@@ -16,13 +16,13 @@ public class UpdateAgencesAllData extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String id = req.getParameter("id");
+        String id = req.getParameter("id_agence");
         if(StringUtils.isNoneBlank(id)){
             //new Updater().restoreAllAgenceDataById(UUID.fromString(id));
             new UpdateController().restoreAllAgenceDataById(UUID.fromString(id));
-            resp.sendRedirect("/QData/setting/update.jsp?err="+URLEncoder.encode(new AgenceController().getAgenceById(UUID.fromString(id)).getName() + " Updated (Globale)", "UTF-8"));
+            resp.sendRedirect("/QData/setting/update.jsp?id_agence="+id+"&err="+URLEncoder.encode(new AgenceController().getAgenceById(UUID.fromString(id)).getName() + " Updated (Globale)", "UTF-8"));
         }else{
-            resp.sendRedirect("/QData/setting/update.jsp?err="+URLEncoder.encode("Erreur sur l'identifiant", "UTF-8"));
+            resp.sendRedirect("/QData/setting/update.jsp?id_agence="+id+"&err="+URLEncoder.encode("Erreur sur l'identifiant", "UTF-8"));
         }
     }
    

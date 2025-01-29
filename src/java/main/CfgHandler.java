@@ -55,10 +55,11 @@ public class CfgHandler {
     private final String gltTempExcel = "\\cfg\\excel\\glttemp.xlsx";
 
     //Pages
-    public static String PAGE_HOME = "/QData/home.jsp";
-    public static String PAGE_REPORT = "/QData/report.jsp";
-    public static String PAGE_TASK = "/QData/setting/taches.jsp";
-    public static String PAGE_GBL_REPORT = "/QData/report/gbl.jsp";
+    public static final String PAGE_HOME = "/QData/home.jsp";
+    public static final String PAGE_REPORT = "/QData/report.jsp";
+    public static final String PAGE_TASK = "/QData/setting/taches.jsp";
+    public static final String PAGE_GBL_REPORT = "/QData/report/gbl.jsp";
+    public static final String PAGE_EMP_REPORT = "/QData/report/emp.jsp";
 
     //API URL
     public static String API_GBL_TABLE_JSON = "QStates/getglobaletable";
@@ -110,7 +111,16 @@ public class CfgHandler {
     public CfgHandler(HttpServletRequest r) throws FileNotFoundException, IOException {
         this.request = r;
     }
-
+    
+    public static String prepareTableJsonUrl(String host, int port, String apiPoint, String date1, String date2) {
+        String url = "http://" + host
+                + ":" + port
+                + "/" + apiPoint
+                + "?date1=" + date1
+                + "&date2=" + date2;
+        return url;
+    }
+    
     public String getPropertie(String name) throws IOException {
 
         prop = new Properties();

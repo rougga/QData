@@ -3,12 +3,14 @@ package main.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import main.CfgHandler;
 import main.controller.AgenceController;
 import main.modal.Agence;
 import org.apache.commons.lang3.StringUtils;
@@ -24,18 +26,20 @@ public class EditDatabase extends HttpServlet {
                 response.sendRedirect("./index.jsp");
             } else {
                 if (Objects.equals(request.getSession().getAttribute("grade"), "adm")) {
-                    request.setCharacterEncoding("UTF-8");
                     String name = request.getParameter("name");
                     String host = request.getParameter("host");
                     String port = request.getParameter("port");
-                    String database = request.getParameter("database");
-                    String username = request.getParameter("username");
-                    String password = request.getParameter("password");
                     String zoneId = request.getParameter("zone");
                     String id_agence = request.getParameter("id_agence");
                     int status = 1;
-                    if (StringUtils.isNoneBlank(name, host, port, database, username, password, id_agence)) {
-                        Agence a = new Agence(UUID.fromString(id_agence), name, host, Integer.parseInt(port), database, username, password, status);
+                    if (StringUtils.isNoneBlank(name, host, port, id_agence)) {
+                        Agence a = new Agence(
+                                UUID.fromString(id_agence),
+                                name,
+                                host,
+                                Integer.parseInt(port),
+                                CfgHandler.getFormatedDateAsString(new Date()),
+                                status);
                         AgenceController ac = new AgenceController();
                         if (ac.editAgence(a)) {
                             if (StringUtils.isNotBlank(zoneId)) {

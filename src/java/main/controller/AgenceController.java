@@ -28,9 +28,16 @@ public class AgenceController {
         try {
             List<Agence> agences = new ArrayList();
             PgConnection con = new PgConnection();
-            ResultSet r = con.getStatement().executeQuery("select * from agence order by name;");
+            ResultSet r = con.getStatement().executeQuery("select * from rougga_agences order by name;");
             while (r.next()) {
-                agences.add(new Agence(UUID.fromString(r.getString("id")), r.getString("name"), r.getString("host"), r.getInt("port"), r.getString("database"), r.getString("username"), r.getString("password"), r.getInt("status")));
+                Agence a = new Agence();
+                a.setId(UUID.fromString(r.getString("id")));
+                a.setName(r.getString("name"));
+                a.setHost(r.getString("host"));
+                a.setPort(r.getInt("port"));
+                a.setLastupdated_at(r.getString("lastupdated_at"));
+                a.setStatus(r.getInt("status"));
+                agences.add(a);
             }
             con.closeConnection();
             return agences;
@@ -64,19 +71,13 @@ public class AgenceController {
     public int addAgence(Agence a) {
         try {
             PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into agence values(?,?,?,?,?,?,?,?);");
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into rougga_agences values(?,?,?,?,?,?);");
             p.setString(1, a.getId().toString());
             p.setString(2, a.getName());
             p.setString(3, a.getHost());
             p.setInt(4, a.getPort());
-            p.setString(5, a.getDatabase());
-            p.setString(6, a.getUsername());
-            p.setString(7, a.getPassword());
-            p.setInt(8, a.getStatus());
-            p.execute();
-            p = con.getStatement().getConnection().prepareStatement("insert into lastupdate values(?,to_timestamp(?,'YYYY-MM-DD HH24:MI:SS'));");
-            p.setString(1, a.getId().toString());
-            p.setString(2, getFormatedDateAsString(getFormatedDateAsDate("1999-12-20 00:00:00")));
+            p.setString(5, a.getLastupdated_at());
+            p.setInt(6, a.getStatus());
             p.execute();
             con.closeConnection();
             return 1;
@@ -90,20 +91,14 @@ public class AgenceController {
     public boolean editAgence(Agence a) {
         try {
             PgConnection con = new PgConnection();
-            String SQL = "update agence set name=?,host=?,port=?,database=?,username=?,password=?,status=? where id=?;";
+            String SQL = "update rougga_agences set name=?,host=?,port=?,lastupdated_at=?,status=? where id=?;";
             PreparedStatement p = con.getStatement().getConnection().prepareStatement(SQL);
             p.setString(1, a.getName());
             p.setString(2, a.getHost());
             p.setInt(3, a.getPort());
-            p.setString(4, a.getDatabase());
-            p.setString(5, a.getUsername());
-            p.setString(6, a.getPassword());
-            p.setInt(7, a.getStatus());
-            p.setString(8, a.getId().toString());
-            p.execute();
-            p = con.getStatement().getConnection().prepareStatement("update lastupdate set last_update=to_timestamp(?,'YYYY-MM-DD HH24:MI:SS') where id_db=?;");
-            p.setString(1, getFormatedDateAsString(new Date()));
-            p.setString(2, a.getId().toString());
+            p.setString(4, a.getLastupdated_at());
+            p.setInt(5, a.getStatus());
+            p.setString(6, a.getId().toString());
             p.execute();
             con.closeConnection();
             return true;
@@ -116,13 +111,18 @@ public class AgenceController {
 
     public Agence getAgenceById(UUID id) {
         try {
-            Agence a;
+            Agence a = new Agence();
             PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("select * from agence where id=? ;");
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("select * from rougga_agences where id=? ;");
             p.setString(1, id.toString());
             ResultSet r = p.executeQuery();
             if (r.next()) {
-                a = new Agence(id, r.getString("name"), r.getString("host"), r.getInt("port"), r.getString("database"), r.getString("username"), r.getString("password"), r.getInt("status"));
+                a.setId(id);
+                a.setName(r.getString("name"));
+                a.setHost(r.getString("host"));
+                a.setPort(r.getInt("port"));
+                a.setLastupdated_at(r.getString("lastupdated_at"));
+                a.setStatus(r.getInt("status"));
                 con.closeConnection();
                 return a;
             } else {
@@ -138,35 +138,13 @@ public class AgenceController {
     public int deleteAgenceById(UUID id) {
         try {
             PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("delete from agence where id=?;");
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("delete from rougga_agences where id=?;");
             p.setString(1, id.toString());
             p.execute();
-            con.closeConnection();
             return 1;
-
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
             return 0;
-        }
-    }
-
-    public boolean isOnline(UUID id) {
-        Agence a = getAgenceById(id);
-        if (a != null) {
-            try {
-                //Socket socket = new Socket(a.getHost(), a.getPort());
-                //socket.close();
-                PgMultiConnection con = new PgMultiConnection(a.getHost(), String.valueOf(a.getPort()), a.getDatabase(), a.getUsername(), a.getPassword());
-                if (con != null) {
-                    con.closeCon();
-                }
-                return true;
-            } catch (ClassNotFoundException | SQLException ex) {
-                return false;
-            }
-
-        } else {
-            return false;
         }
     }
 
@@ -183,7 +161,6 @@ public class AgenceController {
                 return Boolean.parseBoolean(result);
             }
             return false;
-
         } else {
             return false;
         }
@@ -192,7 +169,7 @@ public class AgenceController {
     public int updateName(UUID id, String name) {
         try {
             PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("update agence set name=? where id=?;");
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("update rougga_agences set name=? where id=?;");
             p.setString(1, name);
             p.setString(2, id.toString());
             p.execute();
@@ -206,36 +183,18 @@ public class AgenceController {
     }
 
     public Date getLastUpdate(UUID id) {
-        try {
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("select * from lastupdate where id_db=? ;");
-            p.setString(1, id.toString());
-            ResultSet r = p.executeQuery();
-            if (r.next()) {
-                Date d = getFormatedDateAsDate(r.getString("last_update"));
-                con.closeConnection();
-                return d;
-            } else {
-                con.closeConnection();
-                return null;
-            }
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+        Agence a = this.getAgenceById(id);
+        if (a != null) {
+            return CfgHandler.getFormatedDateAsDate(a.getLastupdated_at());
         }
+        return null;
     }
 
     public void setLastUpdate(UUID id) {
-        try {
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("update lastupdate set  last_update=to_timestamp(?,'YYYY-MM-DD HH24:MI:SS') where id_db=?;");
-            p.setString(1, getFormatedDateAsString(new Date()));
-            p.setString(2, id.toString());
-            p.execute();
-            con.closeConnection();
-
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        Agence a = this.getAgenceById(id);
+        if (a != null) {
+            a.setLastupdated_at(CfgHandler.getFormatedDateAsString(new Date()));
+            this.editAgence(a);
         }
     }
 
@@ -247,7 +206,6 @@ public class AgenceController {
             p.setString(2, id_zone.toString());
             p.execute();
             con.closeConnection();
-
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
         }
@@ -301,75 +259,6 @@ public class AgenceController {
         }
     }
 
-    public void updateAllAgenceName() {
-        List<Agence> agences = new AgenceController().getAllAgence();
-        if (agences != null) {
-            PgMultiConnection con;
-            System.out.println("-- Updating Agence names....");
-            for (int i = 0; i < agences.size(); i++) {
-                try {
-                    con = new PgMultiConnection(agences.get(i).getHost(), String.valueOf(agences.get(i).getPort()), agences.get(i).getDatabase(), agences.get(i).getUsername(), agences.get(i).getPassword());
-                    String SQL = "SELECT value FROM t_basic_par where name='BRANCH_NAME' ;";
-                    ResultSet r = con.getStatement().executeQuery(SQL);
-                    if (r.next()) {
-                        updateName(agences.get(i).getId(), r.getString("value"));
-                        setLastUpdate(agences.get(i).getId());
-                    }
-                    con.closeConnection();
-                } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
-                }
-            }
-            System.out.println("-- Agence names updated.");
-        }
-
-    }
-
-    public String getFormatedDateAsString(Date date) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (date != null) {
-            return format.format(date);
-        } else {
-            return null;
-        }
-    }
-
-    public Date getFormatedDateAsDate(String date) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (date != null) {
-            try {
-                return format.parse(date);
-            } catch (ParseException ex) {
-                Logger.getLogger(TicketController.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    public void updateAgenceNameById(UUID id) {
-        Agence a = new AgenceController().getAgenceById(id);
-        if (a != null) {
-            PgMultiConnection con;
-            System.out.println("-- Updating Agence " + a.getName() + " :....");
-            try {
-                con = new PgMultiConnection(a.getHost(), String.valueOf(a.getPort()), a.getDatabase(), a.getUsername(), a.getPassword());
-                String SQL = "SELECT value FROM t_basic_par where name='BRANCH_NAME' ;";
-                ResultSet r = con.getStatement().executeQuery(SQL);
-                if (r.next()) {
-                    updateName(a.getId(), r.getString("value"));
-                    setLastUpdate(a.getId());
-                }
-                con.closeConnection();
-            } catch (ClassNotFoundException | SQLException ex) {
-                Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex.getMessage());
-            }
-
-            System.out.println("-- Agence " + a.getName() + " updated.");
-        }
-    }
-
     public List<Agence> getAgencesFromStringArray(String[] agences) {
         List<Agence> dbs = new ArrayList<>();
         if (agences != null) {
@@ -396,7 +285,20 @@ public class AgenceController {
     }
 
     public Date getOldesTicketDate(UUID id_agence) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Agence a = this.getAgenceById(id_agence);
+        if (a != null) {
+            StringBuilder sb = new StringBuilder("http://");
+            sb.append(a.getHost());
+            sb.append(":").append(a.getPort());
+            sb.append("/").append(CfgHandler.APP_NODE);
+            sb.append("/getoldestticketdate");
+
+            JSONObject result = UpdateController.getJsonFromUrl(sb.toString());
+            String oldesTicketDate = (String) result.get("oldestDate");
+            System.err.println("OldestTicketDate in agence:"+a.getName()+" is "+ oldesTicketDate);
+            return CfgHandler.getFormatedDateAsDate(oldesTicketDate);
+        }
+        return null;
     }
 
 }

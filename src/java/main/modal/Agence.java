@@ -1,44 +1,36 @@
-
 package main.modal;
 
 import java.util.UUID;
 
 public class Agence {
+
     private UUID id;
     private String name;
     private String host;
     private int port;
-    private String database;
-    private String username;
-    private String password;
+    private String lastupdated_at;
     private int status;
 
     public Agence() {
     }
 
-    public Agence(String name, String host, int port, String database, String username, String password,int status) {
-        this.id=UUID.randomUUID();
+    public Agence(String name, String host, int port, String lastupdated_at, int status) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.host = host;
         this.port = port;
-        this.database = database;
-        this.username = username;
-        this.password = password;
+        this.lastupdated_at = lastupdated_at;
         this.status = status;
     }
 
-    
-    public Agence(UUID id, String name, String host, int port, String database, String username, String password,int status) {
+    public Agence(UUID id, String name, String host, int port, String lastupdated_at, int status) {
         this.id = id;
         this.name = name;
         this.host = host;
         this.port = port;
-        this.database = database;
-        this.username = username;
-        this.password = password;
+        this.lastupdated_at = lastupdated_at;
         this.status = status;
     }
-    
 
     public UUID getId() {
         return id;
@@ -56,16 +48,12 @@ public class Agence {
         return port;
     }
 
-    public String getDatabase() {
-        return database;
+    public String getLastupdated_at() {
+        return lastupdated_at;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
+    public int getStatus() {
+        return status;
     }
 
     public void setId(UUID id) {
@@ -84,24 +72,12 @@ public class Agence {
         this.port = port;
     }
 
-    public void setDatabase(String database) {
-        this.database = database;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setLastupdated_at(String lastupdated_at) {
+        this.lastupdated_at = lastupdated_at;
     }
 
     public void setStatus(int status) {
         this.status = status;
     }
 
-    public int getStatus() {
-        return status;
-    }
-    
- }
+}

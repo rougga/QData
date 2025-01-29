@@ -20,7 +20,7 @@ public class ZoneController {
         try {
             List<Zone> zones = new ArrayList();
             PgConnection con = new PgConnection();
-            ResultSet r = con.getStatement().executeQuery("select * from rougga_zone order by name;");
+            ResultSet r = con.getStatement().executeQuery("select * from rougga_zones order by name;");
             while (r.next()) {
                 zones.add(new Zone(UUID.fromString(r.getString("id")),
                         r.getString("name"),
@@ -39,7 +39,7 @@ public class ZoneController {
     public boolean addZone(Zone z) {
         try {
             PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into rougga_zone values(?,?,?,?);");
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into rougga_zones values(?,?,?,?);");
             p.setString(1, z.getId().toString());
             p.setString(2, z.getName());
             p.setString(3, z.getCity());
@@ -57,7 +57,7 @@ public class ZoneController {
     public boolean editZone(Zone z) {
         try {
             PgConnection con = new PgConnection();
-            String SQL = "update rougga_zone set name=?, city=?, code=? where id=?;";
+            String SQL = "update rougga_zones set name=?, city=?, code=? where id=?;";
             PreparedStatement p = con.getStatement().getConnection().prepareStatement(SQL);
             p.setString(1, z.getName());
             p.setString(2, z.getCity());
@@ -77,7 +77,7 @@ public class ZoneController {
         try {
             Zone a;
             PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("select * from rougga_zone where id=? ;");
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("select * from rougga_zones where id=? ;");
             p.setString(1, id.toString());
             ResultSet r = p.executeQuery();
             if (r.next()) {
@@ -101,7 +101,7 @@ public class ZoneController {
     public boolean deleteZoneById(UUID id) {
         try {
             PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("delete from rougga_zone where id=?;");
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("delete from rougga_zones where id=?;");
             p.setString(1, id.toString());
             p.execute();
             con.closeConnection();

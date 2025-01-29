@@ -20,7 +20,7 @@ public class UtilisateurController {
         try {
             List<Utilisateur> utilisateurs = new ArrayList();
             PgConnection con = new PgConnection();
-            ResultSet r = con.getStatement().executeQuery("select * from rougga_user order by date;");
+            ResultSet r = con.getStatement().executeQuery("select * from rougga_users order by date;");
             while (r.next()) {
                 utilisateurs.add(
                         new Utilisateur(
@@ -48,7 +48,7 @@ public class UtilisateurController {
         Utilisateur u = null;
         try {
             PgConnection con = new PgConnection();
-            PreparedStatement ps = con.getStatement().getConnection().prepareStatement("select * from rougga_user where id=?;");
+            PreparedStatement ps = con.getStatement().getConnection().prepareStatement("select * from rougga_users where id=?;");
             ps.setString(1, id.toString());
             ResultSet r = ps.executeQuery();
             if (r.next()) {
@@ -74,7 +74,7 @@ public class UtilisateurController {
         Utilisateur u = null;
         try {
             PgConnection con = new PgConnection();
-            PreparedStatement ps = con.getStatement().getConnection().prepareStatement("select id from rougga_user where username=?;");
+            PreparedStatement ps = con.getStatement().getConnection().prepareStatement("select id from rougga_users where username=?;");
             ps.setString(1, username);
             ResultSet r = ps.executeQuery();
             if (r.next()) {
@@ -92,7 +92,7 @@ public class UtilisateurController {
     public boolean AddUtilisateur(Utilisateur u) {
           try {
             PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into rougga_user (id,username,password,grade,first_name,last_name,sponsor) values(?,?,?,?,?,?,?);");
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into rougga_users (id,username,password,grade,first_name,last_name,sponsor) values(?,?,?,?,?,?,?);");
             p.setString(1, u.getId().toString());
             p.setString(2, u.getUsername());
             p.setString(3, u.getPassword());
@@ -113,7 +113,7 @@ public class UtilisateurController {
     public boolean deleteUtilisateurById(UUID id) {
        try {
             PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("delete from rougga_user where id=?;");
+            PreparedStatement p = con.getStatement().getConnection().prepareStatement("delete from rougga_users where id=?;");
             p.setString(1, id.toString());
             p.execute();
             con.closeConnection();
