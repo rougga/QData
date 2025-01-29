@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><cibles>
+    
+    
+    
+    
+    <service>
+        <id>3d392d4a6a394b1fb608ab61c0f4903c</id>
+        <name>Prioraitaire</name>
+        <cibleA>600</cibleA>
+        <cibleT>60</cibleT>
+        <dcible>20</dcible>
+    </service>
+<service><id>a3f3ea1c52224201b303bef39df1060c</id><name>Reclamation</name><cibleA>40</cibleA><cibleT>40</cibleT><dcible>20</dcible></service></cibles>

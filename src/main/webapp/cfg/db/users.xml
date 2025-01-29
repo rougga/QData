@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><users> 
+    <user>
+        <username>admin</username>
+        <password>$31$16$3HyoGMKLc4EvcO0ljwLKNY8pclDUAmd7o_oAQUA7J20</password>
+        <grade>adm</grade>
+        <firstName/>
+        <lastName/>
+        <date>2020-07-22</date>
+        <sponsor/>
+    </user>
+    <user>
+        <username>user</username>
+        <password>$31$16$3HyoGMKLc4EvcO0ljwLKNY8pclDUAmd7o_oAQUA7J20</password>
+        <grade>user</grade>
+        <firstName/>
+        <lastName/>
+        <date>2020-07-22</date>
+        <sponsor/>
+    </user>
+    
+</users>
