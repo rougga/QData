@@ -1,12 +1,11 @@
 package ma.rougga.qdata.modal.report;
 
-import ma.rougga.qdata.modal.*;
 import java.util.UUID;
 
 public class GblRow {
 
     private UUID id;
-    private String idService;
+    private String serviceId;
     private String serviceName;
     private long nbT;
     private long nbTt;
@@ -23,14 +22,14 @@ public class GblRow {
     private long nbCt;
     private Double perctPt;
     private String date;
-    private String idAgence;
+    private String agenceId;
 
     public GblRow() {
     }
 
     public GblRow(UUID id, String idService, String serviceName, long nbT, long nbTt, long nbA, long nbTl1, long nbSa, Double perApT, Double pertl1Pt, Double perSaPt, Double avgSecA, long nbCa, Double percapt, Double avgSecT, long nbCt, Double perctPt, String date, String idAgence) {
         this.id = id;
-        this.idService = idService;
+        this.serviceId = idService;
         this.serviceName = serviceName;
         this.nbT = nbT;
         this.nbTt = nbTt;
@@ -47,7 +46,7 @@ public class GblRow {
         this.nbCt = nbCt;
         this.perctPt = perctPt;
         this.date = date;
-        this.idAgence = idAgence;
+        this.agenceId = idAgence;
     }
 
    
@@ -56,8 +55,8 @@ public class GblRow {
         return id;
     }
 
-    public String getIdService() {
-        return idService;
+    public String getServiceId() {
+        return serviceId;
     }
 
     public String getServiceName() {
@@ -124,16 +123,16 @@ public class GblRow {
         return date;
     }
 
-    public String getIdAgence() {
-        return idAgence;
+    public String getAgenceId() {
+        return agenceId;
     }
 
     public void setId(UUID id) {
         this.id = id;
     }
 
-    public void setIdService(String idService) {
-        this.idService = idService;
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
     }
 
     public void setServiceName(String serviceName) {
@@ -200,8 +199,8 @@ public class GblRow {
         this.date = date;
     }
 
-    public void setIdAgence(String idAgence) {
-        this.idAgence = idAgence;
+    public void setAgenceId(String agenceId) {
+        this.agenceId = agenceId;
     }
 
 }

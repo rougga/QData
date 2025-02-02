@@ -59,23 +59,23 @@ public class Add extends HttpServlet {
                         if (StringUtils.isNoneBlank(db_id, id, cibleAH, cibleAM, cibleAS, cibleTH, cibleTM, cibleTS, cibleD)) {
 
                             if (!Objects.equals(id, "0")) {
-                                double cibleA = (Integer.parseInt(cibleAH) * 3600) + (Integer.parseInt(cibleAM) * 60) + Integer.parseInt(cibleAS);
-                                double cibleT = (Integer.parseInt(cibleTH) * 3600) + (Integer.parseInt(cibleTM) * 60) + Integer.parseInt(cibleTS);
-                                float dCible = Float.parseFloat(cibleD);
-                                try {
-                                    CibleController cc = new CibleController();
-                                    if (cc.isUnique(id, db_id)) {
-                                        Cible c = new Cible(id, UUID.fromString(db_id), cibleA, cibleT, dCible);
-                                        cc.addCible(c);
-                                        cc.addCibleXml(c);
-                                        response.sendRedirect("./setting/cibles.jsp?err=Cible%20ajoute.");
-                                    } else {
-                                        response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode("Le cible existe déjà", "UTF-8"));
-                                    }
-
-                                } catch (Exception e) {
-                                    response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
-                                }
+//                                double cibleA = (Integer.parseInt(cibleAH) * 3600) + (Integer.parseInt(cibleAM) * 60) + Integer.parseInt(cibleAS);
+//                                double cibleT = (Integer.parseInt(cibleTH) * 3600) + (Integer.parseInt(cibleTM) * 60) + Integer.parseInt(cibleTS);
+//                                float dCible = Float.parseFloat(cibleD);
+//                                try {
+//                                    CibleController cc = new CibleController();
+//                                    if (cc.isUnique(id, db_id)) {
+//                                        Cible c = new Cible(id, UUID.fromString(db_id), cibleA, cibleT, dCible);
+//                                        cc.addCible(c);
+//                                        cc.addCibleXml(c);
+//                                        response.sendRedirect("./setting/cibles.jsp?err=Cible%20ajoute.");
+//                                    } else {
+//                                        response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode("Le cible existe déjà", "UTF-8"));
+//                                    }
+//
+//                                } catch (Exception e) {
+//                                    response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode(e.getMessage(), "UTF-8"));
+//                                }
 
                             }
 

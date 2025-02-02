@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><title>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <gbl>Rapport Globale</gbl>
+    <emp>Rapport Employée</emp>
+    <empser>Rapport Employée par service</empser>
+    <gch>Rapport Guichet</gch>
+    <gchserv>Rapport Guichet par service</gchserv>
+    <gla>Grille d'attent</gla>
+    <glt>Grille de traitement</glt>
+    <apl>Apple</apl>
+    <ndt>Nombre de tickets edités</ndt>
+    <ndtt>Nombre de tickets traité</ndtt>
+    <ndta>Nombre de tickets absents</ndta>
+    <ndtsa>Nombre de tickets sans affectation</ndtsa>
+    <cnx>Connexions</cnx>
+    <remp>Rendement Employés</remp>
+    <sgch>Supervision:Emùployee- Guichet</sgch>
+    <ser>Supervision: Service</ser>
+    <tch>Rapport tache</tch>
+</title>

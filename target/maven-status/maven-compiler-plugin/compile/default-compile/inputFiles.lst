@@ -6,11 +6,9 @@ C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\modal\Servic
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\controller\UtilisateurController.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\modal\report\GblRow.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\modal\Utilisateur.java
-C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\api\UpdateAllTickets.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\handler\TitleHandler.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\servlets\EditDatabase.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\PgMultiConnection.java
-C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\api\UpdateNow.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\servlets\DeleteCible.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\Stats.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\handler\DbHandler.java
@@ -40,7 +38,6 @@ C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\controller\r
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\modal\Window.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\servlets\AddZone.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\api\UpdateAgencesTodayData.java
-C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\api\UpdateAllLoginLog.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\PgConnection.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\modal\LoginLog.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\servlets\Delete.java
@@ -53,13 +50,12 @@ C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\controller\r
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\servlets\Deletezone.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\Export.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\api\UpdateAgencesAllData.java
+C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\CPConnection.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\servlets\DeleteUtilisateur.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\api\GetTables.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\Tools.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\controller\ZoneController.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\handler\XmlHandler.java
-C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\api\TodayUpdateAgence.java
-C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\api\UpdateAgence.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\servlets\AddDatabase.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\servlets\Edit.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\controller\CibleController.java

@@ -13,6 +13,7 @@ import ma.rougga.qdata.controller.CibleController;
 import ma.rougga.qdata.controller.UtilisateurController;
 import ma.rougga.qdata.controller.ZoneController;
 import ma.rougga.qdata.modal.Agence;
+import ma.rougga.qdata.modal.Cible;
 import ma.rougga.qdata.modal.Zone;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -24,8 +25,6 @@ public class JsonGenerator {
     private AgenceController ac = new AgenceController();
     private ZoneController zc = new ZoneController();
     private UtilisateurController uc = new UtilisateurController();
-    
-
 
     private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -36,7 +35,7 @@ public class JsonGenerator {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
-    public JSONObject generateSimpleGblTable(String d1, String d2, String[] dbs,HttpServletRequest request) {
+    public JSONObject generateSimpleGblTable(String d1, String d2, String[] dbs, HttpServletRequest request) {
 
         this.date1 = (d1 == null) ? format.format(new Date()) : d1;
         this.date2 = (d2 == null) ? format.format(new Date()) : d2;
@@ -114,6 +113,14 @@ public class JsonGenerator {
                         data.add(r.getFloat("perSApT"));
                         data.add(getFormatedTime(r.getFloat("avgSec_A")));
 
+                        long cibleA = 0;
+                        long cibleT = 0;
+                        Cible cible = cc.getOne(id,a.getId().toString());
+                        if (cible != null) {
+                            cibleA = cible.getCibleA();
+                            cibleT = cible.getCibleT();
+                        }
+
                         String cibleSQL = "SELECT G1.BIZ_TYPE_ID, "
                                 + "G1.NAME, "
                                 + "G1.NB_TT, "
@@ -140,13 +147,13 @@ public class JsonGenerator {
                                 + "(SELECT COUNT(*) "
                                 + "FROM T_TICKET T2 "
                                 + "WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID "
-                                + "AND DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric >  " + cc.getOne(id, a.getId()).getCibleA() + " "
+                                + "AND DATE_PART('epoch'::text, T2.CALL_TIME - T2.TICKET_TIME)::numeric >  " + cibleA + " "
                                 + "AND T2.STATUS = 4  " + dateCon + " ) AS NB_CA, "
                                 + " "
                                 + "(SELECT COUNT(*) "
                                 + "FROM T_TICKET T2 "
                                 + "WHERE T2.BIZ_TYPE_ID = T1.BIZ_TYPE_ID "
-                                + "AND DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric >  " + cc.getOne(id, a.getId()).getCibleT() + " "
+                                + "AND DATE_PART('epoch'::text, T2.FINISH_TIME - T2.START_TIME)::numeric >  " + cibleT + " "
                                 + "AND T2.STATUS = 4  " + dateCon + ") AS NB_CT "
                                 + "FROM T_TICKET T1, "
                                 + "T_BIZ_TYPE B "

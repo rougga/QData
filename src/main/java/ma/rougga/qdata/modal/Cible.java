@@ -4,58 +4,70 @@ package ma.rougga.qdata.modal;
 import java.util.UUID;
 
 public class Cible {
-    String biz_type_id;
-    UUID db_id;
-    double cibleA;
-    double cibleT;
-    float dCible;
+    String service_id,service_name;
+    UUID agence_id;
+    long cibleA;
+    long cibleT;
+    double ciblePer;
 
-    public Cible(String biz_type_id, UUID db_id, double cibleA, double cibleT, float dCible) {
-        this.biz_type_id = biz_type_id;
-        this.db_id = db_id;
+    public Cible() {
+    }
+
+    public Cible(String service_id, String service_name, UUID agence_id, long cibleA, long cibleT, double ciblePer) {
+        this.service_id = service_id;
+        this.service_name = service_name;
+        this.agence_id = agence_id;
         this.cibleA = cibleA;
         this.cibleT = cibleT;
-        this.dCible = dCible;
+        this.ciblePer = ciblePer;
     }
 
-    public String getBiz_type_id() {
-        return biz_type_id;
+    public String getService_id() {
+        return service_id;
     }
 
-    public UUID getDb_id() {
-        return db_id;
+    public String getService_name() {
+        return service_name;
     }
 
-    public double getCibleA() {
+    public UUID getAgence_id() {
+        return agence_id;
+    }
+
+    public long getCibleA() {
         return cibleA;
     }
 
-    public double getCibleT() {
+    public long getCibleT() {
         return cibleT;
     }
 
-    public float getdCible() {
-        return dCible;
+    public double getCiblePer() {
+        return ciblePer;
     }
 
-    public void setBiz_type_id(String biz_type_id) {
-        this.biz_type_id = biz_type_id;
+    public void setService_id(String service_id) {
+        this.service_id = service_id;
     }
 
-    public void setDb_id(UUID db_id) {
-        this.db_id = db_id;
+    public void setService_name(String service_name) {
+        this.service_name = service_name;
     }
 
-    public void setCibleA(double cibleA) {
+    public void setAgence_id(UUID agence_id) {
+        this.agence_id = agence_id;
+    }
+
+    public void setCibleA(long cibleA) {
         this.cibleA = cibleA;
     }
 
-    public void setCibleT(double cibleT) {
+    public void setCibleT(long cibleT) {
         this.cibleT = cibleT;
     }
 
-    public void setdCible(float dCible) {
-        this.dCible = dCible;
+    public void setCiblePer(double ciblePer) {
+        this.ciblePer = ciblePer;
     }
-    
+
 }

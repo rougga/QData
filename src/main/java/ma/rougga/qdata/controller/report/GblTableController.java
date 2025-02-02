@@ -505,21 +505,21 @@ public class GblTableController {
                                 id_service);
                         if (row != null) {
                             row.setServiceName(service.get("name").toString());
-                            System.out.println("Nb. T : " + row.getNbT() + " to " + data.get("nb_t"));
-                            row.setNbT((long) data.get("nb_t"));
-                            row.setNbTt((long) data.get("nb_tt"));
-                            row.setNbA((long) data.get("nb_a"));
-                            row.setNbTl1((long) data.get("nb_tl1"));
-                            row.setNbSa((long) data.get("nb_sa"));
-                            row.setPerApT((Double) data.get("perApT"));
-                            row.setPertl1Pt((Double) data.get("PERTL1pt"));
-                            row.setPerSaPt((Double) data.get("perSApT"));
-                            row.setAvgSecA((Double) data.get("avgSec_A"));
-                            row.setNbCa((long) data.get("nb_ca"));
-                            row.setPercapt((Double) data.get("percapt"));
-                            row.setAvgSecT((Double) data.get("avgSec_T"));
-                            row.setNbCt((long) data.get("nb_ct"));
-                            row.setPerctPt((Double) data.get("perctpt"));
+                            System.out.println("Nb. T : " + row.getNbT() + " to " + service.get("nb_t"));
+                            row.setNbT((long) service.get("nb_t"));
+                            row.setNbTt((long) service.get("nb_tt"));
+                            row.setNbA((long) service.get("nb_a"));
+                            row.setNbTl1((long) service.get("nb_tl1"));
+                            row.setNbSa((long) service.get("nb_sa"));
+                            row.setPerApT((Double) service.get("perApT"));
+                            row.setPertl1Pt((Double) service.get("PERTL1pt"));
+                            row.setPerSaPt((Double) service.get("perSApT"));
+                            row.setAvgSecA((Double) service.get("avgSec_A"));
+                            row.setNbCa((long) service.get("nb_ca"));
+                            row.setPercapt((Double) service.get("percapt"));
+                            row.setAvgSecT((Double) service.get("avgSec_T"));
+                            row.setNbCt((long) service.get("nb_ct"));
+                            row.setPerctPt((Double) service.get("perctpt"));
                             row.setDate(CfgHandler.getFormatedDateAsString(new Date()));
                             this.updateRow(row);
                         } else {
@@ -527,20 +527,20 @@ public class GblTableController {
                                     this.getUniquId(),
                                     id_service,
                                     service.get("name").toString(),
-                                    (long) data.get("nb_t"),
-                                    (long) data.get("nb_tt"),
-                                    (long) data.get("nb_a"),
-                                    (long) data.get("nb_tl1"),
-                                    (long) data.get("nb_sa"),
-                                    (Double) data.get("perApT"),
-                                    (Double) data.get("PERTL1pt"),
-                                    (Double) data.get("perSApT"),
-                                    (Double) data.get("avgSec_A"),
-                                    (long) data.get("nb_ca"),
-                                    (Double) data.get("percapt"),
-                                    (Double) data.get("avgSec_T"),
-                                    (long) data.get("nb_ct"),
-                                    (Double) data.get("perctpt"),
+                                    (long) service.get("nb_t"),
+                                    (long) service.get("nb_tt"),
+                                    (long) service.get("nb_a"),
+                                    (long) service.get("nb_tl1"),
+                                    (long) service.get("nb_sa"),
+                                    (Double) service.get("perApT"),
+                                    (Double) service.get("PERTL1pt"),
+                                    (Double) service.get("perSApT"),
+                                    (Double) service.get("avgSec_A"),
+                                    (long) service.get("nb_ca"),
+                                    (Double) service.get("percapt"),
+                                    (Double) service.get("avgSec_T"),
+                                    (long) service.get("nb_ct"),
+                                    (Double) service.get("perctpt"),
                                     CfgHandler.getFormatedDateAsString(new Date()),
                                     id_agence);
                             this.addRow(row);
@@ -586,21 +586,21 @@ public class GblTableController {
                 if (row != null) {
                     try {
                         row.setServiceName(service.get("name").toString());
-                        System.out.println("Nb. T : " + row.getNbT() + " to " + data.get("nb_t"));
-                        row.setNbT((long) data.get("nb_t"));
-                        row.setNbTt((long) data.get("nb_tt"));
-                        row.setNbA((long) data.get("nb_a"));
-                        row.setNbTl1((long) data.get("nb_tl1"));
-                        row.setNbSa((long) data.get("nb_sa"));
-                        row.setPerApT((Double) data.get("perApT"));
-                        row.setPertl1Pt((Double) data.get("PERTL1pt"));
-                        row.setPerSaPt((Double) data.get("perSApT"));
-                        row.setAvgSecA((Double) data.get("avgSec_A"));
-                        row.setNbCa((long) data.get("nb_ca"));
-                        row.setPercapt((Double) data.get("percapt"));
-                        row.setAvgSecT((Double) data.get("avgSec_T"));
-                        row.setNbCt((long) data.get("nb_ct"));
-                        row.setPerctPt((Double) data.get("perctpt"));
+                        System.out.println("Nb. T : " + row.getNbT() + " to " + service.get("nb_t"));
+                        row.setNbT((long) service.get("nb_t"));
+                        row.setNbTt((long) service.get("nb_tt"));
+                        row.setNbA((long) service.get("nb_a"));
+                        row.setNbTl1((long) service.get("nb_tl1"));
+                        row.setNbSa((long) service.get("nb_sa"));
+                        row.setPerApT((Double) service.get("perApT"));
+                        row.setPertl1Pt((Double) service.get("PERTL1pt"));
+                        row.setPerSaPt((Double) service.get("perSApT"));
+                        row.setAvgSecA((Double) service.get("avgSec_A"));
+                        row.setNbCa((long) service.get("nb_ca"));
+                        row.setPercapt((Double) service.get("percapt"));
+                        row.setAvgSecT((Double) service.get("avgSec_T"));
+                        row.setNbCt((long) service.get("nb_ct"));
+                        row.setPerctPt((Double) service.get("perctpt"));
                         row.setDate(CfgHandler.getFormatedDateAsString(CfgHandler.format.parse(date2)));
                         this.updateRow(row);
                     } catch (ParseException ex) {
@@ -612,20 +612,20 @@ public class GblTableController {
                                 this.getUniquId(),
                                 id_service,
                                 service.get("name").toString(),
-                                (long) data.get("nb_t"),
-                                (long) data.get("nb_tt"),
-                                (long) data.get("nb_a"),
-                                (long) data.get("nb_tl1"),
-                                (long) data.get("nb_sa"),
-                                (Double) data.get("perApT"),
-                                (Double) data.get("PERTL1pt"),
-                                (Double) data.get("perSApT"),
-                                (Double) data.get("avgSec_A"),
-                                (long) data.get("nb_ca"),
-                                (Double) data.get("percapt"),
-                                (Double) data.get("avgSec_T"),
-                                (long) data.get("nb_ct"),
-                                (Double) data.get("perctpt"),
+                                (long) service.get("nb_t"),
+                                (long) service.get("nb_tt"),
+                                (long) service.get("nb_a"),
+                                (long) service.get("nb_tl1"),
+                                (long) service.get("nb_sa"),
+                                (Double) service.get("perApT"),
+                                (Double) service.get("PERTL1pt"),
+                                (Double) service.get("perSApT"),
+                                (Double) service.get("avgSec_A"),
+                                (long) service.get("nb_ca"),
+                                (Double) service.get("percapt"),
+                                (Double) service.get("avgSec_T"),
+                                (long) service.get("nb_ct"),
+                                (Double) service.get("perctpt"),
                                 CfgHandler.getFormatedDateAsString(CfgHandler.format.parse(date2)),
                                 id_agence);
                         this.addRow(row);

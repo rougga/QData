@@ -25,15 +25,15 @@ public class DeleteCible extends HttpServlet {
                 if (Objects.equals(request.getSession().getAttribute("grade"), "adm")) {
                     String id = request.getParameter("id");
                     String db_id = request.getParameter("db_id");
-                    if (StringUtils.isNoneBlank(id,db_id)) {
-                        if (new CibleController().deleteById(id,UUID.fromString(db_id))) {
-                            response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode("Cible est supprimé", "UTF-8"));
-                        } else {
-                            response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode("Cible n'est pas supprimé", "UTF-8"));
-                        }
-                    } else {
-                        response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode("un champ est vide", "UTF-8"));
-                    }
+//                    if (StringUtils.isNoneBlank(id,db_id)) {
+//                        if (new CibleController().deleteById(id,UUID.fromString(db_id))) {
+//                            response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode("Cible est supprimé", "UTF-8"));
+//                        } else {
+//                            response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode("Cible n'est pas supprimé", "UTF-8"));
+//                        }
+//                    } else {
+//                        response.sendRedirect("./setting/cibles.jsp?err=" + URLEncoder.encode("un champ est vide", "UTF-8"));
+//                    }
                 } else {
                     response.sendRedirect("./home.jsp");
                 }
