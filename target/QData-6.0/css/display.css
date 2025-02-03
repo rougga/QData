@@ -1,0 +1,25 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+body {
+    font-family: "Open Sans", sans-serif;
+    height: 100vh;
+    background-color: black;
+}
+div.marquee {
+    white-space: nowrap;
+    overflow:hidden;
+}
+div.marquee > div.marquee-text {
+    white-space:nowrap;
+    display:inline;
+    width:auto;
+}
+#setting{
+    cursor: pointer;
+
+}
+#setting:hover{
+    opacity: 0.6;
+}

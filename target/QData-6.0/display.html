@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Display</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="./img/favicon-32x32.png">
+        <script src="js/jquery.js"></script>
+        <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <link href="css/display.css" rel="stylesheet" type="text/css"/>
+        <script src="js/moment.min.js"></script>
+        <script src="js/display.js"></script>
+    </head>
+    <body>
+        <div class="w-100 h-100 row m-0">
+            <div class="w-100  align-self-start">
+                <h1 class="text-white text-center" id="title">
+                    <b id="clock">10:15 </b>
+                    <small id="date">Lundi 21 Dec 2020 </small>
+                    <span id="forcast">  </span>
+                    <span class="text-white float-right mr-1" id="setting"><img src="img/icon/setting.png" alt=""/></span>
+                </h1>
+
+            </div>
+            <div class="w-100 align-self-center row" id="main">
+
+            </div>
+            <div class="w-100 align-self-end marquee">
+                <h3 class="text-white  border-top border-white mt-1 marquee-text" id="footerText">
+                </h3>
+            </div>
+        </div>
+        <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content font-weight-bold">
+                    <form >
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Paramètres:</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="ville">Ville:</label>
+                                <select class="form-control" id="ville">
+                                    <option selected disabled value="0">Sélectionnez une ville</option>
+                                    <option value="Casablanca,Morocco">Casablanca</option>
+                                    <option value="Agadir,Morocco">Agadir</option>
+                                    <option value="Al Hoceima,Morocco">Al Hoceima</option>
+                                    <option value="Béni Mellal,Morocco">Béni Mellal</option>
+                                    <option value="El Jadida,Morocco">El Jadida</option>
+                                    <option value="Errachidia,Morocco">Errachidia</option>
+                                    <option value="Fès,Morocco">Fès</option>
+                                    <option value="Kénitra,Morocco">Kénitra</option>
+                                    <option value="Khénifra,Morocco">Khénifra</option>
+                                    <option value="Khouribga,Morocco">Khouribga</option>
+                                    <option value="Larache,Morocco">Larache</option>
+                                    <option value="Marrakech,Morocco">Marrakech</option>
+                                    <option value="Meknès,Morocco">Meknès</option>
+                                    <option value="Nador,Morocco">Nador</option>
+                                    <option value="Ouarzazate,Morocco">Ouarzazate</option>
+                                    <option value="Oujda,Morocco">Oujda</option>
+                                    <option value="Rabat,Morocco">Rabat</option>
+                                    <option value="Safi,Morocco">Safi</option>
+                                    <option value="Settat,Morocco">Settat</option>
+                                    <option value="Salé,Morocco">Salé</option>
+                                    <option value="Tanger,Morocco">Tanger</option>
+                                    <option value="Taza,Morocco">Taza</option>
+                                    <option value="Tétouan,Morocco">Tétouan</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="size">Tailles d'articles: <span id="sizeInfo">0</span></label>
+                                <input type="range" class="form-control-range" id="size" min="1" max="100">
+                            </div>
+                            <div class="form-check my-3 mx-1">
+                                <input class="form-check-input " type="checkbox" id="margin" value="">
+                                <label class="form-check-label" for="margin">
+                                    La marge.
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="text">Text roulant:</label>
+                                <textarea class="form-control"  rows="3" id="text"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            <button type="button" class="btn btn-success" id="save">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
