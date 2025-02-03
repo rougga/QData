@@ -1,8 +1,8 @@
 <%@page import="java.net.URLEncoder"%>
-<%@page import="main.modal.Zone"%>
-<%@page import="main.controller.ZoneController"%>
-<%@page import="main.controller.UtilisateurController"%>
-<%@page import="main.modal.Utilisateur"%>
+<%@page import="ma.rougga.qdata.modal.Zone"%>
+<%@page import="ma.rougga.qdata.controller.ZoneController"%>
+<%@page import="ma.rougga.qdata.controller.UtilisateurController"%>
+<%@page import="ma.rougga.qdata.modal.Utilisateur"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%

@@ -101,12 +101,12 @@
         <servlet-class>ma.rougga.qdata.servlets.EditDatabase</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>UpdateAgencesAllData</servlet-name>
-        <servlet-class>ma.rougga.qdata.api.RestoreData</servlet-class>
+        <servlet-name>RestoreAgence</servlet-name>
+        <servlet-class>ma.rougga.qdata.api.agence.RestoreAgence</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateAgencesTodayData</servlet-name>
-        <servlet-class>ma.rougga.qdata.api.UpdateData</servlet-class>
+        <servlet-class>ma.rougga.qdata.api.agence.UpdateAgence</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Settings</servlet-name>
@@ -239,12 +239,12 @@
         <url-pattern>/EditDatabase</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>UpdateAgencesAllData</servlet-name>
-        <url-pattern>/updateagencesalldata</url-pattern>
+        <servlet-name>UpdateAgencesTodayData</servlet-name>
+        <url-pattern>/updateagence</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>UpdateAgencesTodayData</servlet-name>
-        <url-pattern>/updateagencestodaydata</url-pattern>
+        <servlet-name>RestoreAgence</servlet-name>
+        <url-pattern>/restoreagence</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

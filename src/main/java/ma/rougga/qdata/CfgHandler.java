@@ -62,7 +62,7 @@ public class CfgHandler {
     public static final String PAGE_EMP_REPORT = "/QData/report/emp.jsp";
 
     //API URL
-    public static String API_GBL_TABLE_JSON = "QStates/getglobaletable";
+    public static String API_GBL_TABLE_JSON = "QStates/getgbltable";
     public static String API_CHECK_STATUS = "QStates/onlinecheck";
     //Pars
     private Properties prop = null;

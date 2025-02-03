@@ -1,12 +1,12 @@
 <%@page import="java.net.URLEncoder"%>
-<%@page import="main.modal.Service"%>
-<%@page import="main.modal.Cible"%>
-<%@page import="main.controller.CibleController"%>
-<%@page import="main.controller.ServiceController"%>
+<%@page import="ma.rougga.qdata.modal.Service"%>
+<%@page import="ma.rougga.qdata.modal.Cible"%>
+<%@page import="ma.rougga.qdata.controller.CibleController"%>
+<%@page import="ma.rougga.qdata.controller.ServiceController"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="main.modal.Agence"%>
+<%@page import="ma.rougga.qdata.modal.Agence"%>
 <%@page import="java.util.List"%>
-<%@page import="main.controller.AgenceController"%>
+<%@page import="ma.rougga.qdata.controller.AgenceController"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     if (!Objects.equals(session.getAttribute("grade"), "adm")) {

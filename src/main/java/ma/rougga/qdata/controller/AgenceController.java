@@ -3,8 +3,6 @@ package ma.rougga.qdata.controller;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,14 +11,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import ma.rougga.qdata.CfgHandler;
 import ma.rougga.qdata.PgConnection;
-import ma.rougga.qdata.PgMultiConnection;
 import ma.rougga.qdata.modal.Agence;
 import ma.rougga.qdata.modal.Zone;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.slf4j.LoggerFactory;
 
 public class AgenceController {
-
+    
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AgenceController.class);
     public AgenceController() {
     }
 
@@ -295,7 +293,7 @@ public class AgenceController {
 
             JSONObject result = UpdateController.getJsonFromUrl(sb.toString());
             String oldesTicketDate = (String) result.get("oldestDate");
-            System.err.println("OldestTicketDate in agence:"+a.getName()+" is "+ oldesTicketDate);
+            logger.info("OldestTicketDate in agence:"+a.getName()+" is "+ oldesTicketDate);
             return CfgHandler.getFormatedDateAsDate(oldesTicketDate);
         }
         return null;

@@ -1,5 +1,6 @@
 package ma.rougga.qdata.controller.report;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,8 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import ma.rougga.qdata.CPConnection;
 import ma.rougga.qdata.CfgHandler;
 import ma.rougga.qdata.PgConnection;
 import ma.rougga.qdata.controller.AgenceController;
@@ -22,8 +22,11 @@ import ma.rougga.qdata.modal.GblRow;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.slf4j.LoggerFactory;
 
 public class GblTableController {
+
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(GblTableController.class);
 
     AgenceController ac = new AgenceController();
 
@@ -81,12 +84,12 @@ public class GblTableController {
             if (rowsInserted > 0) {
                 return true;
             } else {
-                System.out.println("A  row wasnt inserted successfully!");
+                logger.info("A  row wasnt inserted successfully!");
                 return false;
             }
 
         } catch (ClassNotFoundException | SQLException e) {
-            Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+            logger.error(e.getMessage());
             return false;
         }
     }
@@ -142,12 +145,12 @@ public class GblTableController {
             if (rowsInserted > 0) {
                 return true;
             } else {
-                System.out.println("A  row wasnt UPDATED successfully!");
+                logger.info("A  row wasnt UPDATED successfully!");
                 return false;
             }
 
         } catch (ClassNotFoundException | SQLException e) {
-            Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+            logger.error(e.getMessage());
             return false;
         }
     }
@@ -191,10 +194,10 @@ public class GblTableController {
                 row.setDate(CfgHandler.getFormatedDateAsString(CfgHandler.getFormatedDateAsDate(rs.getString("date"))));
                 row.setIdAgence(rs.getString("id_agence"));
             } else {
-                System.out.println("No row found for id: " + id);
+                logger.info("No row found for id: " + id);
             }
         } catch (ClassNotFoundException | SQLException e) {
-            Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+            logger.error(e.getMessage());
         }
 
         return row;
@@ -204,10 +207,10 @@ public class GblTableController {
         GblRow row = new GblRow();
         try {
             // Establish connection
-            PgConnection con = new PgConnection();
+            Connection con = new CPConnection().getConnection();
             String sql = "SELECT "
                     + "id_agence, "
-                    + "'Sub-Totale' AS service_name, "
+                    + "'Sous-Totale' AS service_name, "
                     + "COUNT(*) AS rowCount, "
                     + "SUM(nb_t) AS nb_t, "
                     + "SUM(nb_tt) AS nb_tt, "
@@ -229,7 +232,7 @@ public class GblTableController {
                     + "GROUP BY id_agence";
 
             // Prepare statement
-            PreparedStatement pstmt = con.getStatement().getConnection().prepareStatement(sql);
+            PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, date1);  // Start date
             pstmt.setString(2, date2);  // End date
             pstmt.setString(3, id_agence);  // id_agence
@@ -239,7 +242,7 @@ public class GblTableController {
 
             // Process result set
             if (rs.next()) {
-                row.setId(null);  // Setting `id` to null as requested
+                row.setId(null);  // Setting `id` to null 
                 row.setIdService(null);
                 row.setServiceName(rs.getString("service_name"));
                 row.setNbT(rs.getLong("nb_t"));
@@ -259,9 +262,9 @@ public class GblTableController {
                 row.setDate(null);  // Setting `date` to null since it's not in the query output
                 row.setIdAgence(rs.getString("id_agence"));
             }
-            con.closeConnection();
-        } catch (ClassNotFoundException | SQLException e) {
-            Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+            con.close();
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
         }
         return row;
     }
@@ -346,7 +349,7 @@ public class GblTableController {
 
             con.closeConnection();
         } catch (ClassNotFoundException | SQLException e) {
-            Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+            logger.error(e.getMessage());
         }
         return row;
     }
@@ -355,7 +358,7 @@ public class GblTableController {
         List<GblRow> services = new ArrayList<>();
         try {
             // Establish connection
-            PgConnection con = new PgConnection();
+            Connection con = new CPConnection().getConnection();
             String sql = "SELECT "
                     + "id_service, "
                     + "service_name, "
@@ -381,7 +384,7 @@ public class GblTableController {
                     + "ORDER BY service_name";
 
             // Prepare statement
-            PreparedStatement pstmt = con.getStatement().getConnection().prepareStatement(sql);
+            PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, date1);  // Start date
             pstmt.setString(2, date2);  // End date
             pstmt.setString(3, id_agence);  // id_agence
@@ -413,13 +416,13 @@ public class GblTableController {
                 services.add(row);
             }
             if (services.size() <= 0) {
-                con.closeConnection();
+                con.close();
                 return services;
             }
             services.add(this.getTotaleRowByAgence(id_agence, date1, date2)); // adding subtotale row as a service 
-            con.closeConnection();
-        } catch (ClassNotFoundException | SQLException e) {
-            Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+            con.close();
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
         }
 
         return services;
@@ -464,16 +467,16 @@ public class GblTableController {
                 row.setPerctPt(rs.getDouble("perctpt"));
                 row.setDate(CfgHandler.getFormatedDateAsString(CfgHandler.getFormatedDateAsDate(rs.getString("date"))));
                 row.setIdAgence(rs.getString("id_agence"));
-                System.out.println("row found for date: " + date + " id_agence = "
+                logger.info("row found for date: " + date + " id_agence = "
                         + id_agence
                         + " id_service = " + id_service);
             } else {
-                System.out.println("No row found for date: " + date + " id_agence = "
+                logger.info("No row found for date: " + date + " id_agence = "
                         + id_agence
                         + " id_service = " + id_service);
             }
         } catch (ClassNotFoundException | SQLException e) {
-            Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+            logger.error(e.getMessage());
         }
 
         return row;
@@ -486,11 +489,12 @@ public class GblTableController {
             date1 = date2 = CfgHandler.format.format(new Date());
         }
         if (agences != null) {
-            System.out.println(new Date().toString() + " -- Updating GBL Tables ... ");
+
+            logger.info(" -- Updating GBL Tables ... ");
             for (Agence a : agences) {
-                System.out.println(new Date().toString() + " -- Updating GBL Table in " + a.getName());
+                logger.info(" -- Updating GBL Table in " + a.getName());
                 String url = CfgHandler.prepareTableJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_GBL_TABLE_JSON, date1, date2);
-                System.out.println("URL = " + url + " - " + a.getName());
+                logger.info("URL = " + url + " - " + a.getName());
                 JSONObject json = UpdateController.getJsonFromUrl(url);
 
                 if (json != null) {
@@ -505,7 +509,7 @@ public class GblTableController {
                                 id_service);
                         if (row != null) {
                             row.setServiceName(service.get("name").toString());
-                            System.out.println("Nb. T : " + row.getNbT() + " to " + service.get("nb_t"));
+                            logger.info("Nb. T : " + row.getNbT() + " to " + service.get("nb_t"));
                             row.setNbT((long) service.get("nb_t"));
                             row.setNbTt((long) service.get("nb_tt"));
                             row.setNbA((long) service.get("nb_a"));
@@ -550,99 +554,105 @@ public class GblTableController {
                     ac.setLastUpdate(a.getId());
                 }
             }
-            System.out.println(new Date().toString() + " -- All GBL Tables Updated. ");
+            logger.info(" -- All GBL Tables Updated. ");
         }
     }
 
     //get gbl row between 2 dates and insert json result to database for one agency
-    public String updateAgenceFromJson(String date1, String date2, UUID idAgence) {
-        String error = null;
+    public boolean updateAgenceFromJson(String date1, String date2, String agenceId) {
+        boolean isDone = false;
         Agence a = new Agence();
         //validationg data
-        if (idAgence == null) {
-            error += "updateAgenceFromJson: id agence null;";
-            return error;
+        if (StringUtils.isBlank(agenceId)) {
+            logger.error("updateAgenceFromJson: id agence null;");
+            return false;
         }
         if (StringUtils.isAnyBlank(date1, date2)) {
             date1 = date2 = CfgHandler.format.format(new Date());
         }
-        a = ac.getAgenceById(idAgence);
+        a = ac.getAgenceById(UUID.fromString(agenceId));
+        if (a != null) {
+            logger.info(" -- Updating " + a.getName() + "'s GBL Table ... ");
+            String url = CfgHandler.prepareTableJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_GBL_TABLE_JSON, date1, date2);
+            logger.info("URL = " + url + " - " + a.getName());
+            JSONObject json = UpdateController.getJsonFromUrl(url);
 
-        System.out.println(new Date().toString() + " -- Updating " + a.getName() + "'s GBL Table ... ");
-        String url = CfgHandler.prepareTableJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_GBL_TABLE_JSON, date1, date2);
-        System.out.println("URL = " + url + " - " + a.getName());
-        JSONObject json = UpdateController.getJsonFromUrl(url);
-
-        if (json != null) {
-            JSONArray result = (JSONArray) json.get("result");
-            for (Object s : result) {
-                JSONObject service = (JSONObject) s;
-                JSONObject data = (JSONObject) service.get("data");
-                String id_service = service.get("id").toString(),
-                        id_agence = a.getId().toString();
-                GblRow row = this.getRowByDate(date2,
-                        id_agence,
-                        id_service);
-                if (row != null) {
+            if (json != null) {
+                JSONArray result = (JSONArray) json.get("result");
+                for (Object s : result) {
                     try {
-                        row.setServiceName(service.get("name").toString());
-                        System.out.println("Nb. T : " + row.getNbT() + " to " + service.get("nb_t"));
-                        row.setNbT((long) service.get("nb_t"));
-                        row.setNbTt((long) service.get("nb_tt"));
-                        row.setNbA((long) service.get("nb_a"));
-                        row.setNbTl1((long) service.get("nb_tl1"));
-                        row.setNbSa((long) service.get("nb_sa"));
-                        row.setPerApT((Double) service.get("perApT"));
-                        row.setPertl1Pt((Double) service.get("PERTL1pt"));
-                        row.setPerSaPt((Double) service.get("perSApT"));
-                        row.setAvgSecA((Double) service.get("avgSec_A"));
-                        row.setNbCa((long) service.get("nb_ca"));
-                        row.setPercapt((Double) service.get("percapt"));
-                        row.setAvgSecT((Double) service.get("avgSec_T"));
-                        row.setNbCt((long) service.get("nb_ct"));
-                        row.setPerctPt((Double) service.get("perctpt"));
-                        row.setDate(CfgHandler.getFormatedDateAsString(CfgHandler.format.parse(date2)));
-                        this.updateRow(row);
-                    } catch (ParseException ex) {
-                        Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else {
-                    try {
-                        row = new GblRow(
-                                this.getUniquId(),
-                                id_service,
-                                service.get("name").toString(),
-                                (long) service.get("nb_t"),
-                                (long) service.get("nb_tt"),
-                                (long) service.get("nb_a"),
-                                (long) service.get("nb_tl1"),
-                                (long) service.get("nb_sa"),
-                                (Double) service.get("perApT"),
-                                (Double) service.get("PERTL1pt"),
-                                (Double) service.get("perSApT"),
-                                (Double) service.get("avgSec_A"),
-                                (long) service.get("nb_ca"),
-                                (Double) service.get("percapt"),
-                                (Double) service.get("avgSec_T"),
-                                (long) service.get("nb_ct"),
-                                (Double) service.get("perctpt"),
-                                CfgHandler.getFormatedDateAsString(CfgHandler.format.parse(date2)),
-                                id_agence);
-                        this.addRow(row);
-                    } catch (ParseException ex) {
-                        Logger.getLogger(GblTableController.class.getName()).log(Level.SEVERE, null, ex);
+                        JSONObject service = (JSONObject) s;
+                        String id_service = service.get("service_id").toString(),
+                                id_agence = a.getId().toString();
+                        GblRow row = this.getRowByDate(date2,
+                                id_agence,
+                                id_service);
+                        if (row != null) {
+                            try {
+                                row.setServiceName(service.get("service_name").toString());
+                                logger.info("Nb. T : " + row.getNbT() + " to " + service.get("nb_t"));
+                                row.setNbT((long) service.get("nb_t"));
+                                row.setNbTt((long) service.get("nb_tt"));
+                                row.setNbA((long) service.get("nb_a"));
+                                row.setNbTl1((long) service.get("nb_tl1"));
+                                row.setNbSa((long) service.get("nb_sa"));
+                                row.setPerApT((Double) service.get("perApT"));
+                                row.setPertl1Pt((Double) service.get("PERTL1pt"));
+                                row.setPerSaPt((Double) service.get("perSApT"));
+                                row.setAvgSecA((Double) service.get("avgSec_A"));
+                                row.setNbCa((long) service.get("nb_ca"));
+                                row.setPercapt((Double) service.get("percapt"));
+                                row.setAvgSecT((Double) service.get("avgSec_T"));
+                                row.setNbCt((long) service.get("nb_ct"));
+                                row.setPerctPt((Double) service.get("perctpt"));
+                                row.setDate(CfgHandler.getFormatedDateAsString(CfgHandler.format.parse(date2)));
+                                this.updateRow(row);
+                            } catch (ParseException ex) {
+                                logger.error(ex.getMessage());
+                                return false;
+                            }
+                        } else {
+                            try {
+                                row = new GblRow(
+                                        this.getUniquId(),
+                                        id_service,
+                                        service.get("service_name").toString(),
+                                        (long) service.get("nb_t"),
+                                        (long) service.get("nb_tt"),
+                                        (long) service.get("nb_a"),
+                                        (long) service.get("nb_tl1"),
+                                        (long) service.get("nb_sa"),
+                                        (Double) service.get("perApT"),
+                                        (Double) service.get("PERTL1pt"),
+                                        (Double) service.get("perSApT"),
+                                        (Double) service.get("avgSec_A"),
+                                        (long) service.get("nb_ca"),
+                                        (Double) service.get("percapt"),
+                                        (Double) service.get("avgSec_T"),
+                                        (long) service.get("nb_ct"),
+                                        (Double) service.get("perctpt"),
+                                        CfgHandler.getFormatedDateAsString(CfgHandler.format.parse(date2)),
+                                        id_agence);
+                                this.addRow(row);
+                            } catch (ParseException ex) {
+                                logger.error(ex.getMessage());
+                            }
+                        }
+                    } catch (NullPointerException e) {
+                        logger.error("updateAgenceFromJson: some json variables are null;");
                     }
                 }
-
+                ac.setLastUpdate(UUID.fromString(agenceId));
+                isDone = true;
+            } else {
+                logger.error("updateAgenceFromJson: json null;");
+                return false;
             }
-            ac.setLastUpdate(idAgence);
         } else {
-            error += "updateAgenceFromJson: json null;";
-            return error;
+            logger.error("updateAgenceFromJson: no agence found;");
         }
-        System.out.println(new Date().toString() + " --  GBL Table Updated. ");
-
-        return error;
+        logger.info(" --  GBL Table Updated. ");
+        return isDone;
     }
 
     //returns whole gbl table for report page
@@ -702,8 +712,7 @@ public class GblTableController {
             return rst.next();
 
         } catch (ClassNotFoundException | SQLException e) {
-            Logger.getLogger(GblTableController.class
-                    .getName()).log(Level.SEVERE, e.getMessage(), e);
+            logger.error(e.getMessage());
             return false;
         }
     }
@@ -725,7 +734,7 @@ public class GblTableController {
         Date oldestDate = ac.getOldesTicketDate(a.getId());
         if (oldestDate != null) {
             while (new Date().compareTo(oldestDate) > 0) {
-                System.out.println("Restoring GBL table data of "
+                logger.info("Restoring GBL table data of "
                         + a.getName()
                         + " for date:"
                         + CfgHandler.getFormatedDateAsString(oldestDate)
@@ -733,7 +742,7 @@ public class GblTableController {
                 this.updateAgenceFromJson(
                         CfgHandler.format.format(oldestDate),
                         CfgHandler.format.format(oldestDate),
-                        id_agence);
+                        id_agence.toString());
                 Calendar c = Calendar.getInstance();
                 c.setTime(oldestDate);
                 c.add(Calendar.DATE, 1);

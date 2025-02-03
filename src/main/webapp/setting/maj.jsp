@@ -1,6 +1,6 @@
-<%@page import="main.modal.Agence"%>
+<%@page import="ma.rougga.qdata.modal.Agence"%>
 <%@page import="java.util.List"%>
-<%@page import="main.controller.AgenceController"%>
+<%@page import="ma.rougga.qdata.controller.AgenceController"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -44,7 +44,7 @@
 
                     <div class="w-50 mx-auto ">
                         <form action="" class="d-flex justify-content-center flex-column">
-                            <a class="btn btn-secondary m-1" id="majNowBtn"><img src="/QData/img/icon/maj.png"> Mise à jour (aujourd'hui) maintenant</a>
+                            <a class="btn btn-secondary m-1" id="majNowBtn"><img src="/QData/img/icon/maj.png"> Mise à jour (aujourd'hui) ma.rougga.qdatatenant</a>
                             <a class="btn btn-secondary m-1" id="majTBtn" ><img src="/QData/img/icon/maj.png"> Mise à jour tous les tickets</a>
                             <a class="btn btn-secondary m-1" id="majLBtn"><img src="/QData/img/icon/maj.png"> Mise à jour tout le journal de connexion</a>
                         </form>

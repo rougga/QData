@@ -1,8 +1,8 @@
 <%@page import="java.util.UUID"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
-<%@page import="main.modal.Agence"%>
+<%@page import="ma.rougga.qdata.modal.Agence"%>
 <%@page import="java.util.List"%>
-<%@page import="main.controller.AgenceController"%>
+<%@page import="ma.rougga.qdata.controller.AgenceController"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     String id_agence = request.getParameter("id_agence");
@@ -57,11 +57,11 @@
                         Dernière mise à jour: <%= CfgHandler.getFormatedDateAsString(ac.getLastUpdate(agence.getId()))%>
                     </h5>
                     <div class="col-6 d-flex mt-4 flex-column mx-auto align-items-center">
-                        <a class="btn btn-secondary m-1 " id="majNowBtn" href="/<%=CfgHandler.APP%>/updateagencestodaydata?id_agence=<%=agence.getId().toString()%>">
+                        <a class="btn btn-secondary m-1 " id="majNowBtn" href="/<%=CfgHandler.APP%>/updateagence?id_agence=<%=agence.getId().toString()%>">
                             <i class="fa fa-cloud-download" aria-hidden="true"></i>
                             <span>Forcer la mise à jour d'aujourd'hui</span>
                         </a>
-                        <a class="btn btn-secondary m-1" id="majTBtn"  href="/<%=CfgHandler.APP%>/updateagencesalldata?id_agence=<%=agence.getId().toString()%>" >
+                        <a class="btn btn-secondary m-1" id="majTBtn"  href="/<%=CfgHandler.APP%>/restoreagence?id_agence=<%=agence.getId().toString()%>" >
                             <i class="fa fa-cloud-download" aria-hidden="true"></i>
                             Mettre à jour toutes les données de l'agence
                         </a>

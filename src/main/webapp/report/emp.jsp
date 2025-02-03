@@ -1,4 +1,5 @@
-<%@page import="ma.rougga.qdata.modal.EmpRow"%>
+<%@page import="ma.rougga.qdata.controller.report.EmpTableController"%>
+<%@page import="ma.rougga.qdata.modal.report.EmpRow"%>
 <%@page import="ma.rougga.qdata.handler.TitleHandler"%>
 <%@page import="java.util.Map"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

@@ -1,10 +1,10 @@
- <%@page import="main.modal.Agence"%>
-<%@page import="main.controller.ZoneController"%>
+ <%@page import="ma.rougga.qdata.modal.Agence"%>
+<%@page import="ma.rougga.qdata.controller.ZoneController"%>
 <%@page import="java.util.List"%>
-<%@page import="main.controller.AgenceController"%>
-<%@page import="main.modal.Zone"%>
+<%@page import="ma.rougga.qdata.controller.AgenceController"%>
+<%@page import="ma.rougga.qdata.modal.Zone"%>
 <%@page import="java.util.Date"%>
-<%@page import="main.CfgHandler"%>
+<%@page import="ma.rougga.qdata.CfgHandler"%>
 <div class='div-wrapper d-flex justify-content-center align-items-center'>
                  <form class='form-inline' id='filterForm'  action=''>
                  <label class='m-1' for='date1'>Du: </label>
@@ -19,8 +19,8 @@
                    <div class='dropdown-menu '>
                      <a class='dropdown-item font-weight-bold appHover' href='#' id='today'>Aujourd'hui</a>
                      <a class='dropdown-item font-weight-bold appHover' href='#' id='yesterday'>Hier</a>
-                     <a class='dropdown-item font-weight-bold appHover' href='#' id='cWeek'>Semaine en cours</a>
-                     <a class='dropdown-item font-weight-bold appHover' href='#' id='lWeek'>Dernier semaine</a>
+                     <a class='dropdown-item font-weight-bold appHover' href='#' id='cWeek'>Sema.rougga.qdatae en cours</a>
+                     <a class='dropdown-item font-weight-bold appHover' href='#' id='lWeek'>Dernier sema.rougga.qdatae</a>
                      <a class='dropdown-item font-weight-bold appHover' href='#' id='cMonth'>Mois en cours</a>
                      <a class='dropdown-item font-weight-bold appHover' href='#' id='lMonth'>Mois dernier</a>
                      <a class='dropdown-item font-weight-bold appHover' href='#' id='cYear'>Année en cours</a>

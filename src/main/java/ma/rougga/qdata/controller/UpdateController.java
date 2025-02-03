@@ -10,9 +10,11 @@ import ma.rougga.qdata.controller.report.GblTableController;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.LoggerFactory;
 
 public class UpdateController {
-
+    
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(UpdateController.class);
     public UpdateController() {
     }
 
@@ -43,14 +45,14 @@ public class UpdateController {
                 org.json.simple.JSONObject ob = (org.json.simple.JSONObject) parser.parse(response2.toString());
                 return ob;
             } else {
-                System.out.println("GET request failed with Response Code: " + responseCode);
+                logger.error("GET request failed with Response Code: " + responseCode);
             }
 
             // Disconnect
             connection.disconnect();
             return null;
         } catch (IOException | ParseException e) {
-            System.out.println("UpdateController.getJsonFromUrl: " + e.getMessage());
+            logger.error("UpdateController.getJsonFromUrl: " + e.getMessage());
             return null;
         }
     }
@@ -64,12 +66,12 @@ public class UpdateController {
         return isSuccessful;
     }
 
-    public String updateAgencesTodayData(UUID id_agence) {
-        String error = null;
-        error = new GblTableController().updateAgenceFromJson(null, null, id_agence);
+    public boolean updateAgencesTodayData(UUID id_agence) {
+        boolean isDone = false;
+        isDone = new GblTableController().updateAgenceFromJson(null, null, id_agence.toString());
         // update other tables
         
-        return error;
+        return isDone;
     }
     
     public void updateAllAgencesTodayData(){
@@ -80,7 +82,7 @@ public class UpdateController {
         
         
         // update other tables
-        System.err.println("updateAllAgencesTodayData() Finished! .");
+        logger.info("updateAllAgencesTodayData() Finished! .");
     }
     
 }
