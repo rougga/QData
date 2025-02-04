@@ -1,5 +1,6 @@
 package ma.rougga.qdata.controller;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,19 +9,22 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import ma.rougga.qdata.CPConnection;
 import ma.rougga.qdata.CfgHandler;
 import ma.rougga.qdata.PgConnection;
 import ma.rougga.qdata.modal.Utilisateur;
 import ma.rougga.qdata.modal.Zone;
+import org.slf4j.LoggerFactory;
 
 public class UtilisateurController {
 
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(UtilisateurController.class);
 
     public List<Utilisateur> getAllUtilisateur() {
         try {
             List<Utilisateur> utilisateurs = new ArrayList();
-            PgConnection con = new PgConnection();
-            ResultSet r = con.getStatement().executeQuery("select * from rougga_users order by date;");
+            Connection con = new CPConnection().getConnection();
+            ResultSet r = con.createStatement().executeQuery("select * from rougga_users order by date;");
             while (r.next()) {
                 utilisateurs.add(
                         new Utilisateur(
@@ -34,65 +38,63 @@ public class UtilisateurController {
                                 r.getString("sponsor"))
                 );
             }
-            con.closeConnection();
+            con.close();
             return utilisateurs;
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(UtilisateurController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
             return null;
         }
 
     }
-    
-    
-    public Utilisateur getUtilisateurById(UUID id){
+
+    public Utilisateur getUtilisateurById(UUID id) {
         Utilisateur u = null;
         try {
-            PgConnection con = new PgConnection();
-            PreparedStatement ps = con.getStatement().getConnection().prepareStatement("select * from rougga_users where id=?;");
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement ps = con.prepareStatement("select * from rougga_users where id=?;");
             ps.setString(1, id.toString());
             ResultSet r = ps.executeQuery();
             if (r.next()) {
                 u = new Utilisateur(
-                                UUID.fromString(r.getString("id")),
-                                r.getString("username"),
-                                r.getString("password"),
-                                r.getString("grade"),
-                                r.getString("first_name"),
-                                r.getString("last_name"),
-                                CfgHandler.getFormatedDateAsDate(r.getString("date")),
-                                r.getString("sponsor"));
+                        UUID.fromString(r.getString("id")),
+                        r.getString("username"),
+                        r.getString("password"),
+                        r.getString("grade"),
+                        r.getString("first_name"),
+                        r.getString("last_name"),
+                        CfgHandler.getFormatedDateAsDate(r.getString("date")),
+                        r.getString("sponsor"));
             }
-            con.closeConnection();
+            con.close();
             return u;
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(UtilisateurController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
             return null;
         }
     }
-    
-    public Utilisateur getUtilisateurByUsername(String username){
+
+    public Utilisateur getUtilisateurByUsername(String username) {
         Utilisateur u = null;
         try {
-            PgConnection con = new PgConnection();
-            PreparedStatement ps = con.getStatement().getConnection().prepareStatement("select id from rougga_users where username=?;");
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement ps = con.prepareStatement("select id from rougga_users where username=?;");
             ps.setString(1, username);
             ResultSet r = ps.executeQuery();
             if (r.next()) {
                 u = getUtilisateurById(UUID.fromString(r.getString("id")));
             }
-            con.closeConnection();
+            con.close();
             return u;
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(UtilisateurController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
             return null;
         }
     }
-    
-    
+
     public boolean AddUtilisateur(Utilisateur u) {
-          try {
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into rougga_users (id,username,password,grade,first_name,last_name,sponsor) values(?,?,?,?,?,?,?);");
+        try {
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement p = con.prepareStatement("insert into rougga_users (id,username,password,grade,first_name,last_name,sponsor) values(?,?,?,?,?,?,?);");
             p.setString(1, u.getId().toString());
             p.setString(2, u.getUsername());
             p.setString(3, u.getPassword());
@@ -101,63 +103,63 @@ public class UtilisateurController {
             p.setString(6, u.getLastName());
             p.setString(7, u.getSponsor());
             p.execute();
-            con.closeConnection();
+            con.close();
             return true;
 
         } catch (Exception ex) {
-            Logger.getLogger(UtilisateurController.class.getName()).log(Level.SEVERE, "error in adding utilisateur", ex);
+            logger.error(ex.getMessage());
             return false;
         }
     }
 
     public boolean deleteUtilisateurById(UUID id) {
-       try {
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("delete from rougga_users where id=?;");
+        try {
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement p = con.prepareStatement("delete from rougga_users where id=?;");
             p.setString(1, id.toString());
             p.execute();
-            con.closeConnection();
+            con.close();
             return true;
 
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(UtilisateurController.class.getName()).log(Level.SEVERE, "error deleting utilisateur", ex);
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
             return false;
         }
     }
 
-    public boolean setZone(UUID id_user, UUID id_zone){
+    public boolean setZone(UUID id_user, UUID id_zone) {
         try {
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into rougga_user_zone values(?,?);");
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement p = con.prepareStatement("insert into rougga_user_zone values(?,?);");
             p.setString(1, id_user.toString());
             p.setString(2, id_zone.toString());
             p.execute();
-            con.closeConnection();
+            con.close();
             return true;
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(UtilisateurController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
             return false;
         }
     }
-    
+
     public Zone getUtilisateurZone(UUID id) {
         try {
             Zone z = null;
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("select id_zone from rougga_user_zone where id_user=?;");
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement p = con.prepareStatement("select id_zone from rougga_user_zone where id_user=?;");
             p.setString(1, id.toString());
             ResultSet r = p.executeQuery();
             if (r.next()) {
                 z = new ZoneController().getZoneById(UUID.fromString(r.getString("id_zone")));
             }
-            con.closeConnection();
+            con.close();
             return z;
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(UtilisateurController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
             return null;
         }
     }
-    
+
     public Zone getUtilisateurZoneByUsername(String username) {
         Zone z = this.getUtilisateurZone(this.getUtilisateurByUsername(username).getId());
         return z;

@@ -62,8 +62,15 @@ public class CfgHandler {
     public static final String PAGE_EMP_REPORT = "/QData/report/emp.jsp";
 
     //API URL
-    public static String API_GBL_TABLE_JSON = "QStates/getgbltable";
-    public static String API_CHECK_STATUS = "QStates/onlinecheck";
+    public static String API_GBL_TABLE_JSON = APP_NODE + "/getgbltable";
+    public static String API_EMP_TABLE_JSON = APP_NODE + "/getemptable";
+    public static String API_EMPSER_TABLE_JSON = APP_NODE + "/getempsertable";
+    public static String API_GCH_TABLE_JSON = APP_NODE + "/getgchtable";
+    public static String API_GCHSER_TABLE_JSON = APP_NODE + "/getgchsertable";
+    public static String API_GLA_TABLE_JSON = APP_NODE + "/getglatable";
+    public static String API_GLT_TABLE_JSON = APP_NODE + "/getglttable";
+    public static String API_TCH_TABLE_JSON = APP_NODE + "/gettchtable";
+    public static String API_CHECK_STATUS = APP_NODE + "/onlinecheck";
     //Pars
     private Properties prop = null;
     private String url;
@@ -111,7 +118,7 @@ public class CfgHandler {
     public CfgHandler(HttpServletRequest r) throws FileNotFoundException, IOException {
         this.request = r;
     }
-    
+
     public static String prepareTableJsonUrl(String host, int port, String apiPoint, String date1, String date2) {
         String url = "http://" + host
                 + ":" + port
@@ -120,7 +127,7 @@ public class CfgHandler {
                 + "&date2=" + date2;
         return url;
     }
-    
+
     public String getPropertie(String name) throws IOException {
 
         prop = new Properties();

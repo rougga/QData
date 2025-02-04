@@ -1,5 +1,6 @@
 package ma.rougga.qdata.controller;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import ma.rougga.qdata.CPConnection;
 import ma.rougga.qdata.CfgHandler;
 import ma.rougga.qdata.PgConnection;
 import ma.rougga.qdata.modal.Agence;
@@ -25,8 +27,8 @@ public class AgenceController {
     public List<Agence> getAllAgence() {
         try {
             List<Agence> agences = new ArrayList();
-            PgConnection con = new PgConnection();
-            ResultSet r = con.getStatement().executeQuery("select * from rougga_agences order by name;");
+            Connection con = new CPConnection().getConnection();
+            ResultSet r = con.createStatement().executeQuery("select * from rougga_agences order by name;");
             while (r.next()) {
                 Agence a = new Agence();
                 a.setId(UUID.fromString(r.getString("id")));
@@ -37,10 +39,10 @@ public class AgenceController {
                 a.setStatus(r.getInt("status"));
                 agences.add(a);
             }
-            con.closeConnection();
+            con.close();
             return agences;
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
             return null;
         }
     }
@@ -48,19 +50,17 @@ public class AgenceController {
     public List<Agence> getAgencesByZone(UUID id_zone) {
         try {
             List<Agence> agences = new ArrayList();
-            PgConnection con = new PgConnection();
-            PreparedStatement ps = con.getStatement()
-                    .getConnection()
-                    .prepareStatement("select id_agence from rougga_agence_zone where id_zone=?;");
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement ps = con.prepareStatement("select id_agence from rougga_agence_zone where id_zone=?;");
 
             ps.setString(1, id_zone.toString());
             ResultSet r = ps.executeQuery();
             while (r.next()) {
                 agences.add(this.getAgenceById(UUID.fromString(r.getString("id_agence"))));
             }
-            con.closeConnection();
+            con.close();
             return agences;
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             return null;
         }
@@ -68,8 +68,8 @@ public class AgenceController {
 
     public int addAgence(Agence a) {
         try {
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into rougga_agences values(?,?,?,?,?,?);");
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement p = con.prepareStatement("insert into rougga_agences values(?,?,?,?,?,?);");
             p.setString(1, a.getId().toString());
             p.setString(2, a.getName());
             p.setString(3, a.getHost());
@@ -77,20 +77,20 @@ public class AgenceController {
             p.setString(5, a.getLastupdated_at());
             p.setInt(6, a.getStatus());
             p.execute();
-            con.closeConnection();
+            con.close();
             return 1;
 
         } catch (Exception ex) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex.getMessage());
             return 0;
         }
     }
 
     public boolean editAgence(Agence a) {
         try {
-            PgConnection con = new PgConnection();
+            Connection con = new CPConnection().getConnection();
             String SQL = "update rougga_agences set name=?,host=?,port=?,lastupdated_at=?,status=? where id=?;";
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement(SQL);
+            PreparedStatement p = con.prepareStatement(SQL);
             p.setString(1, a.getName());
             p.setString(2, a.getHost());
             p.setInt(3, a.getPort());
@@ -98,11 +98,11 @@ public class AgenceController {
             p.setInt(5, a.getStatus());
             p.setString(6, a.getId().toString());
             p.execute();
-            con.closeConnection();
+            con.close();
             return true;
 
         } catch (Exception ex) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex.getMessage());
             return false;
         }
     }
@@ -110,8 +110,8 @@ public class AgenceController {
     public Agence getAgenceById(UUID id) {
         try {
             Agence a = new Agence();
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("select * from rougga_agences where id=? ;");
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement p = con.prepareStatement("select * from rougga_agences where id=? ;");
             p.setString(1, id.toString());
             ResultSet r = p.executeQuery();
             if (r.next()) {
@@ -121,27 +121,28 @@ public class AgenceController {
                 a.setPort(r.getInt("port"));
                 a.setLastupdated_at(r.getString("lastupdated_at"));
                 a.setStatus(r.getInt("status"));
-                con.closeConnection();
+                con.close();
                 return a;
             } else {
-                con.closeConnection();
+                con.close();
                 return null;
             }
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
             return null;
         }
     }
 
     public int deleteAgenceById(UUID id) {
         try {
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("delete from rougga_agences where id=?;");
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement p = con.prepareStatement("delete from rougga_agences where id=?;");
             p.setString(1, id.toString());
             p.execute();
+            con.close();
             return 1;
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
             return 0;
         }
     }
@@ -166,16 +167,16 @@ public class AgenceController {
 
     public int updateName(UUID id, String name) {
         try {
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("update rougga_agences set name=? where id=?;");
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement p = con.prepareStatement("update rougga_agences set name=? where id=?;");
             p.setString(1, name);
             p.setString(2, id.toString());
             p.execute();
-            con.closeConnection();
+            con.close();
             return 1;
 
         } catch (Exception ex) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex.getMessage());
             return 0;
         }
     }
@@ -198,61 +199,61 @@ public class AgenceController {
 
     public void setZone(UUID id_agence, UUID id_zone) {
         try {
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into rougga_agence_zone values(?,?);");
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement p = con.prepareStatement("insert into rougga_agence_zone values(?,?);");
             p.setString(1, id_agence.toString());
             p.setString(2, id_zone.toString());
             p.execute();
-            con.closeConnection();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            con.close();
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
         }
     }
 
     public void editZone(UUID id_agence, UUID id_zone) {
         try {
-            PgConnection con = new PgConnection();
+            Connection con = new CPConnection().getConnection();
             if (this.getAgenceZoneByAgenceId(id_agence) != null) {
                 String SQL = "";
                 PreparedStatement p;
                 if (id_zone != null) {
                     SQL = "update rougga_agence_zone set id_zone=? where  id_agence=?;";
-                    p = con.getStatement().getConnection().prepareStatement(SQL);
+                    p = con.prepareStatement(SQL);
                     p.setString(2, id_agence.toString());
                     p.setString(1, id_zone.toString());
                 } else {
                     SQL = "delete from rougga_agence_zone where id_agence=?";
-                    p = con.getStatement().getConnection().prepareStatement(SQL);
+                    p = con.prepareStatement(SQL);
                     p.setString(1, id_agence.toString());
                 }
                 p.execute();
-                con.closeConnection();
+                con.close();
             } else {
                 this.setZone(id_agence, id_zone);
             }
 
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
         }
     }
 
     public Zone getAgenceZoneByAgenceId(UUID id_agence) {
         try {
             Zone a;
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("select * from rougga_agence_zone where id_agence=? ;");
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement p = con.prepareStatement("select * from rougga_agence_zone where id_agence=? ;");
             p.setString(1, id_agence.toString());
             ResultSet r = p.executeQuery();
             if (r.next()) {
                 a = new ZoneController().getZoneById(UUID.fromString(r.getString("id_zone")));
-                con.closeConnection();
+                con.close();
                 return a;
             } else {
-                con.closeConnection();
+                con.close();
                 return null;
             }
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
             return null;
         }
     }
@@ -295,6 +296,8 @@ public class AgenceController {
             String oldesTicketDate = (String) result.get("oldestDate");
             logger.info("OldestTicketDate in agence:"+a.getName()+" is "+ oldesTicketDate);
             return CfgHandler.getFormatedDateAsDate(oldesTicketDate);
+        }else{
+            logger.error("getOldestTicketDate: agence not found");
         }
         return null;
     }

@@ -1,4 +1,7 @@
 
 /build/
 /dist/
-/target/
+/target
+/target
+/target/classes
+*.class

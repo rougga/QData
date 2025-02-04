@@ -1,5 +1,6 @@
 package ma.rougga.qdata.controller;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,10 +9,14 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import ma.rougga.qdata.CPConnection;
 import ma.rougga.qdata.PgConnection;
 import ma.rougga.qdata.modal.Zone;
+import org.slf4j.LoggerFactory;
 
 public class ZoneController {
+
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ZoneController.class);
 
     public ZoneController() {
     }
@@ -19,8 +24,8 @@ public class ZoneController {
     public List<Zone> getAllZones() {
         try {
             List<Zone> zones = new ArrayList();
-            PgConnection con = new PgConnection();
-            ResultSet r = con.getStatement().executeQuery("select * from rougga_zones order by name;");
+            Connection con = new CPConnection().getConnection();
+            ResultSet r = con.createStatement().executeQuery("select * from rougga_zones order by name;");
             while (r.next()) {
                 zones.add(new Zone(UUID.fromString(r.getString("id")),
                         r.getString("name"),
@@ -28,56 +33,56 @@ public class ZoneController {
                         r.getString("code")
                 ));
             }
-            con.closeConnection();
+            con.close();
             return zones;
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(ZoneController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
             return null;
         }
     }
 
     public boolean addZone(Zone z) {
         try {
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into rougga_zones values(?,?,?,?);");
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement p = con.prepareStatement("insert into rougga_zones values(?,?,?,?);");
             p.setString(1, z.getId().toString());
             p.setString(2, z.getName());
             p.setString(3, z.getCity());
             p.setString(4, z.getCode());
             p.execute();
-            con.closeConnection();
+            con.close();
             return true;
 
         } catch (Exception ex) {
-            Logger.getLogger(ZoneController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex.getMessage());
             return false;
         }
     }
 
     public boolean editZone(Zone z) {
         try {
-            PgConnection con = new PgConnection();
+            Connection con = new CPConnection().getConnection();
             String SQL = "update rougga_zones set name=?, city=?, code=? where id=?;";
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement(SQL);
+            PreparedStatement p = con.prepareStatement(SQL);
             p.setString(1, z.getName());
             p.setString(2, z.getCity());
             p.setString(3, z.getCode());
             p.setString(4, z.getId().toString());
             p.execute();
-            con.closeConnection();
+            con.close();
             return true;
 
         } catch (Exception ex) {
-            Logger.getLogger(ZoneController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex.getMessage());
             return false;
         }
     }
-    
+
     public Zone getZoneById(UUID id) {
         try {
             Zone a;
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("select * from rougga_zones where id=? ;");
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement p = con.prepareStatement("select * from rougga_zones where id=? ;");
             p.setString(1, id.toString());
             ResultSet r = p.executeQuery();
             if (r.next()) {
@@ -86,29 +91,29 @@ public class ZoneController {
                         r.getString("city"),
                         r.getString("code")
                 );
-                con.closeConnection();
+                con.close();
                 return a;
             } else {
-                con.closeConnection();
+                con.close();
                 return null;
             }
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(ZoneController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
             return null;
         }
     }
 
     public boolean deleteZoneById(UUID id) {
         try {
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("delete from rougga_zones where id=?;");
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement p = con.prepareStatement("delete from rougga_zones where id=?;");
             p.setString(1, id.toString());
             p.execute();
-            con.closeConnection();
+            con.close();
             return true;
 
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(ZoneController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
             return false;
         }
     }
@@ -116,20 +121,20 @@ public class ZoneController {
     public int getAgenceCountInZone(UUID id) {
         try {
             int agenceCount = 0;
-            PgConnection con = new PgConnection();
-            PreparedStatement p = con.getStatement().getConnection().prepareStatement("select count(*) as num from rougga_agence_zone where id_zone=? ;");
+            Connection con = new CPConnection().getConnection();
+            PreparedStatement p = con.prepareStatement("select count(*) as num from rougga_agence_zone where id_zone=? ;");
             p.setString(1, id.toString());
             ResultSet r = p.executeQuery();
             if (r.next()) {
                 agenceCount = r.getInt("num");
-                con.closeConnection();
+                con.close();
                 return agenceCount;
             } else {
-                con.closeConnection();
+                con.close();
                 return agenceCount;
             }
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(ZoneController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage());
             return 0;
         }
     }

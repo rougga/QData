@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.UUID;
 import ma.rougga.qdata.CPConnection;
 import ma.rougga.qdata.CfgHandler;
-import ma.rougga.qdata.PgConnection;
 import ma.rougga.qdata.controller.AgenceController;
 import ma.rougga.qdata.controller.UpdateController;
 import ma.rougga.qdata.modal.Agence;
@@ -35,7 +34,7 @@ public class GblTableController {
 
     public boolean addRow(GblRow row) {
         try {
-            PgConnection con = new PgConnection();
+            Connection con = new CPConnection().getConnection();
             String sql = "INSERT INTO rougga_gbl_table ("
                     + "id_service, "
                     + "service_name, "
@@ -58,7 +57,7 @@ public class GblTableController {
                     + "id"
                     + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, to_date(?,'YYYY-MM-DD HH24:MI:SS'), ?,?)";
 
-            PreparedStatement pstmt = con.getStatement().getConnection().prepareCall(sql);
+            PreparedStatement pstmt = con.prepareCall(sql);
             // Set parameters
             pstmt.setString(1, row.getIdService());  // id_service
             pstmt.setString(2, row.getServiceName());  // service_name
@@ -82,13 +81,15 @@ public class GblTableController {
             // Execute the insert
             int rowsInserted = pstmt.executeUpdate();
             if (rowsInserted > 0) {
+                con.close();
                 return true;
             } else {
                 logger.info("A  row wasnt inserted successfully!");
+                con.close();
                 return false;
             }
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             logger.error(e.getMessage());
             return false;
         }
@@ -96,7 +97,7 @@ public class GblTableController {
 
     public boolean updateRow(GblRow row) {
         try {
-            PgConnection con = new PgConnection();
+            Connection con = new CPConnection().getConnection();
             String sql = "UPDATE rougga_gbl_table SET "
                     + "service_name = ?, "
                     + "nb_t = ?, "
@@ -117,7 +118,7 @@ public class GblTableController {
                     + "id_service = ?,"
                     + "id_agence=?"
                     + "WHERE id = ?;";
-            PreparedStatement pstmt = con.getStatement().getConnection().prepareCall(sql);
+            PreparedStatement pstmt = con.prepareCall(sql);
             // Set parameters
 
             pstmt.setString(1, row.getServiceName());  // service_name
@@ -143,13 +144,15 @@ public class GblTableController {
             // Execute the insert
             int rowsInserted = pstmt.executeUpdate();
             if (rowsInserted > 0) {
+                con.close();
                 return true;
             } else {
                 logger.info("A  row wasnt UPDATED successfully!");
+                con.close();
                 return false;
             }
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             logger.error(e.getMessage());
             return false;
         }
@@ -159,13 +162,13 @@ public class GblTableController {
         GblRow row = null;
         try {
             // Establish connection
-            PgConnection con = new PgConnection();
+            Connection con = new CPConnection().getConnection();
             String sql = "SELECT id, id_service, service_name, nb_t, nb_tt, nb_a, nb_tl1, nb_sa, perApT, PERTL1pt, perSApT, "
                     + "avgSec_A, nb_ca, percapt, avgSec_T, nb_ct, perctpt, date, id_agence "
                     + "FROM rougga_gbl_table WHERE id = ?";
 
             // Prepare statement
-            PreparedStatement pstmt = con.getStatement().getConnection().prepareStatement(sql);
+            PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, id);
 
             // Execute query
@@ -193,10 +196,12 @@ public class GblTableController {
                 row.setPerctPt(rs.getDouble("perctpt"));
                 row.setDate(CfgHandler.getFormatedDateAsString(CfgHandler.getFormatedDateAsDate(rs.getString("date"))));
                 row.setIdAgence(rs.getString("id_agence"));
+
             } else {
                 logger.info("No row found for id: " + id);
             }
-        } catch (ClassNotFoundException | SQLException e) {
+            con.close();
+        } catch (SQLException e) {
             logger.error(e.getMessage());
         }
 
@@ -266,6 +271,7 @@ public class GblTableController {
         } catch (SQLException e) {
             logger.error(e.getMessage());
         }
+
         return row;
     }
 
@@ -277,7 +283,7 @@ public class GblTableController {
                 agences = ac.putAgencesToStringArray(ac.getAllAgence());
             }
 
-            PgConnection con = new PgConnection();
+            Connection con = new CPConnection().getConnection();
             StringBuilder sqlBuilder = new StringBuilder("");
             if (agences.length > 0) {
                 sqlBuilder.append(" AND  id_agence IN (");
@@ -314,7 +320,7 @@ public class GblTableController {
                     + "BETWEEN TO_DATE(?, 'YYYY-MM-DD') AND TO_DATE(?, 'YYYY-MM-DD') "
                     + agenceCondition;
             // Prepare statement
-            PreparedStatement pstmt = con.getStatement().getConnection().prepareStatement(sql);
+            PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, date1);  // Start date
             pstmt.setString(2, date2);  // End date
 
@@ -346,9 +352,8 @@ public class GblTableController {
                 row.setPerctPt(rs.getDouble("perctpt"));
                 row.setIdAgence(null);  // No id_agence provided in query output
             }
-
-            con.closeConnection();
-        } catch (ClassNotFoundException | SQLException e) {
+            con.close();
+        } catch (SQLException e) {
             logger.error(e.getMessage());
         }
         return row;
@@ -432,13 +437,13 @@ public class GblTableController {
         GblRow row = null;
         try {
             // Establish connection
-            PgConnection con = new PgConnection();
+            Connection con = new CPConnection().getConnection();
             String sql = "SELECT id, id_service, service_name, nb_t, nb_tt, nb_a, nb_tl1, nb_sa, perApT, PERTL1pt, perSApT, "
                     + "avgSec_A, nb_ca, percapt, avgSec_T, nb_ct, perctpt, date, id_agence "
                     + "FROM rougga_gbl_table WHERE  to_date(to_char(date,'YYYY-MM-DD'),'YYYY-MM-DD') = TO_DATE(?,'YYYY-MM-DD') and id_agence= ? and id_service = ?";
 
             // Prepare statement
-            PreparedStatement pstmt = con.getStatement().getConnection().prepareStatement(sql);
+            PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, date);
             pstmt.setString(2, id_agence);
             pstmt.setString(3, id_service);
@@ -475,7 +480,9 @@ public class GblTableController {
                         + id_agence
                         + " id_service = " + id_service);
             }
-        } catch (ClassNotFoundException | SQLException e) {
+
+            con.close();
+        } catch (SQLException e) {
             logger.error(e.getMessage());
         }
 
@@ -704,14 +711,16 @@ public class GblTableController {
     //checks if the id exists in gbl table
     private boolean doesIdExist(UUID uniqueId) {
         try {
-            PgConnection con = new PgConnection();
+            Connection con = new CPConnection().getConnection();
             String sql = "select * from rougga_gbl_table where id=?";
-            PreparedStatement pstmt = con.getStatement().getConnection().prepareCall(sql);
+            PreparedStatement pstmt = con.prepareCall(sql);
             pstmt.setString(1, uniqueId.toString());
             ResultSet rst = pstmt.executeQuery();
-            return rst.next();
+            boolean result = rst.next();
+            con.close();
+            return result;
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             logger.error(e.getMessage());
             return false;
         }

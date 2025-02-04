@@ -8,7 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ma.rougga.qdata.controller.TitleController;
 import ma.rougga.qdata.handler.TitleHandler;
+import ma.rougga.qdata.modal.Title;
 import org.apache.commons.lang3.StringUtils;
 
 public class EditTitles extends HttpServlet {
@@ -40,31 +42,67 @@ public class EditTitles extends HttpServlet {
                     String sgch = request.getParameter("sgch");
                     String ser = request.getParameter("ser");
                     String tch = request.getParameter("tch");
-                    if (StringUtils.isNoneBlank(gbl,emp,empser,gch,gchserv,gla,glt,apl,ndt,ndtt,ndta,ndtsa,cnx,remp,sgch,ser,tch)) {
-                        TitleHandler th = new TitleHandler(request);
-                        th.setTitle("gbl", gbl);
-                        th.setTitle("emp", emp);
-                        th.setTitle("empser", empser);
-                        th.setTitle("gch", gch);
-                        th.setTitle("gchserv", gchserv);
-                        th.setTitle("gla", gla);
-                        th.setTitle("glt", glt);
-                        th.setTitle("apl", apl);
-                        th.setTitle("ndt", ndt);
-                        th.setTitle("ndtt", ndtt);
-                        th.setTitle("ndta", ndta);
-                        th.setTitle("ndtsa", ndtsa);
-                        th.setTitle("cnx", cnx);
-                        th.setTitle("remp", remp);
-                        th.setTitle("sgch", sgch);
-                        th.setTitle("ser", ser);
-                        th.setTitle("tch", tch);
-                        response.sendRedirect("/QData/setting/titles.jsp?err="+URLEncoder.encode("Modifié", "UTF-8"));
+                    if (StringUtils.isNoneBlank(gbl, emp, empser, gch, gchserv, gla, glt, apl, ndt, ndtt, ndta, ndtsa, cnx, remp, sgch, ser)) {
+
+                        TitleController tc = new TitleController();
+                        Title t = new Title();
+                        t = tc.getTitleByType("gbl");
+                        t.setValue(gbl);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("emp");
+                        t.setValue(emp);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("empser");
+                        t.setValue(empser);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("gch");
+                        t.setValue(gch);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("gchserv");
+                        t.setValue(gchserv);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("gla");
+                        t.setValue(gla);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("glt");
+                        t.setValue(glt);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("apl");
+                        t.setValue(apl);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("ndt");
+                        t.setValue(ndt);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("ndtt");
+                        t.setValue(ndtt);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("ndta");
+                        t.setValue(ndta);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("ndtsa");
+                        t.setValue(ndtsa);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("cnx");
+                        t.setValue(cnx);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("remp");
+                        t.setValue(remp);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("sgch");
+                        t.setValue(sgch);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("ser");
+                        t.setValue(ser);
+                        tc.updateTitle(t);
+                        t = tc.getTitleByType("tch");
+                        t.setValue(tch);
+                        tc.updateTitle(t);
+                        response.sendRedirect("/QStates/setting/titles.jsp?err=" + URLEncoder.encode("Modifié", "UTF-8"));
                     } else {
-                        response.sendRedirect("/QData/setting/titles.jsp?err="+URLEncoder.encode("une ou plusieurs entrées vides", "UTF-8"));
+                        response.sendRedirect("/QStates/setting/titles.jsp?err=" + URLEncoder.encode("une ou plusieurs entrées vides", "UTF-8"));
                     }
 
-                }else{
+                } else {
                     response.sendRedirect("/QData/home.jsp");
                 }
             }
