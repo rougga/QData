@@ -22,7 +22,6 @@ ma\rougga\qdata\PasswordAuthentication.class
 ma\rougga\qdata\servlets\DeleteCible.class
 ma\rougga\qdata\modal\Window.class
 ma\rougga\qdata\servlets\AddZone.class
-ma\rougga\qdata\api\RestoreData.class
 ma\rougga\qdata\controller\TaskController.class
 ma\rougga\qdata\PgConnection1.class
 ma\rougga\qdata\modal\report\GlaRow.class
@@ -34,7 +33,6 @@ ma\rougga\qdata\controller\WindowController.class
 ma\rougga\qdata\controller\AgenceController.class
 ma\rougga\qdata\servlets\EditZone.class
 ma\rougga\qdata\modal\report\EmpSerRow.class
-ma\rougga\qdata\api\UpdateData.class
 ma\rougga\qdata\controller\report\GblTableController.class
 ma\rougga\qdata\servlets\EditDatabase.class
 ma\rougga\qdata\modal\Service.class
@@ -51,6 +49,7 @@ ma\rougga\qdata\SQLiteConnection.class
 ma\rougga\qdata\handler\DbHandler.class
 ma\rougga\qdata\controller\report\GchSerTableController.class
 ma\rougga\qdata\controller\report\GltTableController.class
+ma\rougga\qdata\api\agence\UpdateAgence.class
 ma\rougga\qdata\modal\report\EmpRow.class
 ma\rougga\qdata\servlets\AddDatabase.class
 ma\rougga\qdata\Listener$1.class
@@ -69,6 +68,7 @@ ma\rougga\qdata\PgMultiConnection.class
 ma\rougga\qdata\controller\report\TchTableController.class
 ma\rougga\qdata\modal\GblRow.class
 ma\rougga\qdata\controller\report\EmpSerTableController.class
+ma\rougga\qdata\api\agence\RestoreAgence.class
 ma\rougga\qdata\controller\CibleController.class
 ma\rougga\qdata\Tools.class
 ma\rougga\qdata\servlets\Delete.class

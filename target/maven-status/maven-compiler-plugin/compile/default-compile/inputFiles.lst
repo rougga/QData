@@ -1,6 +1,8 @@
+C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\api\agence\RestoreAgence.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\CfgHandler.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\modal\GblRow.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\controller\TitleController.java
+C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\api\agence\UpdateAgence.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\servlets\Settings.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\modal\report\GchSerRow.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\modal\Service.java
@@ -40,7 +42,6 @@ C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\servlets\Edi
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\servlets\Logoff.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\api\GetAgenceStatus.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\servlets\DeleteDatabase.java
-C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\api\agence\UpdateData.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\controller\report\EmpSerTableController.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\modal\report\GltRow.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\modal\Window.java
@@ -56,7 +57,6 @@ C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\Listener.jav
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\servlets\AddUtilisateur.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\servlets\Login.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\PgConnection1.java
-C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\api\agence\RestoreData.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\controller\report\TchTableController.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\controller\report\GblTableController.java
 C:\Users\bouga\Documents\GitHub\QData\src\main\java\ma\rougga\qdata\modal\report\TchRow.java

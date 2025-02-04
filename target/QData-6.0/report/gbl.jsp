@@ -1,33 +1,20 @@
+<%@page import="ma.rougga.qdata.modal.Title"%>
+<%@page import="ma.rougga.qdata.controller.TitleController"%>
 <%@page import="ma.rougga.qdata.modal.GblRow"%>
-<%@page import="ma.rougga.qdata.handler.TitleHandler"%>
 <%@page import="ma.rougga.qdata.controller.report.GblTableController"%>
 <%@page import="java.util.Map"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="ma.rougga.qdata.TableGenerator"%>
-<%@page import="org.w3c.dom.Element"%>
-<%@page import="org.xml.sax.SAXException"%>
-<%@page import="javax.xml.parsers.ParserConfigurationException"%>
-<%@page import="org.w3c.dom.NodeList"%>
-<%@page import="org.w3c.dom.Node"%>
-<%@page import="org.w3c.dom.Document"%>
 <%@page import="ma.rougga.qdata.CfgHandler"%>
-<%@page import="java.io.FileInputStream"%>
-<%@page import="java.io.InputStream"%>
-<%@page import="java.util.Properties"%>
-<%@page import="java.io.FileNotFoundException"%>
-<%@page import="java.io.IOException"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>
-<%@page import="ma.rougga.qdata.PgConnection"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     String type = "gbl";
     String[] agences = request.getParameterValues("agences");
-    String Title = new TitleHandler(request).getTitle(type);
+    Title Title = new TitleController().getTitleByType(type);
     String date1 = (request.getParameter("date1") == null) ? CfgHandler.format.format(new Date()) : request.getParameter("date1");
     String date2 = (request.getParameter("date2") == null) ? CfgHandler.format.format(new Date()) : request.getParameter("date2");
     List<Map> table = new GblTableController().getTableAsList(date1, date2, agences);
@@ -36,7 +23,7 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>QData - <%= Title%></title>
+        <title>QData - <%= Title.getValue() %></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="/<%= CfgHandler.APP%>/img/favicon-32x32.png">
         <script src="/<%= CfgHandler.APP%>/js/jquery.js"></script>
@@ -75,7 +62,7 @@
                 %>
 
 
-                <h2 class="text-center p-4"><%= Title%></h2>
+                <h2 class="text-center p-4"><%= Title.getValue() %></h2>
                 <div>
                     <%@include file="../addon/report/defaulthtml.jsp" %>
                 </div>
@@ -129,7 +116,8 @@
                                 if (servicesObj instanceof List<?>) {
                                     List<GblRow> services = (ArrayList<GblRow>) agence.get("services");
                                     for (GblRow service : services) {
-                            %>                      <tr class="" data-id="<%= agence.get("id_agence")%>">
+                            %>                      
+                            <tr class="" data-id="<%= agence.get("id_agence")%>">
                                 <th scope="row" class="text-center align-middle border-dark 0 db <%= agence.get("agence_name")%>" data-id="<%= agence.get("id_agence")%>"><%= agence.get("agence_name")%></th>
 
                                 <th class="col 1 text-wrap text-center align-middle <%= service.getServiceName()%>" data-id="<%= service.getServiceName()%>"><%= service.getServiceName()%></th>
