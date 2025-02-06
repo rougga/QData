@@ -55,11 +55,17 @@ public class CfgHandler {
     private final String gltTempExcel = "\\cfg\\excel\\glttemp.xlsx";
 
     //Pages
-    public static final String PAGE_HOME = "/QData/home.jsp";
-    public static final String PAGE_REPORT = "/QData/report.jsp";
-    public static final String PAGE_TASK = "/QData/setting/taches.jsp";
-    public static final String PAGE_GBL_REPORT = "/QData/report/gbl.jsp";
-    public static final String PAGE_EMP_REPORT = "/QData/report/emp.jsp";
+    public static final String PAGE_HOME = "/" + APP + "/home.jsp";
+    public static final String PAGE_REPORT = "/" + APP + "/report.jsp";
+    public static final String PAGE_TASK = "/" + APP + "/setting/taches.jsp";
+    public static final String PAGE_GBL_REPORT = "/" + APP + "/report/gbl.jsp";
+    public static final String PAGE_EMP_REPORT = "/" + APP + "/report/emp.jsp";
+    public static final String PAGE_EMPSER_REPORT = "/" + APP + "/report/empser.jsp";
+    public static final String PAGE_GCH_REPORT = "/" + APP + "/report/gch.jsp";
+    public static final String PAGE_GCHSER_REPORT = "/" + APP + "/report/gchser.jsp";
+    public static final String PAGE_GLA_REPORT = "/" + APP + "/report/gla.jsp";
+    public static final String PAGE_GLT_REPORT = "/" + APP + "/report/glt.jsp";
+    public static final String PAGE_TCH_REPORT = "/" + APP + "/report/tch.jsp";
 
     //API URL
     public static String API_GBL_TABLE_JSON = APP_NODE + "/getgbltable";

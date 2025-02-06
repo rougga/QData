@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.UUID;
+import ma.rougga.qdata.controller.report.EmpSerTableController;
 import ma.rougga.qdata.controller.report.EmpTableController;
 import ma.rougga.qdata.controller.report.GblTableController;
 import org.json.simple.JSONObject;
@@ -63,6 +64,7 @@ public class UpdateController {
         boolean isSuccessful = false;
         isSuccessful = new GblTableController().restoreOldRowsByAgenceId(id_agence);
         isSuccessful = new EmpTableController().restoreOldRowsByAgenceId(id_agence);
+        isSuccessful = new EmpSerTableController().restoreOldRowsByAgenceId(id_agence);
         // restore other tables
 
         return isSuccessful;
@@ -72,6 +74,7 @@ public class UpdateController {
         boolean isDone = false;
         isDone = new GblTableController().updateAgenceFromJson(null, null, id_agence.toString());
         isDone = new EmpTableController().updateAgenceFromJson(null, null, id_agence.toString());
+        isDone = new EmpSerTableController().updateAgenceFromJson(null, null, id_agence.toString());
         // update other tables
         
         return isDone;
@@ -79,9 +82,8 @@ public class UpdateController {
     
     public void updateAllAgencesTodayData(){
         new GblTableController().updateFromJson(null, null);
-        
-        
-        
+        new EmpTableController().updateFromJson(null, null);
+        new EmpSerTableController().updateFromJson(null, null);
         
         
         // update other tables

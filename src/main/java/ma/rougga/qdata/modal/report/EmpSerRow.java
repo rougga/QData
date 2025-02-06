@@ -27,6 +27,11 @@ public class EmpSerRow {
     private String date;
 
     // Constructor
+
+    public EmpSerRow() {
+    }
+    
+    
     public EmpSerRow(UUID id, String userId, String userName, String serviceId, String serviceName, String agenceId,
             Long nbT, Long nbTt, Long nbA, Long nbTl1, Long nbSa, Double perApT, Double perTl1Pt,
             Double perSaPt, Double avgSecA, Double avgSecT, Long nbCa, Double perCapt, Long nbCt,

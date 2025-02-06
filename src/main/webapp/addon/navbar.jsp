@@ -26,13 +26,13 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownR" >
                     <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_GBL_REPORT%>?d=d"">RAPPORT GLOBALE</a>
                     <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_EMP_REPORT %>?d=d">RAPPORT EMPLOYE</a>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=empser&d=d">RAPPORT EMPLOYE (service)</a>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=gch&d=d">RAPPORT GUICHET</a>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=gchserv&d=d">RAPPORT GUICHET (service)</a>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=tch&d=d">RAPPORT TACHE</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_EMPSER_REPORT %>?d=d">RAPPORT EMPLOYE (service)</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_GCH_REPORT %>?d=d">RAPPORT GUICHET</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_GCHSER_REPORT %>?d=d">RAPPORT GUICHET (service)</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_TCH_REPORT %>?d=d">RAPPORT TACHE</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=gla&d=d">Grille attente</a>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=glt&d=d">Grille traitement</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_GLA_REPORT %>?d=d">Grille attente</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_GLT_REPORT %>?d=d">Grille traitement</a>
                     </div>
             </li> 
             <li class="nav-item dropdown" id="tranche">

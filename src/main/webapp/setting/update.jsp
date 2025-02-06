@@ -56,16 +56,21 @@
                     <h5 class="text-white text-center">
                         Dernière mise à jour: <%= CfgHandler.getFormatedDateAsString(ac.getLastUpdate(agence.getId()))%>
                     </h5>
+                    <div class="d-flex justify-content-center text-white loadingSpinner p-4" >
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
                     <div class="col-6 d-flex mt-4 flex-column mx-auto align-items-center">
-                        <a class="btn btn-secondary m-1 " id="majNowBtn" href="/<%=CfgHandler.APP%>/updateagence?id_agence=<%=agence.getId().toString()%>">
+                        <a class="btn btn-secondary m-1 majBtn" id="majNowBtn" href="/<%=CfgHandler.APP%>/updateagence?id_agence=<%=agence.getId().toString()%>">
                             <i class="fa fa-cloud-download" aria-hidden="true"></i>
                             <span>Forcer la mise à jour d'aujourd'hui</span>
                         </a>
-                        <a class="btn btn-secondary m-1" id="majTBtn"  href="/<%=CfgHandler.APP%>/restoreagence?id_agence=<%=agence.getId().toString()%>" >
+                        <a class="btn btn-secondary m-1 majBtn" id="majTBtn"  href="/<%=CfgHandler.APP%>/restoreagence?id_agence=<%=agence.getId().toString()%>" >
                             <i class="fa fa-cloud-download" aria-hidden="true"></i>
                             Mettre à jour toutes les données de l'agence
                         </a>
-                        <a class="btn btn-danger mt-5 col-4" id="majTBtn"  href="/<%=CfgHandler.APP%>/setting/agences.jsp" >
+                        <a class="btn btn-danger mt-5 col-4 " id=""  href="/<%=CfgHandler.APP%>/setting/agences.jsp" >
                             <i class="fa fa-arrow-left" aria-hidden="true"></i>
                             RETOURNER
                         </a>
@@ -76,6 +81,25 @@
             </div>
     </body>
     <script>
-         history.replaceState({page: 1}, 'title', "?id_agence=<%= id_agence%>&err=");
+        history.replaceState({page: 1}, 'title', "?id_agence=<%= id_agence%>&err=");
+        function initLoader() {
+            $("#majNowBtn").addClass("disabled");
+            $("#majTBtn").addClass("disabled");
+            $("#majNowBtn").removeClass("btn-secondary").addClass("btn-dark");
+            $("#majTBtn").removeClass("btn-secondary").addClass("btn-dark");
+            $(".loadingSpinner").removeClass("d-none").addClass("d-flex");
+            console.log("loading");
+        }
+        $(".majBtn").on("click", function () {
+            initLoader();
+        });
+        $(document).ready(function () {
+            $("#majNowBtn").removeClass("disabled");
+            $("#majTBtn").removeClass("disabled");
+            $("#majNowBtn").removeClass("btn-dark").addClass("btn-secondary");
+            $("#majTBtn").removeClass("btn-dark").addClass("btn-secondary");
+            $(".loadingSpinner").removeClass("d-flex").addClass("d-none");
+        });
+
     </script>
 </html>

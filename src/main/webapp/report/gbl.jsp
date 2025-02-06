@@ -35,9 +35,6 @@
         <script src="/<%= CfgHandler.APP%>/js/moment.min.js"></script>
         <script src="/<%= CfgHandler.APP%>/js/report.js"></script>
         <style>
-            .db{
-                max-width: 35%;
-            }
         </style>
     </head>
     <body>
@@ -73,7 +70,7 @@
                             <tr class="">
                                 <th class="col 0 text-wrap text-center align-middle db" >Site</th>
 
-                                <th class="col 1 text-wrap text-center align-middle" >Service</th>
+                                <th class="col 1 text-center align-middle" >Service</th>
 
                                 <th class="col 2 text-wrap text-center align-middle" >Nb. Tickets</th>
 
@@ -120,7 +117,7 @@
                             <tr class="" data-id="<%= agence.get("id_agence")%>">
                                 <th scope="row" class="text-center align-middle border-dark 0 db <%= agence.get("agence_name")%>" data-id="<%= agence.get("id_agence")%>"><%= agence.get("agence_name")%></th>
 
-                                <th class="col 1 text-wrap text-center align-middle <%= service.getServiceName()%>" data-id="<%= service.getServiceName()%>"><%= service.getServiceName()%></th>
+                                <th class="col 1 text-center align-middle <%= service.getServiceName()%>" data-id="<%= service.getServiceName()%>"><%= service.getServiceName()%></th>
 
                                 <th class="col 2 text-wrap text-center align-middle" ><%= service.getNbT()%></th>
 

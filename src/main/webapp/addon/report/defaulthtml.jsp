@@ -19,8 +19,8 @@
                    <div class='dropdown-menu '>
                      <a class='dropdown-item font-weight-bold appHover' href='#' id='today'>Aujourd'hui</a>
                      <a class='dropdown-item font-weight-bold appHover' href='#' id='yesterday'>Hier</a>
-                     <a class='dropdown-item font-weight-bold appHover' href='#' id='cWeek'>Sema.rougga.qdatae en cours</a>
-                     <a class='dropdown-item font-weight-bold appHover' href='#' id='lWeek'>Dernier sema.rougga.qdatae</a>
+                     <a class='dropdown-item font-weight-bold appHover' href='#' id='cWeek'>Semaine en cours</a>
+                     <a class='dropdown-item font-weight-bold appHover' href='#' id='lWeek'>Dernier semaine</a>
                      <a class='dropdown-item font-weight-bold appHover' href='#' id='cMonth'>Mois en cours</a>
                      <a class='dropdown-item font-weight-bold appHover' href='#' id='lMonth'>Mois dernier</a>
                      <a class='dropdown-item font-weight-bold appHover' href='#' id='cYear'>Année en cours</a>
