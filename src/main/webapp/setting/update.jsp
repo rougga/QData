@@ -1,8 +1,10 @@
+<%@page import="java.net.URLEncoder"%>
 <%@page import="java.util.UUID"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="ma.rougga.qdata.modal.Agence"%>
 <%@page import="java.util.List"%>
 <%@page import="ma.rougga.qdata.controller.AgenceController"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     String id_agence = request.getParameter("id_agence");
@@ -49,6 +51,9 @@
                     }
                 %>
 
+                <%
+                    if (agence != null) {
+                %>
                 <div class="w-100" id="dbTbl">
                     <h1 class="text-white text-center">
                         Mise a jour de l'agence: <%= agence.getName()%>
@@ -76,6 +81,32 @@
                         </a>
                     </div>
                 </div>
+                <%
+                } else {
+                %>
+                    <div class="w-100" id="dbTbl">
+                    <h1 class="text-white text-center">
+                        Mise a jour de l'agence: Agence inexistant!
+                    </h1>
+                    <h5 class="text-white text-center">
+                        Dernière mise à jour: --
+                    </h5>
+                    <div class="d-flex justify-content-center text-white loadingSpinner p-4" >
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex mt-4 flex-column mx-auto align-items-center">
+                        
+                        <a class="btn btn-danger mt-5 col-4 " id=""  href="/<%=CfgHandler.APP%>/setting/agences.jsp" >
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                            RETOURNER
+                        </a>
+                    </div>
+                </div>
+                <%
+                    }
+                %>
             </div>
             <div class="footer">
             </div>

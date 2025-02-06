@@ -148,8 +148,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="agence">Zone:</label>
-                                        <select class="form-control" id="zone" name="zone">
-                                            <option class="disabled" selected disabled>Selectionez Zone</option>
+                                        <select class="form-control" id="zone" name="zone" required>
                                             <%                                                ZoneController zc = new ZoneController();
                                                 List<Zone> zones = zc.getAllZones();
                                                 if (zones != null) {
@@ -165,7 +164,6 @@
                                                 }
 
                                             %>
-                                            <option class="bg-danger text-white" value="" >No Zone</option>
                                         </select>
                                     </div>
                                     <div class="form-group">

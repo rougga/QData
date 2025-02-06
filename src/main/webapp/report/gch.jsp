@@ -1,7 +1,7 @@
-<%@page import="ma.rougga.qdata.modal.report.EmpRow"%>
+<%@page import="ma.rougga.qdata.modal.report.GchRow"%>
 <%@page import="ma.rougga.qdata.controller.TitleController"%>
 <%@page import="ma.rougga.qdata.modal.Title"%>
-<%@page import="ma.rougga.qdata.controller.report.EmpTableController"%>
+<%@page import="ma.rougga.qdata.controller.report.GchTableController"%>
 <%@page import="java.util.Map"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="ma.rougga.qdata.CfgHandler"%>
@@ -12,12 +12,12 @@
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    String type = "emp";
+    String type = "gch";
     String[] agences = request.getParameterValues("agences");
     Title Title = new TitleController().getTitleByType(type);
     String date1 = (request.getParameter("date1") == null) ? CfgHandler.format.format(new Date()) : request.getParameter("date1");
     String date2 = (request.getParameter("date2") == null) ? CfgHandler.format.format(new Date()) : request.getParameter("date2");
-    List<Map> table = new EmpTableController().getTableAsList(date1, date2, agences);
+    List<Map> table = new GchTableController().getTableAsList(date1, date2, agences);
 %>
 <!DOCTYPE html>
 <html>
@@ -71,38 +71,40 @@
                         <a class="float-right btn btn-link text-white" id="plus">PLUS >></a>
                         <thead class="appColor">
                             <tr class="">
-
-                                <th class="col 0 text-wrap text-center align-middle db" >Site</th>
-
-                                <th class="col 1  text-center align-middle" >Employé</th>
-                                <th class="col 2 text-wrap text-center align-middle" >Nb. Tickets</th>
-                                <th class="col 3 text-wrap text-center align-middle" >Nb. Traités</th>
-
-                                <th class="col 4 text-wrap text-center align-middle" >Nb. Absents</th>
-
-                                <th class="col 5 text-wrap text-center align-middle" >Nb. Traités &lt;1mn</th>
-
-                                <th class="col 6 text-wrap text-center align-middle" >Nb. Sans affectation</th>
-
-                                <th class="col 7 text-wrap text-center align-middle" >Absents/Nb. Tickets(%)</th>
-
-                                <th class="col 8 text-wrap text-center align-middle" >Traités&lt;1mn/Nb. Tickets(%)</th>
-
-                                <th class="col 9 text-wrap text-center align-middle" >Sans affect/Nb. Tickets(%)</th>
-
-                                <th class="col 10 text-wrap text-center align-middle" >Moyenne d'attente</th>
-
-                                <th class="col 11 text-wrap text-center align-middle" >&gt;Cible</th>
-
-                                <th class="col 12 text-wrap text-center align-middle" >%Cible</th>
-
-                                <th class="col 13 text-wrap text-center align-middle" >Moyenne Traitement</th>
-
-                                <th class="col 14 text-wrap text-center align-middle" >&gt;Cible</th>
-
-                                <th class="col 15 text-wrap text-center align-middle" >%Cible</th>
-
-                            </tr>
+                            
+                                <th class="col 0 text-wrap text-center align-middle db"  style="">Site</th>
+                                
+                                <th class="col 1 text-center align-middle" style="">Guichet</th>
+                                
+                                <th class="col 2 text-wrap text-center align-middle" style="">Nb. Tickets</th>
+                                
+                                <th class="col 3 text-wrap text-center align-middle" style="">Nb. Traités</th>
+                                
+                                <th class="col 4 text-wrap text-center align-middle" style="">Nb. Absents</th>
+                                
+                                <th class="col 5 text-wrap text-center align-middle" style="">Nb. Traités &lt;1mn</th>
+                                
+                                <th class="col 6 text-wrap text-center align-middle" style="">Nb. Sans affectation</th>
+                                
+                                <th class="col 7 text-wrap text-center align-middle" style="">Absents/Nb. Tickets(%)</th>
+                                
+                                <th class="col 8 text-wrap text-center align-middle" style="">Traités&lt;1mn/Nb. Tickets(%)</th>
+                                
+                                <th class="col 9 text-wrap text-center align-middle" style="">Sans affect/Nb. Tickets(%)</th>
+                                
+                                <th class="col 10 text-wrap text-center align-middle" style="">Moyenne d'attente</th>
+                                
+                                <th class="col 11 text-wrap text-center align-middle" style="">&gt;Cible</th>
+                                
+                                <th class="col 12 text-wrap text-center align-middle" style="">%Cible</th>
+                                
+                                <th class="col 13 text-wrap text-center align-middle" style="">Moyenne Traitement</th>
+                                
+                                <th class="col 14 text-wrap text-center align-middle" style="">&gt;Cible</th>
+                                
+                                <th class="col 15 text-wrap text-center align-middle" style="">%Cible</th>
+                                
+                        </tr>
                         </thead>
                         <tbody  class="font-weight-bold ">
 
@@ -113,13 +115,13 @@
                             <%
                                 Object empsObj = agence.get("emps");
                                 if (empsObj instanceof List<?>) {
-                                    List<EmpRow> emps = (ArrayList<EmpRow>) empsObj;
-                                    for (EmpRow emp : emps) {
+                                    List<GchRow> emps = (ArrayList<GchRow>) empsObj;
+                                    for (GchRow emp : emps) {
                             %>                     
                             <tr class="" data-id="<%= agence.get("id_agence")%>">
                                 <th scope="row" class="text-center align-middle border-dark 0 db <%= agence.get("agence_name")%>" data-id="<%= agence.get("id_agence")%>"><%= agence.get("agence_name")%></th>
 
-                                <th class="col 1 text-wrap text-center align-middle <%= emp.getUserName()%>" ><%= emp.getUserName()%></th>
+                                <th class="col 1  text-center align-middle <%= emp.getGuichetName()%>" data-id="<%= emp.getGuichetId()%>" ><%= emp.getGuichetName()%></th>
                                 <th class="col 2 text-wrap text-center align-middle" ><%= emp.getNbT()%></th>
 
                                 <th class="col 3 text-wrap text-center align-middle" ><%= emp.getNbTt()%></th>

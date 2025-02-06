@@ -9,6 +9,8 @@ import java.util.UUID;
 import ma.rougga.qdata.controller.report.EmpSerTableController;
 import ma.rougga.qdata.controller.report.EmpTableController;
 import ma.rougga.qdata.controller.report.GblTableController;
+import ma.rougga.qdata.controller.report.GchSerTableController;
+import ma.rougga.qdata.controller.report.GchTableController;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -65,6 +67,8 @@ public class UpdateController {
         isSuccessful = new GblTableController().restoreOldRowsByAgenceId(id_agence);
         isSuccessful = new EmpTableController().restoreOldRowsByAgenceId(id_agence);
         isSuccessful = new EmpSerTableController().restoreOldRowsByAgenceId(id_agence);
+        isSuccessful = new GchTableController().restoreOldRowsByAgenceId(id_agence);
+        isSuccessful = new GchSerTableController().restoreOldRowsByAgenceId(id_agence);
         // restore other tables
 
         return isSuccessful;
@@ -75,6 +79,8 @@ public class UpdateController {
         isDone = new GblTableController().updateAgenceFromJson(null, null, id_agence.toString());
         isDone = new EmpTableController().updateAgenceFromJson(null, null, id_agence.toString());
         isDone = new EmpSerTableController().updateAgenceFromJson(null, null, id_agence.toString());
+        isDone = new GchTableController().updateAgenceFromJson(null, null, id_agence.toString());
+        isDone = new GchSerTableController().updateAgenceFromJson(null, null, id_agence.toString());
         // update other tables
         
         return isDone;
@@ -84,6 +90,8 @@ public class UpdateController {
         new GblTableController().updateFromJson(null, null);
         new EmpTableController().updateFromJson(null, null);
         new EmpSerTableController().updateFromJson(null, null);
+        new GchTableController().updateFromJson(null, null);
+        new GchSerTableController().updateFromJson(null, null);
         
         
         // update other tables

@@ -1,4 +1,5 @@
-<%@page import="ma.rougga.qdata.modal.report.EmpRow"%>
+<%@page import="ma.rougga.qdata.controller.report.GchSerTableController"%>
+<%@page import="ma.rougga.qdata.modal.report.GchSerRow"%>
 <%@page import="ma.rougga.qdata.controller.TitleController"%>
 <%@page import="ma.rougga.qdata.modal.Title"%>
 <%@page import="ma.rougga.qdata.controller.report.EmpTableController"%>
@@ -12,12 +13,12 @@
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    String type = "emp";
+    String type = "gchser";
     String[] agences = request.getParameterValues("agences");
     Title Title = new TitleController().getTitleByType(type);
     String date1 = (request.getParameter("date1") == null) ? CfgHandler.format.format(new Date()) : request.getParameter("date1");
     String date2 = (request.getParameter("date2") == null) ? CfgHandler.format.format(new Date()) : request.getParameter("date2");
-    List<Map> table = new EmpTableController().getTableAsList(date1, date2, agences);
+    List<Map> table = new GchSerTableController().getTableAsList(date1, date2, agences);
 %>
 <!DOCTYPE html>
 <html>
@@ -35,9 +36,6 @@
         <script src="/<%= CfgHandler.APP%>/js/moment.min.js"></script>
         <script src="/<%= CfgHandler.APP%>/js/report.js"></script>
         <style>
-            .db{
-                max-width: 40%;
-            }
         </style>
     </head>
     <body>
@@ -72,35 +70,39 @@
                         <thead class="appColor">
                             <tr class="">
 
-                                <th class="col 0 text-wrap text-center align-middle db" >Site</th>
+                                <th class="col 0 text-wrap text-center align-middle db" style="">Site</th>
 
-                                <th class="col 1  text-center align-middle" >Employé</th>
-                                <th class="col 2 text-wrap text-center align-middle" >Nb. Tickets</th>
-                                <th class="col 3 text-wrap text-center align-middle" >Nb. Traités</th>
+                                <th class="col 1 text-center align-middle" style="">Guichet</th>
 
-                                <th class="col 4 text-wrap text-center align-middle" >Nb. Absents</th>
+                                <th class="col 2  text-center align-middle" style="">Service</th>
 
-                                <th class="col 5 text-wrap text-center align-middle" >Nb. Traités &lt;1mn</th>
+                                <th class="col 3 text-wrap text-center align-middle" style="">Nb. Tickets</th>
 
-                                <th class="col 6 text-wrap text-center align-middle" >Nb. Sans affectation</th>
+                                <th class="col 4 text-wrap text-center align-middle" style="">Nb. Traités</th>
 
-                                <th class="col 7 text-wrap text-center align-middle" >Absents/Nb. Tickets(%)</th>
+                                <th class="col 5 text-wrap text-center align-middle" style="">Nb. Absents</th>
 
-                                <th class="col 8 text-wrap text-center align-middle" >Traités&lt;1mn/Nb. Tickets(%)</th>
+                                <th class="col 6 text-wrap text-center align-middle" style="">Nb. Traités &lt;1mn</th>
 
-                                <th class="col 9 text-wrap text-center align-middle" >Sans affect/Nb. Tickets(%)</th>
+                                <th class="col 7 text-wrap text-center align-middle" style="">Nb. Sans affectation</th>
 
-                                <th class="col 10 text-wrap text-center align-middle" >Moyenne d'attente</th>
+                                <th class="col 8 text-wrap text-center align-middle" style="">Absents/Nb. Tickets(%)</th>
 
-                                <th class="col 11 text-wrap text-center align-middle" >&gt;Cible</th>
+                                <th class="col 9 text-wrap text-center align-middle" style="">Traités&lt;1mn/Nb. Tickets(%)</th>
 
-                                <th class="col 12 text-wrap text-center align-middle" >%Cible</th>
+                                <th class="col 10 text-wrap text-center align-middle" style="">Sans affect/Nb. Tickets(%)</th>
 
-                                <th class="col 13 text-wrap text-center align-middle" >Moyenne Traitement</th>
+                                <th class="col 11 text-wrap text-center align-middle" style="">Moyenne d'attente</th>
 
-                                <th class="col 14 text-wrap text-center align-middle" >&gt;Cible</th>
+                                <th class="col 12 text-wrap text-center align-middle" style="">&gt;Cible</th>
 
-                                <th class="col 15 text-wrap text-center align-middle" >%Cible</th>
+                                <th class="col 13 text-wrap text-center align-middle" style="">%Cible</th>
+
+                                <th class="col 14 text-wrap text-center align-middle" style="">Moyenne Traitement</th>
+
+                                <th class="col 15 text-wrap text-center align-middle" style="">&gt;Cible</th>
+
+                                <th class="col 16 text-wrap text-center align-middle" style="">%Cible</th>
 
                             </tr>
                         </thead>
@@ -113,43 +115,43 @@
                             <%
                                 Object empsObj = agence.get("emps");
                                 if (empsObj instanceof List<?>) {
-                                    List<EmpRow> emps = (ArrayList<EmpRow>) empsObj;
-                                    for (EmpRow emp : emps) {
+                                    List<GchSerRow> emps = (ArrayList<GchSerRow>) empsObj;
+                                    for (GchSerRow emp : emps) {
                             %>                     
                             <tr class="" data-id="<%= agence.get("id_agence")%>">
                                 <th scope="row" class="text-center align-middle border-dark 0 db <%= agence.get("agence_name")%>" data-id="<%= agence.get("id_agence")%>"><%= agence.get("agence_name")%></th>
 
-                                <th class="col 1 text-wrap text-center align-middle <%= emp.getUserName()%>" ><%= emp.getUserName()%></th>
-                                <th class="col 2 text-wrap text-center align-middle" ><%= emp.getNbT()%></th>
+                                <th class="col 1  text-center align-middle <%= emp.getGuichetName()%>" data-id="<%= emp.getGuichetId()%>" ><%= emp.getGuichetName()%></th>
+                                <th class="col 2  text-center align-middle <%= emp.getServiceName()%>" data-id="<%= emp.getServiceId()%>"><%= emp.getServiceName()%></th>
+                                <th class="col 3 text-wrap text-center align-middle" ><%= emp.getNbT()%></th>
+                                <th class="col 4 text-wrap text-center align-middle" ><%= emp.getNbTt()%></th>
 
-                                <th class="col 3 text-wrap text-center align-middle" ><%= emp.getNbTt()%></th>
+                                <th class="col 5 text-wrap text-center align-middle" ><%= emp.getNbA()%></th>
 
-                                <th class="col 4 text-wrap text-center align-middle" ><%= emp.getNbA()%></th>
+                                <th class="col 6 text-wrap text-center align-middle" ><%= emp.getNbTl1()%></th>
 
-                                <th class="col 5 text-wrap text-center align-middle" ><%= emp.getNbTl1()%></th>
+                                <th class="col 7 text-wrap text-center align-middle" ><%= emp.getNbSa()%></th>
 
-                                <th class="col 6 text-wrap text-center align-middle" ><%= emp.getNbSa()%></th>
+                                <th class="col 8 text-wrap text-center align-middle" ><%= emp.getPerApT()%>%</th>
 
-                                <th class="col 7 text-wrap text-center align-middle" ><%= emp.getPerApT()%>%</th>
+                                <th class="col 9 text-wrap text-center align-middle" ><%= emp.getPerTl1Pt()%>%</th>
 
-                                <th class="col 8 text-wrap text-center align-middle" ><%= emp.getPerTl1Pt()%>%</th>
+                                <th class="col 10 text-wrap text-center align-middle" ><%= emp.getPerSaPt()%>%</th>
 
-                                <th class="col 9 text-wrap text-center align-middle" ><%= emp.getPerSaPt()%>%</th>
+                                <th class="col 11 text-wrap text-center align-middle" ><%= CfgHandler.getFormatedTimeFromSeconds(emp.getAvgSecA())%></th>
 
-                                <th class="col 10 text-wrap text-center align-middle" ><%= CfgHandler.getFormatedTimeFromSeconds(emp.getAvgSecA())%></th>
+                                <th class="col 12 text-wrap text-center align-middle" ><%= emp.getNbCa()%></th>
 
-                                <th class="col 11 text-wrap text-center align-middle" ><%= emp.getNbCa()%></th>
+                                <th class="col 13 text-wrap text-center align-middle" ><%= emp.getPerCapt()%>%</th>
 
-                                <th class="col 12 text-wrap text-center align-middle" ><%= emp.getPerCapt()%>%</th>
+                                <th class="col 14 text-wrap text-center align-middle" ><%= CfgHandler.getFormatedTimeFromSeconds(emp.getAvgSecT())%></th>
 
-                                <th class="col 13 text-wrap text-center align-middle" ><%= CfgHandler.getFormatedTimeFromSeconds(emp.getAvgSecT())%></th>
+                                <th class="col 15 text-wrap text-center align-middle" ><%= emp.getNbCt()%></th>
 
-                                <th class="col 14 text-wrap text-center align-middle" ><%= emp.getNbCt()%></th>
-
-                                <th class="col 15 text-wrap text-center align-middle" ><%= emp.getPerCtPt()%>%</th>
+                                <th class="col 16 text-wrap text-center align-middle" ><%= emp.getPerCtPt()%>%</th>
 
                                 <%}
-                                        }%>
+                                    }%>
                             </tr>
                             <%
                                     }

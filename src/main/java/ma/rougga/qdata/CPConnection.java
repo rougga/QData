@@ -26,6 +26,7 @@ public class CPConnection {
         config.setIdleTimeout(30000); // Close idle connections after 30 sec
         config.setConnectionTimeout(3000); // Wait max 3 sec for a connection
         config.setLeakDetectionThreshold(5000); // Detects connection leaks
+        config.setMaxLifetime(900000);
         config.setAutoCommit(true);
         dataSource = new HikariDataSource(config);
     }

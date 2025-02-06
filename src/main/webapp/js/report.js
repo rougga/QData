@@ -34,7 +34,7 @@ $(document).ready(function () {
             case "gch":
                 $(colsToShow.gch).show();
                 break;
-            case "gchserv":
+            case "gchser":
                 $(colsToShow.gchser).show();
                 break;
             case "ndt":
