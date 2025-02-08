@@ -7,217 +7,198 @@ public class GlaRow {
     private UUID id;
     private String date;
     private String agenceId;
-    private String guichetId;
-    private String guichetName;
     private String serviceId;
     private String serviceName;
-    private Long nbT;
-    private Long nbTt;
-    private Long nbA;
-    private Long nbTl1;
-    private Long nbSa;
-    private Double perApT;
-    private Double perTl1Pt;
-    private Double perSaPt;
-    private Double avgSecA;
-    private Long nbCa;
-    private Double perCapt;
-    private Double avgSecT;
-    private Long nbCt;
-    private Double perCtPt;
+    private Long s0_15;
+    private Long s15_30;
+    private Long s30_60;
+    private Long s60_90;
+    private Long s90_120;
+    private Long s120;
+    private Long m0_5;
+    private Long m5_10;
+    private Long m10_20;
+    private Long m20_30;
+    private Long m30_45;
+    private Long m45_50;
+    private Long m50;
+    private Long total;
+    public GlaRow() {
+    }
 
-    // Constructors, Getters, and Setters
-    public GlaRow() {}
-
-    public GlaRow(UUID id, String date, String agenceId, String guichetId, String guichetName, String serviceId, String serviceName, Long nbT, Long nbTt, Long nbA, Long nbTl1, Long nbSa, Double perApT, Double perTl1Pt, Double perSaPt, Double avgSecA, Long nbCa, Double perCapt, Double avgSecT, Long nbCt, Double perCtPt) {
+    public GlaRow(UUID id, String date, String agenceId, String serviceId, String serviceName, Long s0_15, Long s15_30, Long s30_60, Long s60_90, Long s90_120, Long s120, Long m0_5, Long m5_10, Long m10_20, Long m20_30, Long m30_45, Long m45_50, Long m50, Long total) {
         this.id = id;
         this.date = date;
         this.agenceId = agenceId;
-        this.guichetId = guichetId;
-        this.guichetName = guichetName;
         this.serviceId = serviceId;
         this.serviceName = serviceName;
-        this.nbT = nbT;
-        this.nbTt = nbTt;
-        this.nbA = nbA;
-        this.nbTl1 = nbTl1;
-        this.nbSa = nbSa;
-        this.perApT = perApT;
-        this.perTl1Pt = perTl1Pt;
-        this.perSaPt = perSaPt;
-        this.avgSecA = avgSecA;
-        this.nbCa = nbCa;
-        this.perCapt = perCapt;
-        this.avgSecT = avgSecT;
-        this.nbCt = nbCt;
-        this.perCtPt = perCtPt;
+        this.s0_15 = s0_15;
+        this.s15_30 = s15_30;
+        this.s30_60 = s30_60;
+        this.s60_90 = s60_90;
+        this.s90_120 = s90_120;
+        this.s120 = s120;
+        this.m0_5 = m0_5;
+        this.m5_10 = m5_10;
+        this.m10_20 = m10_20;
+        this.m20_30 = m20_30;
+        this.m30_45 = m30_45;
+        this.m45_50 = m45_50;
+        this.m50 = m50;
+        this.total = total;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public String getDate() {
         return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public String getAgenceId() {
         return agenceId;
     }
 
-    public void setAgenceId(String agenceId) {
-        this.agenceId = agenceId;
-    }
-
-    public String getGuichetId() {
-        return guichetId;
-    }
-
-    public void setGuichetId(String guichetId) {
-        this.guichetId = guichetId;
-    }
-
-    public String getGuichetName() {
-        return guichetName;
-    }
-
-    public void setGuichetName(String guichetName) {
-        this.guichetName = guichetName;
-    }
-
     public String getServiceId() {
         return serviceId;
-    }
-
-    public void setServiceId(String serviceId) {
-        this.serviceId = serviceId;
     }
 
     public String getServiceName() {
         return serviceName;
     }
 
+    public Long getS0_15() {
+        return s0_15;
+    }
+
+    public Long getS15_30() {
+        return s15_30;
+    }
+
+    public Long getS30_60() {
+        return s30_60;
+    }
+
+    public Long getS60_90() {
+        return s60_90;
+    }
+
+    public Long getS90_120() {
+        return s90_120;
+    }
+
+    public Long getS120() {
+        return s120;
+    }
+
+    public Long getM0_5() {
+        return m0_5;
+    }
+
+    public Long getM5_10() {
+        return m5_10;
+    }
+
+    public Long getM10_20() {
+        return m10_20;
+    }
+
+    public Long getM20_30() {
+        return m20_30;
+    }
+
+    public Long getM30_45() {
+        return m30_45;
+    }
+
+    public Long getM45_50() {
+        return m45_50;
+    }
+
+    public Long getM50() {
+        return m50;
+    }
+
+    public Long getTotal() {
+        return total;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setAgenceId(String agenceId) {
+        this.agenceId = agenceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
+    }
+
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
 
-    public Long getNbT() {
-        return nbT;
+    public void setS0_15(Long s0_15) {
+        this.s0_15 = s0_15;
     }
 
-    public void setNbT(Long nbT) {
-        this.nbT = nbT;
+    public void setS15_30(Long s15_30) {
+        this.s15_30 = s15_30;
     }
 
-    public Long getNbTt() {
-        return nbTt;
+    public void setS30_60(Long s30_60) {
+        this.s30_60 = s30_60;
     }
 
-    public void setNbTt(Long nbTt) {
-        this.nbTt = nbTt;
+    public void setS60_90(Long s60_90) {
+        this.s60_90 = s60_90;
     }
 
-    public Long getNbA() {
-        return nbA;
+    public void setS90_120(Long s90_120) {
+        this.s90_120 = s90_120;
     }
 
-    public void setNbA(Long nbA) {
-        this.nbA = nbA;
+    public void setS120(Long s120) {
+        this.s120 = s120;
     }
 
-    public Long getNbTl1() {
-        return nbTl1;
+    public void setM0_5(Long m0_5) {
+        this.m0_5 = m0_5;
     }
 
-    public void setNbTl1(Long nbTl1) {
-        this.nbTl1 = nbTl1;
+    public void setM5_10(Long m5_10) {
+        this.m5_10 = m5_10;
     }
 
-    public Long getNbSa() {
-        return nbSa;
+    public void setM10_20(Long m10_20) {
+        this.m10_20 = m10_20;
     }
 
-    public void setNbSa(Long nbSa) {
-        this.nbSa = nbSa;
+    public void setM20_30(Long m20_30) {
+        this.m20_30 = m20_30;
     }
 
-    public Double getPerApT() {
-        return perApT;
+    public void setM30_45(Long m30_45) {
+        this.m30_45 = m30_45;
     }
 
-    public void setPerApT(Double perApT) {
-        this.perApT = perApT;
+    public void setM45_50(Long m45_50) {
+        this.m45_50 = m45_50;
     }
 
-    public Double getPerTl1Pt() {
-        return perTl1Pt;
+    public void setM50(Long m50) {
+        this.m50 = m50;
     }
 
-    public void setPerTl1Pt(Double perTl1Pt) {
-        this.perTl1Pt = perTl1Pt;
+    public void setTotal(Long total) {
+        this.total = total;
     }
 
-    public Double getPerSaPt() {
-        return perSaPt;
-    }
 
-    public void setPerSaPt(Double perSaPt) {
-        this.perSaPt = perSaPt;
-    }
-
-    public Double getAvgSecA() {
-        return avgSecA;
-    }
-
-    public void setAvgSecA(Double avgSecA) {
-        this.avgSecA = avgSecA;
-    }
-
-    public Long getNbCa() {
-        return nbCa;
-    }
-
-    public void setNbCa(Long nbCa) {
-        this.nbCa = nbCa;
-    }
-
-    public Double getPerCapt() {
-        return perCapt;
-    }
-
-    public void setPerCapt(Double perCapt) {
-        this.perCapt = perCapt;
-    }
-
-    public Double getAvgSecT() {
-        return avgSecT;
-    }
-
-    public void setAvgSecT(Double avgSecT) {
-        this.avgSecT = avgSecT;
-    }
-
-    public Long getNbCt() {
-        return nbCt;
-    }
-
-    public void setNbCt(Long nbCt) {
-        this.nbCt = nbCt;
-    }
-
-    public Double getPerCtPt() {
-        return perCtPt;
-    }
-
-    public void setPerCtPt(Double perCtPt) {
-        this.perCtPt = perCtPt;
-    }
 }

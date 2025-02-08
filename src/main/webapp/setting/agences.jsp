@@ -29,7 +29,7 @@
         <script src="../js/setting/agence.js"></script>
     </head>
     <body>
-        <div class="container-lg p-0 ">
+        <div class="p-0">
             <div class="head">
                 <%@include file="../addon/navbar.jsp" %>
                 <script>
@@ -48,7 +48,7 @@
                     }
                 %>
 
-                <div class="w-100" id="dbTbl">
+                <div class="container" id="dbTbl">
                     <h1 class="text-white text_center pl-2">
                         Les agences :
                         <span class=" float-right">

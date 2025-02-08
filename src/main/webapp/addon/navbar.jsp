@@ -16,34 +16,34 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active" id="home">
                 <a class="nav-link font-weight-bold" href="/QData/home.jsp">
-                    <span class="fas fa-home font-weight-bold"></span> Accueil
+                    <span class="fas fa-home font-weight-bold"></span> ACCUEIL
                 </a>
             </li>
             <li class="nav-item dropdown" id="report">
                 <a class="nav-link dropdown-toggle font-weight-bold gbl emp empser gch gchserv" href="#" id="navbarDropdownR" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class=""></span> Rapport
+                    <span class=""></span> RAPPORTS
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownR" >
                     <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_GBL_REPORT%>?d=d"">RAPPORT GLOBALE</a>
                     <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_EMP_REPORT %>?d=d">RAPPORT EMPLOYE</a>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_EMPSER_REPORT %>?d=d">RAPPORT EMPLOYE (service)</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_EMPSER_REPORT %>?d=d">RAPPORT EMPLOYE / SERVICE</a>
                     <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_GCH_REPORT %>?d=d">RAPPORT GUICHET</a>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_GCHSER_REPORT %>?d=d">RAPPORT GUICHET (service)</a>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_TCH_REPORT %>?d=d">RAPPORT TACHE</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_GCHSER_REPORT %>?d=d">RAPPORT GUICHET / SERVICE</a>
+                    <a class="dropdown-item font-weight-bold navHover d d-none" href="<%=CfgHandler.PAGE_TCH_REPORT %>?d=d">RAPPORT TACHE</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_GLA_REPORT %>?d=d">Grille attente</a>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_GLT_REPORT %>?d=d">Grille traitement</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_GLA_REPORT %>?d=d">GRILLE ATTENTE</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_GLT_REPORT %>?d=d">GRILLE TRAITEMENT</a>
                     </div>
             </li> 
             <li class="nav-item dropdown" id="tranche">
                 <a class="nav-link dropdown-toggle font-weight-bold ndt ndtt ndta ndtsa" href="#" id="navbarDropdownRe" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class=""></span> Tranche horaire
+                    <span class=""></span> TRANCHE HORAIRE
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownRe" >
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=ndt&d=d">Nombre de tickets edités</a>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=ndtt&d=d">Nombre de tickets traités</a>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=ndta&d=d">Nombre de tickets absents</a>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=ndtsa&d=d">Nombre de tickets sans affectation</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=ndt&d=d">NOMBRE DE TICKETS EDITÉS</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=ndtt&d=d">NOMBRE DE TICKETS TRAITÉS</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=ndta&d=d">NOMBRE DE TICKETS ABSENTS</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=ndtsa&d=d">NOMBRE DE TICKETS SANS AFFECTATION</a>
                 </div>
             </li> 
             <li class="nav-item" id="topics">
@@ -59,7 +59,7 @@
                 <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <b>${user}</b>
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item font-weight-bold navHover disabled" href="/QData/settings.jsp" >Paramètres</a>
                     <div class="dropdown-divider border-dark"></div>
                     

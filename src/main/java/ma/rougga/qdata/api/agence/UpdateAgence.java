@@ -1,7 +1,6 @@
 package ma.rougga.qdata.api.agence;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.Objects;
 import java.util.UUID;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import ma.rougga.qdata.controller.AgenceController;
 import ma.rougga.qdata.controller.UpdateController;
-import ma.rougga.qdata.controller.report.GblTableController;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 

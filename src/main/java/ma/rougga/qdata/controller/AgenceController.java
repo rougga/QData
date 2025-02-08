@@ -19,8 +19,9 @@ import org.json.simple.JSONObject;
 import org.slf4j.LoggerFactory;
 
 public class AgenceController {
-    
+
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AgenceController.class);
+
     public AgenceController() {
     }
 
@@ -193,6 +194,7 @@ public class AgenceController {
         Agence a = this.getAgenceById(id);
         if (a != null) {
             a.setLastupdated_at(CfgHandler.getFormatedDateAsString(new Date()));
+            a.setName(this.getBranchName(id));
             this.editAgence(a);
         }
     }
@@ -294,12 +296,39 @@ public class AgenceController {
 
             JSONObject result = UpdateController.getJsonFromUrl(sb.toString());
             String oldesTicketDate = (String) result.get("oldestDate");
-            logger.info("OldestTicketDate in agence:"+a.getName()+" is "+ oldesTicketDate);
+            logger.info("OldestTicketDate in agence:" + a.getName() + " is " + oldesTicketDate);
             return CfgHandler.getFormatedDateAsDate(oldesTicketDate);
-        }else{
+        } else {
             logger.error("getOldestTicketDate: agence not found");
         }
         return null;
+    }
+
+    private String getBranchName(UUID id) {
+        String BRANCH_NAME = "BORNE ?";
+        Agence a = this.getAgenceById(id);
+        if (a != null) {
+            StringBuilder sb = new StringBuilder("http://");
+            sb.append(a.getHost());
+            sb.append(":").append(a.getPort());
+            sb.append("/").append(CfgHandler.APP_NODE);
+            sb.append("/getname");
+
+            JSONObject result = UpdateController.getJsonFromUrl(sb.toString());
+            if (result!= null) {
+                if (result.get("name") != null) {
+                  BRANCH_NAME  = (String) result.get("name");
+                } else {
+                    logger.error("getBranchName: name not found in json");
+                }
+            } else {
+                logger.error("getBranchName: json object is null");
+            }
+        } else {
+            logger.error("getBranchName: agence not found");
+        }
+        return BRANCH_NAME;
+
     }
 
 }

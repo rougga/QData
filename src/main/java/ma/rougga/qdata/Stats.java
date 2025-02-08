@@ -2,8 +2,10 @@ package ma.rougga.qdata;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,10 +14,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Stats {
 
-    private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    private static final Logger logger = LoggerFactory.getLogger(Stats.class);
     private String date1;
     private String date2;
 
@@ -29,208 +33,140 @@ public class Stats {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
-    public long getTotalTicket(String d1, String d2) {
+    public long getTotalTicket() {
+        long nb = 0;
         try {
-            setDate1(d1);
-            setDate2(d2);
-            PgConnection con = new PgConnection();
-            String SQL = "Select count(*) from t_ticket where to_date(to_char(ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE(?,'YYYY-MM-DD') AND TO_DATE(?,'YYYY-MM-DD');";
-            PreparedStatement s = con.getStatement().getConnection().prepareStatement(SQL);
-            s.setString(1, getDate1());
-            s.setString(2, getDate2());
-            ResultSet r = s.executeQuery();
-            con.closeConnection();
-            long nb;
+            Connection con = new CPConnection().getConnection();
+            String SQL = "SELECT SUM(nb_t)  "
+                    + " FROM rougga_gbl_table "
+                    + " WHERE TO_DATE(TO_CHAR(date, 'YYYY-MM-DD'), 'YYYY-MM-DD') = CURRENT_DATE;";
+            ResultSet r = con.createStatement().executeQuery(SQL);
             if (r.next()) {
                 nb = r.getLong(1);
-                r.close();
-                return nb;
-            } else {
-
-                return 0;
             }
-
-        } catch (Exception e) {
-            return 0;
+            con.close();
+            return nb;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return nb;
         }
     }
 
-    public long getDealTicket(String d1, String d2) {
+    public long getDealTicket() {
+        long nb = 0;
         try {
-            setDate1(d1);
-            setDate2(d2);
-            PgConnection con = new PgConnection();
-            String SQL = "Select count(*) from t_ticket where to_date(to_char(ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE(?,'YYYY-MM-DD') AND TO_DATE(?,'YYYY-MM-DD') and status=4;";
-            PreparedStatement s = con.getStatement().getConnection().prepareStatement(SQL);
-            s.setString(1, getDate1());
-            s.setString(2, getDate2());
-            ResultSet r = s.executeQuery();
-            con.closeConnection();
-            long nb;
+            Connection con = new CPConnection().getConnection();
+            String SQL = "SELECT SUM(nb_tt) "
+                    + "FROM rougga_gbl_table  "
+                    + "WHERE TO_DATE(TO_CHAR(date, 'YYYY-MM-DD'), 'YYYY-MM-DD') = CURRENT_DATE;";
+            ResultSet r = con.createStatement().executeQuery(SQL);
             if (r.next()) {
                 nb = r.getLong(1);
-                r.close();
-                return nb;
-            } else {
-                return 0;
             }
-
-        } catch (Exception e) {
-            return 0;
+            con.close();
+            return nb;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return nb;
         }
     }
 
-    public long getAbsentTicket(String d1, String d2) {
+    public long getAbsentTicket() {
+        long nb = 0;
         try {
-            setDate1(d1);
-            setDate2(d2);
-            PgConnection con = new PgConnection();
-            String SQL = "Select count(*) from t_ticket where to_date(to_char(ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE(?,'YYYY-MM-DD') AND TO_DATE(?,'YYYY-MM-DD') and status=2;";
-            PreparedStatement s = con.getStatement().getConnection().prepareStatement(SQL);
-            s.setString(1, getDate1());
-            s.setString(2, getDate2());
-            ResultSet r = s.executeQuery();
-            con.closeConnection();
-            long nb;
+            Connection con = new CPConnection().getConnection();
+            String SQL = "SELECT SUM(nb_a)  "
+                    + "FROM rougga_gbl_table "
+                    + "WHERE TO_DATE(TO_CHAR(date, 'YYYY-MM-DD'), 'YYYY-MM-DD') = CURRENT_DATE;";
+            ResultSet r = con.createStatement().executeQuery(SQL);
             if (r.next()) {
                 nb = r.getLong(1);
-                r.close();
-                return nb;
-            } else {
-                return 0;
             }
-
-        } catch (Exception e) {
-            return 0;
+            con.close();
+            return nb;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return nb;
         }
     }
 
-    public long getWaitingTicket(String d1, String d2) {
-        try {
-            setDate1(d1);
-            setDate2(d2);
-            PgConnection con = new PgConnection();
-            String SQL = "Select count(*) from t_ticket where to_date(to_char(ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE(?,'YYYY-MM-DD') AND TO_DATE(?,'YYYY-MM-DD') and status=0;";
-            PreparedStatement s = con.getStatement().getConnection().prepareStatement(SQL);
-            s.setString(1, getDate1());
-            s.setString(2, getDate2());
-            ResultSet r = s.executeQuery();
-            con.closeConnection();
-            long nb;
-            if (r.next()) {
-                nb = r.getLong(1);
-                r.close();
-                return nb;
-            } else {
-                return 0;
-            }
+    public long getWaitingTicket() {
+        return 0;
+    }
 
-        } catch (Exception e) {
-            return 0;
+    public Double getMaxWaitTime() {
+        Double nb = 0.0;
+        try {
+            Connection con = new CPConnection().getConnection();
+            String SQL = "SELECT MAX(avgSec_A)  "
+                    + "FROM rougga_gbl_table  "
+                    + "WHERE TO_DATE(TO_CHAR(date, 'YYYY-MM-DD'), 'YYYY-MM-DD') = CURRENT_DATE;";
+            ResultSet r = con.createStatement().executeQuery(SQL);
+            if (r.next()) {
+                nb = r.getDouble(1);
+            }
+            con.close();
+            return nb;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return nb;
         }
     }
 
-    public String getMaxWaitTime(String d1, String d2) {
+    public Double getAvgWaitTime() {
+        Double nb = 0.0;
         try {
-            setDate1(d1);
-            setDate2(d2);
-            PgConnection con = new PgConnection();
-            String SQL = "Select max(DATE_PART('epoch'::text, CALL_TIME - TICKET_TIME)::numeric) from t_ticket where to_date(to_char(ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE(?,'YYYY-MM-DD') AND TO_DATE(?,'YYYY-MM-DD') and call_time is not null;";
-            PreparedStatement s = con.getStatement().getConnection().prepareStatement(SQL);
-            s.setString(1, getDate1());
-            s.setString(2, getDate2());
-            ResultSet r = s.executeQuery();
-            con.closeConnection();
-            String nb;
+            Connection con = new CPConnection().getConnection();
+            String SQL = "SELECT AVG(avgSec_A)  "
+                    + "FROM rougga_gbl_table  "
+                    + "WHERE TO_DATE(TO_CHAR(date, 'YYYY-MM-DD'), 'YYYY-MM-DD') = CURRENT_DATE;";
+            ResultSet r = con.createStatement().executeQuery(SQL);
             if (r.next()) {
-                nb = getFormatedTime(r.getFloat(1));
-                r.close();
-                return nb;
-            } else {
-                r.close();
-                return "00:00:00";
+                nb = r.getDouble(1);
             }
-
-        } catch (Exception e) {
-            return "00:00:00";
+            con.close();
+            return nb;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return nb;
         }
     }
 
-    public String getAvgWaitTime(String d1, String d2) {
+    public Double getMaxDealTime() {
+        Double nb = 0.0;
         try {
-            setDate1(d1);
-            setDate2(d2);
-            PgConnection con = new PgConnection();
-            String SQL = "Select avg(DATE_PART('epoch'::text, CALL_TIME - TICKET_TIME)::numeric) from t_ticket where to_date(to_char(ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE(?,'YYYY-MM-DD') AND TO_DATE(?,'YYYY-MM-DD') and call_time is not null;";
-            PreparedStatement s = con.getStatement().getConnection().prepareStatement(SQL);
-            s.setString(1, getDate1());
-            s.setString(2, getDate2());
-            ResultSet r = s.executeQuery();
-            con.closeConnection();
-            String nb;
+            Connection con = new CPConnection().getConnection();
+            String SQL = "SELECT MAX(avgSec_T) "
+                    + "FROM rougga_gbl_table "
+                    + "WHERE TO_DATE(TO_CHAR(date, 'YYYY-MM-DD'), 'YYYY-MM-DD') = CURRENT_DATE;";
+            ResultSet r = con.createStatement().executeQuery(SQL);
             if (r.next()) {
-                nb = getFormatedTime(r.getFloat(1));
-                r.close();
-                return nb;
-            } else {
-                r.close();
-                return "00:00:00";
+                nb = r.getDouble(1);
             }
-
-        } catch (Exception e) {
-            return "00:00:00";
+            con.close();
+            return nb;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return nb;
         }
     }
 
-    public String getMaxDealTime(String d1, String d2) {
+    public Double getAvgDealTime() {
+        Double nb = 0.0;
         try {
-            setDate1(d1);
-            setDate2(d2);
-            PgConnection con = new PgConnection();
-            String SQL = "Select max(DATE_PART('epoch'::text, finish_time - start_time)::numeric) from t_ticket where to_date(to_char(ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE(?,'YYYY-MM-DD') AND TO_DATE(?,'YYYY-MM-DD') and status=4;";
-            PreparedStatement s = con.getStatement().getConnection().prepareStatement(SQL);
-            s.setString(1, getDate1());
-            s.setString(2, getDate2());
-            ResultSet r = s.executeQuery();
-            con.closeConnection();
-            String nb;
+            Connection con = new CPConnection().getConnection();
+            String SQL = "SELECT AVG(avgSec_T)  "
+                    + "FROM rougga_gbl_table  "
+                    + "WHERE TO_DATE(TO_CHAR(date, 'YYYY-MM-DD'), 'YYYY-MM-DD') = CURRENT_DATE;";
+            ResultSet r = con.createStatement().executeQuery(SQL);
             if (r.next()) {
-                nb = getFormatedTime(r.getFloat(1));
-                r.close();
-                return nb;
-            } else {
-                r.close();
-                return "00:00:00";
+                nb = r.getDouble(1);
             }
-
-        } catch (Exception e) {
-            return "00:00:00";
-        }
-    }
-
-    public String getAvgDealTime(String d1, String d2) {
-        try {
-            setDate1(d1);
-            setDate2(d2);
-            PgConnection con = new PgConnection();
-            String SQL = "Select avg(DATE_PART('epoch'::text, finish_time - start_time)::numeric) from t_ticket where to_date(to_char(ticket_time,'YYYY-MM-DD'),'YYYY-MM-DD')  BETWEEN TO_DATE(?,'YYYY-MM-DD') AND TO_DATE(?,'YYYY-MM-DD') and status=4;";
-            PreparedStatement s = con.getStatement().getConnection().prepareStatement(SQL);
-            s.setString(1, getDate1());
-            s.setString(2, getDate2());
-            ResultSet r = s.executeQuery();
-            con.closeConnection();
-            String nb;
-            if (r.next()) {
-                nb = getFormatedTime(r.getFloat(1));
-                r.close();
-                return nb;
-            } else {
-                r.close();
-                return "00:00:00";
-            }
-
-        } catch (Exception e) {
-            return "00:00:00";
+            con.close();
+            return nb;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return nb;
         }
     }
 
@@ -265,7 +201,7 @@ public class Stats {
 
     public void setDate1(String date1) {
         if (Objects.equals(date1, null)) {
-            this.date1 = format.format(new Date());
+            this.date1 = CfgHandler.format.format(new Date());
         } else {
             this.date1 = date1;
         }
@@ -274,7 +210,7 @@ public class Stats {
 
     public void setDate2(String date2) {
         if (Objects.equals(date2, null)) {
-            this.date2 = format.format(new Date());
+            this.date2 = CfgHandler.format.format(new Date());
         } else {
             this.date2 = date2;
         }
@@ -282,7 +218,7 @@ public class Stats {
     }
 
     public SimpleDateFormat getFormat() {
-        return format;
+        return CfgHandler.format;
     }
 
     public String getDate1() {
@@ -298,23 +234,23 @@ public class Stats {
         String lables = "[";
         String data = "[";
         try {
-            PgConnection con = new PgConnection();
+            Connection con = new CPConnection().getConnection();
             String SQL = "select  "
-                    + "t.db_id, "
+                    + "a.id, "
                     + "a.name, "
-                    + "count(*) as nb_t "
-                    + "from t_ticket t ,agence a "
-                    + "where t.db_id=a.id and t.status=4 "
-                    + "GROUP by t.db_id,a.name;";
-            ResultSet r = con.getStatement().executeQuery(SQL);
+                    + "sum(gbl.nb_t) as nb_t "
+                    + "from rougga_gbl_table gbl,rougga_agences a "
+                    + "where gbl.id_agence=a.id  "
+                    + "GROUP by a.id,a.name;";
+            ResultSet r = con.createStatement().executeQuery(SQL);
             while (r.next()) {
                 lables += "'" + r.getString("name") + "',";
                 data += r.getLong("nb_t") + ",";
             }
 
-            con.closeConnection();
-        } catch (Exception e) {
-            
+            con.close();
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
         }
         lables += "]";
         data += "]";

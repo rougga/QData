@@ -19,7 +19,7 @@ public class Listener implements ServletContextListener {
         @Override
         public void run() {
             logger.info("-- "+CfgHandler.APP+" v"+CfgHandler.VERSION+" Today Data Update Starting.....");
-            new UpdateController().updateAllAgencesTodayData();
+            new UpdateController().update();
             logger.info("-- Last Updated: " + new Date().toString());
         }
     };

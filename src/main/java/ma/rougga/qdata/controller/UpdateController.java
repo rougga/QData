@@ -11,6 +11,8 @@ import ma.rougga.qdata.controller.report.EmpTableController;
 import ma.rougga.qdata.controller.report.GblTableController;
 import ma.rougga.qdata.controller.report.GchSerTableController;
 import ma.rougga.qdata.controller.report.GchTableController;
+import ma.rougga.qdata.controller.report.GlaTableController;
+import ma.rougga.qdata.controller.report.GltTableController;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -69,6 +71,8 @@ public class UpdateController {
         isSuccessful = new EmpSerTableController().restoreOldRowsByAgenceId(id_agence);
         isSuccessful = new GchTableController().restoreOldRowsByAgenceId(id_agence);
         isSuccessful = new GchSerTableController().restoreOldRowsByAgenceId(id_agence);
+        isSuccessful = new GlaTableController().restoreOldRowsByAgenceId(id_agence);
+        isSuccessful = new GltTableController().restoreOldRowsByAgenceId(id_agence);
         // restore other tables
 
         return isSuccessful;
@@ -81,21 +85,38 @@ public class UpdateController {
         isDone = new EmpSerTableController().updateAgenceFromJson(null, null, id_agence.toString());
         isDone = new GchTableController().updateAgenceFromJson(null, null, id_agence.toString());
         isDone = new GchSerTableController().updateAgenceFromJson(null, null, id_agence.toString());
+        isDone = new GlaTableController().updateAgenceFromJson(null, null, id_agence.toString());
+        isDone = new GltTableController().updateAgenceFromJson(null, null, id_agence.toString());
         // update other tables
         
         return isDone;
     }
     
-    public void updateAllAgencesTodayData(){
+    public void update(){
         new GblTableController().updateFromJson(null, null);
         new EmpTableController().updateFromJson(null, null);
         new EmpSerTableController().updateFromJson(null, null);
         new GchTableController().updateFromJson(null, null);
         new GchSerTableController().updateFromJson(null, null);
+        new GlaTableController().updateFromJson(null, null);
+        new GltTableController().updateFromJson(null, null);
         
         
         // update other tables
-        logger.info("updateAllAgencesTodayData() Finished! .");
+        logger.info("Globale update is Finished! .");
     }
     
+    public void restore() {
+
+         new GblTableController().restoreOldRowsForAllAgences();
+         new EmpTableController().restoreOldRowsForAllAgences();
+         new EmpSerTableController().restoreOldRowsForAllAgences();
+         new GchTableController().restoreOldRowsForAllAgences();
+         new GchSerTableController().restoreOldRowsForAllAgences();
+         new GlaTableController().restoreOldRowsForAllAgences();
+         new GltTableController().restoreOldRowsForAllAgences();
+       
+        // restore other tables
+        logger.info("Globale restore is Finished! .");
+    }
 }

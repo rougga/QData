@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     if (!Objects.equals(session.getAttribute("grade"), "adm")) {
-        response.sendRedirect("/"+CfgHandler.APP+"/home.jsp?err="+ URLEncoder.encode("vous avez besoin des privilèges d'administrateur", "UTF-8"));
+        response.sendRedirect("/" + CfgHandler.APP + "/home.jsp?err=" + URLEncoder.encode("vous avez besoin des privilèges d'administrateur", "UTF-8"));
     }
 
 %>
@@ -18,6 +18,7 @@
         int seconds = (int) (Sec % 60);
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
+
     public String getGrade(String grd) {
         switch (grd) {
             case "adm":
@@ -43,7 +44,7 @@
         <script src="/QData/js/settings.js"></script>
     </head>
     <body>
-        <div class="container-lg">
+        <div class="">
             <div class="head">
                 <%@include file="../addon/navbar.jsp" %>
                 <script>
@@ -51,17 +52,17 @@
                 </script>
             </div>
             <div class="pt-4 mt-4">
-                <div class="" id="userTbl">
+                <div class="container" id="userTbl">
                     <%                    String err = request.getParameter("err");
-                    if (err != "" && err != null) {
+                        if (err != "" && err != null) {
 
-                %>
-                <%= "<div class='alert alert-danger alert-dismissible fade show' role='alert'><b>"
-                        + err
-                        + "</b><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"%>
-                <%
-                    }
-                %>
+                    %>
+                    <%= "<div class='alert alert-danger alert-dismissible fade show' role='alert'><b>"
+                            + err
+                            + "</b><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"%>
+                    <%
+                        }
+                    %>
                     <h1 class="text-white">
                         Utilisateurs : 
                         <span class="  float-right">
@@ -86,29 +87,29 @@
                             <%
                                 UtilisateurController uc = new UtilisateurController();
                                 List<Utilisateur> utilisateur = uc.getAllUtilisateur();
-                                
-                                if(utilisateur!=null){
-                                    for(int i=0;i<utilisateur.size();i++){
-                                    String zoneName = "-";
-                                    if(uc.getUtilisateurZone(utilisateur.get(i).getId())!= null){
-                                         zoneName = uc.getUtilisateurZone(utilisateur.get(i).getId()).getName() ; 
-                                    }else{
-                                        continue;
-                                    }
+
+                                if (utilisateur != null) {
+                                    for (int i = 0; i < utilisateur.size(); i++) {
+                                        String zoneName = "-";
+                                        if (uc.getUtilisateurZone(utilisateur.get(i).getId()) != null) {
+                                            zoneName = uc.getUtilisateurZone(utilisateur.get(i).getId()).getName();
+                                        } else {
+                                            continue;
+                                        }
                             %>
                             <tr class=' clickable-row3 '>
-                                <th scope='row'  class="border-dark align-middle" data-userId="<%=utilisateur.get(i).getId() %>"> <%=utilisateur.get(i).getUsername() %></th>
-                                <td class="border-dark align-middle" ><b><%=utilisateur.get(i).getLastName() + " " + utilisateur.get(i).getFirstName() %></b></td>
-                                <td class="border-dark align-middle" data-grade="<%=utilisateur.get(i).getGrade() %>"><b> <%=getGrade(utilisateur.get(i).getGrade()) %></b></td>
-                                <td class="border-dark align-middle" data-sponsor="<%=utilisateur.get(i).getSponsor() %>"><b> <%= (utilisateur.get(i).getSponsor()!= null) ? utilisateur.get(i).getSponsor() : "-"  %></b></td>
-                                <td class="border-dark align-middle" data-zone><b> <%= zoneName %></b></td>
+                                <th scope='row'  class="border-dark align-middle" data-userId="<%=utilisateur.get(i).getId()%>"> <%=utilisateur.get(i).getUsername()%></th>
+                                <td class="border-dark align-middle" ><b><%=utilisateur.get(i).getLastName() + " " + utilisateur.get(i).getFirstName()%></b></td>
+                                <td class="border-dark align-middle" data-grade="<%=utilisateur.get(i).getGrade()%>"><b> <%=getGrade(utilisateur.get(i).getGrade())%></b></td>
+                                <td class="border-dark align-middle" data-sponsor="<%=utilisateur.get(i).getSponsor()%>"><b> <%= (utilisateur.get(i).getSponsor() != null) ? utilisateur.get(i).getSponsor() : "-"%></b></td>
+                                <td class="border-dark align-middle" data-zone><b> <%= zoneName%></b></td>
                                 <td class="border-dark align-middle">
-                                    <a class="btn btn-danger m-0" href="/QData/DeleteUtilisateur?id=<%= utilisateur.get(i).getId() %>"><img src="/QData/img/icon/trash.png"></a>
+                                    <a class="btn btn-danger m-0" href="/QData/DeleteUtilisateur?id=<%= utilisateur.get(i).getId()%>"><img src="/QData/img/icon/trash.png"></a>
                                 </td>
                             </tr>
                             <%
                                     }
-                            }
+                                }
                             %>
 
                         </tbody>
@@ -161,7 +162,7 @@
                                         <label for="agence">Zone <span class="text-danger">*</span>:</label>
                                         <select class="form-control" id="zone" name="zone">
 
-                                            <%                                     
+                                            <%
                                                 ZoneController zc = new ZoneController();
                                                 List<Zone> zones = zc.getAllZones();
                                                 if (zones != null) {
@@ -169,7 +170,7 @@
                                             %>
 
                                             <option class="" value="<%=zones.get(i).getId()%>"><%=zones.get(i).getName()%></option>
-                                            
+
                                             <%
                                                 }
                                             } else {
@@ -182,7 +183,7 @@
                                     <div class="form-group">
                                         <input type="hidden" class="form-control" id="type" name="type" value="user">
                                     </div>
-                                        
+
                                     <p> <span class="text-danger">*</span> = champ obligatoire.</p>
 
                                 </div>

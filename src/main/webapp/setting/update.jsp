@@ -32,7 +32,7 @@
         <script src="../js/settings.js"></script>
     </head>
     <body>
-        <div class="container-lg">
+        <div class="">
             <div class="head">
                 <%@include file="../addon/navbar.jsp" %>
                 <script>
@@ -54,7 +54,7 @@
                 <%
                     if (agence != null) {
                 %>
-                <div class="w-100" id="dbTbl">
+                <div class="container" id="dbTbl">
                     <h1 class="text-white text-center">
                         Mise a jour de l'agence: <%= agence.getName()%>
                     </h1>
@@ -84,7 +84,7 @@
                 <%
                 } else {
                 %>
-                    <div class="w-100" id="dbTbl">
+                <div class="w-100" id="dbTbl">
                     <h1 class="text-white text-center">
                         Mise a jour de l'agence: Agence inexistant!
                     </h1>
@@ -97,7 +97,7 @@
                         </div>
                     </div>
                     <div class="col-6 d-flex mt-4 flex-column mx-auto align-items-center">
-                        
+
                         <a class="btn btn-danger mt-5 col-4 " id=""  href="/<%=CfgHandler.APP%>/setting/agences.jsp" >
                             <i class="fa fa-arrow-left" aria-hidden="true"></i>
                             RETOURNER
@@ -110,6 +110,7 @@
             </div>
             <div class="footer">
             </div>
+        </div>
     </body>
     <script>
         history.replaceState({page: 1}, 'title', "?id_agence=<%= id_agence%>&err=");

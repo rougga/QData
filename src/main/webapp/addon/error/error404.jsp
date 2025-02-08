@@ -15,11 +15,11 @@
         <link href="/QData/css/navbar.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <div class="container-lg">
+        <div class="">
             <div>
                 <%@include file="../navbar.jsp" %>
             </div>
-            <div>
+            <div class="container">
                 <div class="jumbotron mt-4">
                     <h1 class="display-4">404</h1>
                     <p class="lead">OUPS Y A RIEN À VOIR ICI !
@@ -32,5 +32,6 @@
                     </p>
                 </div>
             </div>
+        </div>
     </body>
 </html>

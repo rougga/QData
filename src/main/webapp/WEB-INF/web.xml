@@ -108,6 +108,22 @@
         <servlet-name>UpdateAgencesTodayData</servlet-name>
         <servlet-class>ma.rougga.qdata.api.agence.UpdateAgence</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Update</servlet-name>
+        <servlet-class>ma.rougga.qdata.api.update.Update</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Restore</servlet-name>
+        <servlet-class>ma.rougga.qdata.api.update.Restore</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ExportPdf</servlet-name>
+        <servlet-class>ma.rougga.qdata.api.report.ExportPdf</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ExportExcel</servlet-name>
+        <servlet-class>ma.rougga.qdata.api.report.ExportExcel</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Settings</servlet-name>
         <url-pattern>/Settings</url-pattern>
@@ -245,6 +261,22 @@
     <servlet-mapping>
         <servlet-name>RestoreAgence</servlet-name>
         <url-pattern>/restoreagence</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Update</servlet-name>
+        <url-pattern>/update</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Restore</servlet-name>
+        <url-pattern>/restore</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExportPdf</servlet-name>
+        <url-pattern>/exportpdf</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExportExcel</servlet-name>
+        <url-pattern>/exportexcel</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

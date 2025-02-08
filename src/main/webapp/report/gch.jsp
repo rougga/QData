@@ -41,7 +41,7 @@
         </style>
     </head>
     <body>
-        <div class=" bg-dark container h-100 p-0">
+        <div class=" bg-dark h-100 p-0">
 
             <div class="head">
                 <%@include file="../addon/navbar.jsp" %>
@@ -66,105 +66,118 @@
                 <div>
                     <%@include file="../addon/report/defaulthtml.jsp" %>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-light table-bordered table-striped  ">
-                        <a class="float-right btn btn-link text-white" id="plus">PLUS >></a>
-                        <thead class="appColor">
-                            <tr class="">
-                            
-                                <th class="col 0 text-wrap text-center align-middle db"  style="">Site</th>
-                                
-                                <th class="col 1 text-center align-middle" style="">Guichet</th>
-                                
-                                <th class="col 2 text-wrap text-center align-middle" style="">Nb. Tickets</th>
-                                
-                                <th class="col 3 text-wrap text-center align-middle" style="">Nb. Traités</th>
-                                
-                                <th class="col 4 text-wrap text-center align-middle" style="">Nb. Absents</th>
-                                
-                                <th class="col 5 text-wrap text-center align-middle" style="">Nb. Traités &lt;1mn</th>
-                                
-                                <th class="col 6 text-wrap text-center align-middle" style="">Nb. Sans affectation</th>
-                                
-                                <th class="col 7 text-wrap text-center align-middle" style="">Absents/Nb. Tickets(%)</th>
-                                
-                                <th class="col 8 text-wrap text-center align-middle" style="">Traités&lt;1mn/Nb. Tickets(%)</th>
-                                
-                                <th class="col 9 text-wrap text-center align-middle" style="">Sans affect/Nb. Tickets(%)</th>
-                                
-                                <th class="col 10 text-wrap text-center align-middle" style="">Moyenne d'attente</th>
-                                
-                                <th class="col 11 text-wrap text-center align-middle" style="">&gt;Cible</th>
-                                
-                                <th class="col 12 text-wrap text-center align-middle" style="">%Cible</th>
-                                
-                                <th class="col 13 text-wrap text-center align-middle" style="">Moyenne Traitement</th>
-                                
-                                <th class="col 14 text-wrap text-center align-middle" style="">&gt;Cible</th>
-                                
-                                <th class="col 15 text-wrap text-center align-middle" style="">%Cible</th>
-                                
-                        </tr>
-                        </thead>
-                        <tbody  class="font-weight-bold ">
+                <div class="px-4">
+                    <a class="float-right btn btn-link text-white" id="plus">PLUS >></a>
+                    <div class="table-responsive">
+                        <table class="table table-light table-bordered table-striped  ">
+                            <thead class="appColor">
+                                <tr class="">
 
-                            <%    if (!table.isEmpty() && table != null) {
+                                    <th class="col 0 text-wrap text-center align-middle db"  style="">Site</th>
 
-                                    for (Map agence : table) {
-                            %>
-                            <%
-                                Object empsObj = agence.get("emps");
-                                if (empsObj instanceof List<?>) {
-                                    List<GchRow> emps = (ArrayList<GchRow>) empsObj;
-                                    for (GchRow emp : emps) {
-                            %>                     
-                            <tr class="" data-id="<%= agence.get("id_agence")%>">
-                                <th scope="row" class="text-center align-middle border-dark 0 db <%= agence.get("agence_name")%>" data-id="<%= agence.get("id_agence")%>"><%= agence.get("agence_name")%></th>
+                                    <th class="col 1 text-center align-middle" style="">Guichet</th>
 
-                                <th class="col 1  text-center align-middle <%= emp.getGuichetName()%>" data-id="<%= emp.getGuichetId()%>" ><%= emp.getGuichetName()%></th>
-                                <th class="col 2 text-wrap text-center align-middle" ><%= emp.getNbT()%></th>
+                                    <th class="col 2 text-wrap text-center align-middle" style="">Nb. Tickets</th>
 
-                                <th class="col 3 text-wrap text-center align-middle" ><%= emp.getNbTt()%></th>
+                                    <th class="col 3 text-wrap text-center align-middle" style="">Nb. Traités</th>
 
-                                <th class="col 4 text-wrap text-center align-middle" ><%= emp.getNbA()%></th>
+                                    <th class="col 4 text-wrap text-center align-middle" style="">Nb. Absents</th>
 
-                                <th class="col 5 text-wrap text-center align-middle" ><%= emp.getNbTl1()%></th>
+                                    <th class="col 5 text-wrap text-center align-middle" style="">Nb. Traités &lt;1mn</th>
 
-                                <th class="col 6 text-wrap text-center align-middle" ><%= emp.getNbSa()%></th>
+                                    <th class="col 6 text-wrap text-center align-middle" style="">Nb. Sans affectation</th>
 
-                                <th class="col 7 text-wrap text-center align-middle" ><%= emp.getPerApT()%>%</th>
+                                    <th class="col 7 text-wrap text-center align-middle" style="">Absents/Nb. Tickets(%)</th>
 
-                                <th class="col 8 text-wrap text-center align-middle" ><%= emp.getPerTl1Pt()%>%</th>
+                                    <th class="col 8 text-wrap text-center align-middle" style="">Traités&lt;1mn/Nb. Tickets(%)</th>
 
-                                <th class="col 9 text-wrap text-center align-middle" ><%= emp.getPerSaPt()%>%</th>
+                                    <th class="col 9 text-wrap text-center align-middle" style="">Sans affect/Nb. Tickets(%)</th>
 
-                                <th class="col 10 text-wrap text-center align-middle" ><%= CfgHandler.getFormatedTimeFromSeconds(emp.getAvgSecA())%></th>
+                                    <th class="col 10 text-wrap text-center align-middle" style="">Moyenne d'attente</th>
 
-                                <th class="col 11 text-wrap text-center align-middle" ><%= emp.getNbCa()%></th>
+                                    <th class="col 11 text-wrap text-center align-middle" style="">&gt;Cible</th>
 
-                                <th class="col 12 text-wrap text-center align-middle" ><%= emp.getPerCapt()%>%</th>
+                                    <th class="col 12 text-wrap text-center align-middle" style="">%Cible</th>
 
-                                <th class="col 13 text-wrap text-center align-middle" ><%= CfgHandler.getFormatedTimeFromSeconds(emp.getAvgSecT())%></th>
+                                    <th class="col 13 text-wrap text-center align-middle" style="">Moyenne Traitement</th>
 
-                                <th class="col 14 text-wrap text-center align-middle" ><%= emp.getNbCt()%></th>
+                                    <th class="col 14 text-wrap text-center align-middle" style="">&gt;Cible</th>
 
-                                <th class="col 15 text-wrap text-center align-middle" ><%= emp.getPerCtPt()%>%</th>
+                                    <th class="col 15 text-wrap text-center align-middle" style="">%Cible</th>
 
-                                <%}
+                                </tr>
+                            </thead>
+                            <tbody  class="font-weight-bold ">
+
+                                <%    if (!table.isEmpty() && table != null) {
+
+                                        for (Map agence : table) {
+                                %>
+                                <%
+                                    Object empsObj = agence.get("emps");
+                                    if (empsObj instanceof List<?>) {
+                                        List<GchRow> emps = (ArrayList<GchRow>) empsObj;
+                                        for (GchRow emp : emps) {
+                                %>                     
+                                <tr class="" data-id="<%= agence.get("id_agence")%>">
+                                    <th scope="row" class="text-center text-wrap align-middle border-dark 0 db <%= agence.get("agence_name")%>" data-id="<%= agence.get("id_agence")%>"><%= agence.get("agence_name")%></th>
+
+                                    <th class="col 1  text-center align-middle <%= emp.getGuichetName()%>" data-id="<%= emp.getGuichetId()%>" ><%= emp.getGuichetName()%></th>
+                                    <th class="col 2 text-wrap text-center align-middle" ><%= emp.getNbT()%></th>
+
+                                    <th class="col 3 text-wrap text-center align-middle" ><%= emp.getNbTt()%></th>
+
+                                    <th class="col 4 text-wrap text-center align-middle" ><%= emp.getNbA()%></th>
+
+                                    <th class="col 5 text-wrap text-center align-middle" ><%= emp.getNbTl1()%></th>
+
+                                    <th class="col 6 text-wrap text-center align-middle" ><%= emp.getNbSa()%></th>
+
+                                    <th class="col 7 text-wrap text-center align-middle" ><%= emp.getPerApT()%>%</th>
+
+                                    <th class="col 8 text-wrap text-center align-middle" ><%= emp.getPerTl1Pt()%>%</th>
+
+                                    <th class="col 9 text-wrap text-center align-middle" ><%= emp.getPerSaPt()%>%</th>
+
+                                    <th class="col 10 text-wrap text-center align-middle" ><%= CfgHandler.getFormatedTimeFromSeconds(emp.getAvgSecA())%></th>
+
+                                    <th class="col 11 text-wrap text-center align-middle" ><%= emp.getNbCa()%></th>
+
+                                    <th class="col 12 text-wrap text-center align-middle" ><%= emp.getPerCapt()%>%</th>
+
+                                    <th class="col 13 text-wrap text-center align-middle" ><%= CfgHandler.getFormatedTimeFromSeconds(emp.getAvgSecT())%></th>
+
+                                    <th class="col 14 text-wrap text-center align-middle" ><%= emp.getNbCt()%></th>
+
+                                    <th class="col 15 text-wrap text-center align-middle" ><%= emp.getPerCtPt()%>%</th>
+
+                                    <%}
                                         }%>
-                            </tr>
-                            <%
+                                </tr>
+                                <%
+                                        }
                                     }
-                                }
-                            %>
+                                %>
 
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="footer">
-
+                <div>
+                    <div class='div-wrapper d-flex justify-content-center align-items-center p-2'>
+                        <a type='button' class='btn btn-success m-2' id='excel' href="/<%=CfgHandler.APP%>/exportexcel?type=<%= type%>&date1=<%= date1%>&date2=<%= date2%>&agence_id=">
+                            <img src='/<%=CfgHandler.APP%>/img/icon/excel.png'/>
+                            Excel
+                        </a>
+                        <a type='button' class='btn btn-danger m-2' id='pdf' href="/<%=CfgHandler.APP%>/exportpdf?type=<%= type%>&date1=<%= date1%>&date2=<%= date2%>&agence_id=" >
+                            <img src='/<%=CfgHandler.APP%>/img/icon/pdf.png'/>
+                            PDF
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 

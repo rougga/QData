@@ -30,9 +30,14 @@ Map chart= stat.getTotalDealChart();
         <link href="./css/Chart.min.css" rel="stylesheet" type="text/css"/>
         <link href="./css/body.css" rel="stylesheet" type="text/css"/>
         <link href="./css/navbar.css" rel="stylesheet" type="text/css"/>
+        <style>
+            .min-hieght{
+                min-height: 510px;
+            }
+        </style>
     </head>
     <body>
-        <div class="container-lg">
+        <div class="">
             <div>
                 <%@include file="./addon/navbar.jsp" %>
             </div>
@@ -48,13 +53,12 @@ Map chart= stat.getTotalDealChart();
                     }
                 %>
             </div>
-            <div class="row">
-                <div class="col-12 col-md-6 mt-4 pt-4">
-                    <div class="border border-white rounded p-2">
+            <div class="d-flex justify-content-center px-4">
+                <div class="col-12 col-md-6 mt-4 pt-4 min-hieght">
+                    <div class="border border-white rounded p-2 min-hieght">
                         <h4 class="text-white mx-1 text-center">Pourcentage de ticket traité par Agence:</h4>
-                        <canvas id="myChart"  height="260"></canvas>
+                        <canvas id="myChart"  height=""></canvas>
                     </div>
-
                     <script>
                         var ctx = document.getElementById('myChart').getContext('2d');
                         var myChart = new Chart(ctx, {
@@ -94,8 +98,8 @@ Map chart= stat.getTotalDealChart();
                     </script>
 
                 </div>
-                <div class="col-12 col-md-6 mt-4 pt-4">
-                    <form class="text-white border border-white rounded" >
+                <div class="col-12 col-md-6 mt-4 pt-4 min-hieght">
+                    <form class="text-white border border-white rounded min-hieght" >
 
                         <h4 class="text-center"><img src="./img/agence.png" class="img-fluid mx-auto my-3"> TOTALE d'aujourd'hui
                             <div class='spinner-grow text-white' role='status'>
@@ -108,7 +112,7 @@ Map chart= stat.getTotalDealChart();
                                 <div class="input-group-prepend ">
                                     <span class="input-group-text bg-dark" id="inputGroupPrepend2"><img src="img/icon/ticket.png"/></span>
                                 </div>
-                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getTotalTicket(null, null)%>">
+                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getTotalTicket()%>">
                             </div>
                         </div>
                         <div class="form-group d-flex justify-content-center align-items-center flex-md-row flex-column mx-auto">
@@ -117,7 +121,7 @@ Map chart= stat.getTotalDealChart();
                                 <div class="input-group-prepend">
                                     <span class="input-group-text bg-dark" id="inputGroupPrepend2"><img src="img/icon/done.png"/></span>
                                 </div>
-                                <input type="text" class="form-control bg-dark text-white text-md-right " id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getDealTicket(null, null)%>">
+                                <input type="text" class="form-control bg-dark text-white text-md-right " id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getDealTicket()%>">
                             </div>
                         </div>
                         <div class="form-group d-flex justify-content-center align-items-center flex-md-row flex-column">
@@ -126,7 +130,7 @@ Map chart= stat.getTotalDealChart();
                                 <div class="input-group-prepend ">
                                     <span class="input-group-text bg-dark" id="inputGroupPrepend2"><img src="img/icon/x.png"/></span>
                                 </div>
-                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getAbsentTicket(null, null)%>">
+                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getAbsentTicket()%>">
                             </div>
                         </div>
                         <div class="form-group d-flex justify-content-center align-items-center flex-md-row flex-column">
@@ -135,7 +139,7 @@ Map chart= stat.getTotalDealChart();
                                 <div class="input-group-prepend ">
                                     <span class="input-group-text bg-dark" id="inputGroupPrepend2"><img src="img/icon/ticket.png"/></span>
                                 </div>
-                                <input type="text" class="form-control bg-dark text-white text-md-right " id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getWaitingTicket(null, null)%>">
+                                <input type="text" class="form-control bg-dark text-white text-md-right " id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getWaitingTicket()%>">
                             </div>
                         </div>
                         <div class="form-group  d-flex justify-content-center align-items-center flex-md-row flex-column">
@@ -144,7 +148,7 @@ Map chart= stat.getTotalDealChart();
                                 <div class="input-group-prepend ">
                                     <span class="input-group-text bg-dark " id="inputGroupPrepend2"><img src="img/icon/wait.png"/></span>
                                 </div>
-                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getAvgWaitTime(null, null)%>">
+                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= CfgHandler.getFormatedTimeFromSeconds(stat.getAvgWaitTime())%>">
                             </div>
                         </div>
                         <div class="form-group d-flex justify-content-center align-items-center flex-md-row flex-column">
@@ -153,7 +157,7 @@ Map chart= stat.getTotalDealChart();
                                 <div class="input-group-prepend ">
                                     <span class="input-group-text bg-dark" id="inputGroupPrepend2"><img src="img/icon/done.png"/></span>
                                 </div>
-                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getAvgDealTime(null, null)%>">
+                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= CfgHandler.getFormatedTimeFromSeconds(stat.getAvgDealTime())%>">
                             </div>
                         </div>
                         <div class="form-group d-flex justify-content-center align-items-center flex-md-row flex-column">
@@ -162,7 +166,7 @@ Map chart= stat.getTotalDealChart();
                                 <div class="input-group-prepend ">
                                     <span class="input-group-text bg-dark" id="inputGroupPrepend2"><img src="img/icon/max.png"/></span>
                                 </div>
-                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getMaxWaitTime(null, null)%>">
+                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= CfgHandler.getFormatedTimeFromSeconds(stat.getMaxWaitTime())%>">
                             </div>
                         </div>
                         <div class="form-group d-flex justify-content-center align-items-center flex-md-row flex-column">
@@ -171,7 +175,7 @@ Map chart= stat.getTotalDealChart();
                                 <div class="input-group-prepend ">
                                     <span class="input-group-text bg-dark" id="inputGroupPrepend2"><img src="img/icon/max.png"/></span>
                                 </div>
-                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= stat.getMaxDealTime(null, null)%>">
+                                <input type="text" class="form-control bg-dark text-white text-md-right" id="validationDefaultUsername" aria-describedby="inputGroupPrepend2" disabled value="<%= CfgHandler.getFormatedTimeFromSeconds(stat.getMaxDealTime())%>">
                             </div>
                         </div>
                     </form>
