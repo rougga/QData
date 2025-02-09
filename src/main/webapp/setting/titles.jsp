@@ -1,3 +1,4 @@
+<%@page import="ma.rougga.qdata.controller.TitleController"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="ma.rougga.qdata.handler.TitleHandler"%>
 <%@page import="ma.rougga.qdata.modal.Agence"%>
@@ -6,9 +7,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     if (!Objects.equals(session.getAttribute("grade"), "adm")) {
-        response.sendRedirect("/"+CfgHandler.APP+"/home.jsp?err="+ URLEncoder.encode("vous avez besoin des privilèges d'administrateur", "UTF-8"));
+        response.sendRedirect("/" + CfgHandler.APP + "/home.jsp?err=" + URLEncoder.encode("vous avez besoin des privilèges d'administrateur", "UTF-8"));
     }
-
+    TitleController tc = new TitleController();
 %>
 <!DOCTYPE html>
 <html>
@@ -25,7 +26,7 @@
         <script src="../js/settings.js"></script>
     </head>
     <body>
-        <div class="container-lg">
+        <div class="">
             <div class="head">
                 <%@include file="../addon/navbar.jsp" %>
                 <script>
@@ -33,8 +34,7 @@
                 </script>
             </div>
             <div class="mt-4">
-                <%                     
-                    String err=request.getParameter("err");
+                <%                    String err = request.getParameter("err");
                     if (err != "" && err != null) {
 
                 %>
@@ -44,129 +44,121 @@
                 <%
                     }
 
-                    TitleHandler th = new TitleHandler(request);
                 %>
-                <div class="w-100">
+                <div class="container">
                     <h1 class="text-white text-center">Modifier les titre des tables:</h1>
-                    <form id="ttlForm" action="/QData/EditTitles" method="POST" class="bg-white p-2 my-4 border rounded w-75 mx-auto font-weight-bold" >
-                        <div class="form-group row">
-                            <label for="gbl" class="col-sm-3 col-form-label text-dark">Globale:</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control border border-dark" id="gbl" name="gbl" required value="<%= th.getGblTitle()%>">
-                            </div>
-                        </div>
+                    <form id="ttlForm" action="/QData/EditTitles" method="POST" class="my-4 py-4" >
+                        <table class="table table-bordered table-light table-responsive-sm border-dark" id="dbTable">
+                            <thead class="appColor border-dark">
+                                <tr>
+                                    <th scope="col" class="w-50 text-right">Rapport</th>
+                                    <th scope="col" class="w-50">Nom</th>
+                                </tr>
+                            </thead>
+                            <tbody class="font-weight-bold">
+                                <tr class="border-dark">
+                                    <td class="border-dark align-middle text-right" >
+                                        Globale:
+                                    </td>
+                                    <td class="border-dark align-middle">
+                                        <input type="text" class="form-control border border-dark" id="gbl" name="gbl" required value="<%= tc.getTitleByType("gbl").getValue()%>">
+                                    </td>
+                                </tr>
+                                <tr class="border-dark">
+                                    <td class="border-dark align-middle text-right" >
+                                        Employée:
+                                    </td>
+                                    <td class="border-dark align-middle">
+                                        <input type="text" class="form-control border border-dark" id="emp" name="emp" required value="<%= tc.getTitleByType("emp").getValue()%>">     
+                                    </td>
+                                </tr>
+                                <tr class="border-dark">
+                                    <td class="border-dark align-middle text-right" >
+                                        Employée-Service:
+                                    </td>
+                                    <td class="border-dark align-middle">
+                                        <input type="text" class="form-control border border-dark" id="empser" name="empser" required value="<%= tc.getTitleByType("empser").getValue()%>">    
+                                    </td>
+                                </tr>
+                                <tr class="border-dark">
+                                    <td class="border-dark align-middle text-right" >
+                                        Guichet:
+                                    </td>
+                                    <td class="border-dark align-middle ">
+                                        <input type="text" class="form-control border border-dark" id="gch" name="gch" required value="<%= tc.getTitleByType("gch").getValue()%>">     
+                                    </td>
+                                </tr>
+                                <tr class="border-dark">
+                                    <td class="border-dark align-middle text-right" >
+                                        Guichet-Service:
+                                    </td>
+                                    <td class="border-dark align-middle">
+                                        <input type="text" class="form-control border border-dark" id="gchserv" name="gchser" required value="<%= tc.getTitleByType("gchser").getValue()%>">    
+                                    </td>
+                                </tr>
+                                <tr class="border-dark">
+                                    <td class="border-dark align-middle text-right" >
+                                        Grille attente:
+                                    </td>
+                                    <td class="border-dark align-middle ">
+                                        <input type="text" class="form-control border border-dark" id="gla" name="gla" required value="<%= tc.getTitleByType("gla").getValue()%>">    
+                                    </td>
+                                </tr>
+                                <tr class="border-dark">
+                                    <td class="border-dark align-middle text-right" >
+                                        Grille traitement:
+                                    </td>
+                                    <td class="border-dark align-middle">
+                                        <input type="text" class="form-control border border-dark" id="glt" name="glt" required value="<%= tc.getTitleByType("glt").getValue()%>">        
+                                    </td>
+                                </tr>
+                                <tr class="border-dark">
+                                    <td class="border-dark align-middle text-right" >
+                                        Tranche horaire Nb. edités:
+                                    </td>
+                                    <td class="border-dark align-middle">
+                                        <input type="text" class="form-control border border-dark" id="nbt" name="ndt" required value="<%= tc.getTitleByType("ndt").getValue()%>">          
+                                    </td>
+                                </tr>
+                                <tr class="border-dark">
+                                    <td class="border-dark align-middle text-right" >
+                                        Tranche horaire Nb. traités:
+                                    </td>
+                                    <td class="border-dark align-middle">
+                                        <input type="text" class="form-control border border-dark" id="nbtt" name="ndtt" required value="<%= tc.getTitleByType("ndtt").getValue()%>">           
+                                    </td>
+                                </tr>
+                                <tr class="border-dark">
+                                    <td class="border-dark align-middle text-right" >
+                                        Tranche horaire Nb. absents:
+                                    </td>
+                                    <td class="border-dark align-middle">
+                                        <input type="text" class="form-control border border-dark" id="nbta" name="ndta" required value="<%= tc.getTitleByType("ndta").getValue()%>">            
+                                    </td>
+                                </tr>
+                                <tr class="border-dark">
+                                    <td class="border-dark align-middle text-right" >
+                                        Tranche horaire Nb. sans affectation:
+                                    </td>
+                                    <td class="border-dark align-middle">
+                                        <input type="text" class="form-control border border-dark" id="nbtsa" name="ndtsa" required value="<%= tc.getTitleByType("ndtsa").getValue()%>">           
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
 
-                        <div class="form-group row">
-                            <label for="emp" class="col-sm-3 col-form-label text-dark">Employée:</label>
-                            <div class="col-sm-9">                                
-                                <input type="text" class="form-control border border-dark" id="emp" name="emp" required value="<%= th.getEmpTitle()%>">       
-                            </div>
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-success " >
+                                <img src="../img/icon/done.png"/>
+                                Sauvegarder
+                            </button>
                         </div>
-
-                        <div class="form-group row">
-                            <label for="empser" class="col-sm-3 col-form-label text-dark">Employée-Service:</label>
-                            <div class="col-sm-9">                                
-                                <input type="text" class="form-control border border-dark" id="empser" name="empser" required value="<%= th.getEmpSerTitle()%>">         
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="gch" class="col-sm-3 col-form-label text-dark">Guichet:</label>
-                            <div class="col-sm-9">                                
-                                <input type="text" class="form-control border border-dark" id="gch" name="gch" required value="<%= th.getGchTitle() %>">               
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="gchserv" class="col-sm-3 col-form-label text-dark">Guichet-Service:</label>
-                            <div class="col-sm-9">                                
-                                <input type="text" class="form-control border border-dark" id="gchserv" name="gchserv" required value="<%= th.getGchServTitle() %>">                   
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="gla" class="col-sm-3 col-form-label text-dark">Grille attente:</label>
-                            <div class="col-sm-9">                              
-                                <input type="text" class="form-control border border-dark" id="gla" name="gla" required value="<%= th.getGlaTitle() %>">                  
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="glt" class="col-sm-3 col-form-label text-dark">Grille traitement:</label>
-                            <div class="col-sm-9">                               
-                                <input type="text" class="form-control border border-dark" id="glt" name="glt" required value="<%= th.getGltTitle() %>">                  
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="apl" class="col-sm-3 col-form-label text-dark">Détail des appels:</label>
-                            <div class="col-sm-9">                               
-                                <input type="text" class="form-control border border-dark" id="apl" name="apl" required value="<%= th.getAplTitle() %>">                  
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="nbt" class="col-sm-3 col-form-label text-dark">Nb. edités:</label>
-                            <div class="col-sm-9">                                
-                                <input type="text" class="form-control border border-dark" id="nbt" name="ndt" required value="<%= th.getNdtTitle() %>">             
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="nbtt" class="col-sm-3 col-form-label text-dark">Nb. traités:</label>
-                            <div class="col-sm-9">                               
-                                <input type="text" class="form-control border border-dark" id="nbtt" name="ndtt" required value="<%= th.getNdttTitle() %>">               
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="nbta" class="col-sm-3 col-form-label text-dark">Nb. absents:</label>
-                            <div class="col-sm-9">                                
-                                <input type="text" class="form-control border border-dark" id="nbta" name="ndta" required value="<%= th.getNdtaTitle() %>">                
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="nbtsa" class="col-sm-3 col-form-label text-dark">Nb. sans affectation:</label>
-                            <div class="col-sm-9">                               
-                                <input type="text" class="form-control border border-dark" id="nbtsa" name="ndtsa" required value="<%= th.getNdtsaTitle() %>">                 
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="cnx" class="col-sm-3 col-form-label text-dark">Rendement - Connexions:</label>
-
-                            <div class="col-sm-9">                               
-                                <input type="text" class="form-control border border-dark" id="cnx" name="cnx" required value="<%= th.getCnxTitle() %>">                      
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="remp" class="col-sm-3 col-form-label text-dark">Rendement - Employés:</label>
-                            <div class="col-sm-9">                                
-                                <input type="text" class="form-control border border-dark disabled" id="remp" name="remp" required value="<%= th.getRempTitle() %>">          
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="sgch" class="col-sm-3 col-form-label text-dark">Supervision - Guichet:</label>
-                            <div class="col-sm-9">                               
-                                <input type="text" class="form-control border border-dark disabled" id="sgch" name="sgch" required value="<%= th.getSgchTitle() %>">            
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="ser" class="col-sm-3 col-form-label text-dark">Supervision - Services:</label>
-                            <div class="col-sm-9">                               
-                                <input type="text" class="form-control border border-dark disabled" id="ser" name="ser" required value="<%= th.getSerTitle() %>">                 
-                            </div>
-                        </div>
-                            
-                        <div class="form-group row">
-                            <label for="tch" class="col-sm-3 col-form-label text-dark">Rapport Tache:</label>
-                            <div class="col-sm-9">                               
-                                <input type="text" class="form-control border border-dark disabled" id="tch" name="tch" required value="<%= th.getTaskTitle() %>">                 
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-10">
-                                <button type="submit" class="btn btn-success float-right" >Sauvegarder</button>
-                            </div>
-                        </div>
-
                     </form>
                 </div>
             </div>
-        </div>
-        <div class="footer">
+            <div class="footer">
 
+            </div>
         </div>
     </body>
 </html>

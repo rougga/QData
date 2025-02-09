@@ -2,7 +2,6 @@
 <%@page import="ma.rougga.qdata.modal.Service"%>
 <%@page import="ma.rougga.qdata.modal.Cible"%>
 <%@page import="ma.rougga.qdata.controller.CibleController"%>
-<%@page import="ma.rougga.qdata.controller.ServiceController"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="ma.rougga.qdata.modal.Agence"%>
 <%@page import="java.util.List"%>
@@ -37,7 +36,7 @@ return String.format("%02d:%02d:%02d", hours, minutes, seconds);
         <script src="../js/setting/cible.js"></script>
     </head>
     <body>
-        <div class="container-lg">
+        <div class="">
             <div class="head">
                 <%@include file="../addon/navbar.jsp" %>
                 <script>
@@ -57,13 +56,9 @@ return String.format("%02d:%02d:%02d", hours, minutes, seconds);
                     }
                 %>
 
-                <div class="w-100" id="dbTbl">
+                <div class="container" id="dbTbl">
                     <h1 class="text-white text_center ">
                         Les cibles :
-                        <span class=" float-right">
-                            <a class="btn btn-success" id="cibleAdd" data-toggle="modal" data-target="#cibleModal"><img src="/QData/img/icon/plus.png"> Ajouter</a>
-
-                        </span>
                     </h1>
                     <table class="table table-bordered table-light   table-responsive-sm border-dark" id="dbTable">
                         <thead class="appColor border-dark">
@@ -73,31 +68,27 @@ return String.format("%02d:%02d:%02d", hours, minutes, seconds);
                                 <th scope="col">Cible d'attente</th>
                                 <th scope="col">Cible de traitement</th>
                                 <th scope="col">depasse cible %</th>
-                                <th scope="col"></th>
                             </tr>
                         </thead>
 
                         <tbody class="font-weight-bold">
                             <%
                                AgenceController ac =new AgenceController();
-                               ServiceController sc = new ServiceController();
                                CibleController cc = new CibleController();
-                              List<Cible> table=cc.getAll();
+                               List<Cible> table=cc.getAll();
                               if(table!=null){
-                                  for(int i =0;i<table.size();i++){
+                                  for(Cible cible :table ){
                             %>
                             <tr class="clickable-row5 border-dark">
-                                <td class="border-dark align-middle" data-id="<%= table.get(i).getDb_id() %>">
-                                    <%= ac.getAgenceById(table.get(i).getDb_id()).getName() %>
+                                <td class="border-dark align-middle" data-id="<%= cible.getAgence_id() %>">
+                                    <%= ac.getAgenceById(cible.getAgence_id()).getName() %>
                                 </td>
                                 <td class="border-dark align-middle">
-                                    <%= sc.getById(table.get(i).getBiz_type_id(), table.get(i).getDb_id()).getName() %>
+                                    <%= cible.getService_name() %>
                                 </td>
-                                <td class="border-dark align-middle"><%=getFormatedTime(table.get(i).getCibleA()) %></td>
-                                <td class="border-dark align-middle"><%=getFormatedTime(table.get(i).getCibleT()) %></td>
-                                <td class="border-dark align-middle"><%=table.get(i).getdCible() %>%</td><td class="border-dark align-middle">
-                                    <a class="btn btn-danger m-0" id="dbDlt" href="/QData/DeleteCible?id=<%= table.get(i).getBiz_type_id()%>&db_id=<%= table.get(i).getDb_id() %>"><img src="/QData/img/icon/trash.png"></a>
-                                </td>
+                                <td class="border-dark align-middle"><%= cible.getCibleA() %></td>
+                                <td class="border-dark align-middle"><%= cible.getCibleT() %></td>
+                                <td class="border-dark align-middle"><%= cible.getCiblePer() %>%</td>
                             </tr>
                             <%
                                  }
@@ -109,93 +100,6 @@ return String.format("%02d:%02d:%02d", hours, minutes, seconds);
 
                         </tbody>
                     </table>
-                </div>
-            </div>
-            <div class="footer">
-                <div class="modal fade text-dark" id="cibleModal" tabindex="-1" aria-labelledby="cibleModalaria" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <form id="cibleForm" action="/QData/Add" method="POST">
-                                <div class="modal-header">
-                                    <h5 class="modal-title "  id="exampleModalLabel">Modal title</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <label for="site">Site:</label>
-                                        <select class="form-control" id="site" name="site" required>
-
-                                            <option selected disabled >Sélectionner Site:</option>
-                                            <%
-                                                List<Agence> agences = new AgenceController().getAllAgence();
-                                                if(agences!=null && agences.size()>0){
-                                                    for (int i = 0; i < agences.size(); i++) {
-                                            %>          
-                                            <option value="<%= agences.get(i).getId().toString() %>" >
-                                                <%= agences.get(i).getName() %>
-                                            </option>
-
-                                            <%
-                                                    }
-                                                }
-                                                
-                                                
-                                            %>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="service">Service:</label>
-                                        <select class="form-control" id="service" name="service" required>
-
-                                            <option selected disabled >Sélectionner Site:</option>
-                                            <%
-                                                List<Service> services = new ServiceController().getAll();
-                                                if(services!=null && services.size()>0){
-                                                    for (int i = 0; i < services.size(); i++) {
-                                            %>          
-                                            <option value="<%= services.get(i).getId()%>" data-db-id="<%= services.get(i).getDb_id() %>">
-                                                <%= services.get(i).getName() %>
-                                            </option>
-
-                                            <%
-                                                    }
-                                                }
-                                                
-                                                
-                                            %>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="cibleA">Cible d'attente:</label><br>
-                                        <input type="number" class="form-control w-25 d-inline-block" id="cibleAH" name="cibleAH" placeholder="Hr" min="0" max="23" value="0" required>
-                                        <input type="number" class="form-control w-25 d-inline-block" id="cibleAM" name="cibleAM" placeholder="Min" min="0" max="60" value="0" required>
-                                        <input type="number" class="form-control w-25 d-inline-block" id="cibleAS" name="cibleAS" placeholder="Sec" min="0" max="60" value="0" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="cibleT">Cible Traitement:</label><br>
-                                        <input type="number" class="form-control w-25 d-inline-block" id="cibleTH" name="cibleTH" placeholder="Hr" min="0" max="23" value="0" required>
-                                        <input type="number" class="form-control w-25 d-inline-block" id="cibleTM" name="cibleTM" placeholder="Min" min="0" max="60" value="0" required>
-                                        <input type="number" class="form-control w-25 d-inline-block" id="cibleTS" name="cibleTS" placeholder="Sec" min="0" max="60" value="0" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="cibleD">%dépasse. Cible:</label>
-                                        <input type="number" class="form-control" id="cibleD" name="cibleD" min="0" max="100" value="0" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="hidden" class="form-control" name="type" value="cible">
-                                    </div>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
-                                    <button type="submit" class="btn btn-success  " id="cibleSubmit" >Enregistrer</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

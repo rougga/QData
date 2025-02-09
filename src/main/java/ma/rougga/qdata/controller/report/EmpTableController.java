@@ -166,6 +166,101 @@ public class EmpTableController {
         return row;
     }
 
+    public boolean batchInsert(List<EmpRow> rows) {
+        boolean isSuccess = false;
+        try {
+            Connection con = new CPConnection().getConnection();
+            con.setAutoCommit(false); // Disable auto-commit
+            String sql = "INSERT INTO rougga_emp_table ("
+                    + "id, id_emp, emp_name, nb_t, nb_tt, nb_a, nb_tl1, nb_sa, "
+                    + "perApT, PERTL1pt, perSApT, avgSec_A, nb_ca, percapt, "
+                    + "avgSec_T, nb_ct, perctpt, date, id_agence) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, to_date(?,'YYYY-MM-DD HH24:MI:SS'), ?)";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            for (EmpRow row : rows) {
+                pstmt.setString(1, row.getId().toString());
+                pstmt.setString(2, row.getUserId());
+                pstmt.setString(3, row.getUserName());
+                pstmt.setLong(4, row.getNbT());
+                pstmt.setLong(5, row.getNbTt());
+                pstmt.setLong(6, row.getNbA());
+                pstmt.setLong(7, row.getNbTl1());
+                pstmt.setLong(8, row.getNbSa());
+                pstmt.setDouble(9, row.getPerApT());
+                pstmt.setDouble(10, row.getPerTl1Pt());
+                pstmt.setDouble(11, row.getPerSaPt());
+                pstmt.setDouble(12, row.getAvgSecA());
+                pstmt.setLong(13, row.getNbCa());
+                pstmt.setDouble(14, row.getPerCapt());
+                pstmt.setDouble(15, row.getAvgSecT());
+                pstmt.setLong(16, row.getNbCt());
+                pstmt.setDouble(17, row.getPerCtPt());
+                pstmt.setString(18, row.getDate());
+                pstmt.setString(19, row.getAgenceId());
+                pstmt.addBatch(); // Add to batch
+            }
+
+            int[] batchResults = pstmt.executeBatch(); // Execute batch
+            con.commit(); // Commit transaction
+            isSuccess = batchResults.length == rows.size();
+            logger.info("batchInsert: inserted " + batchResults.length + " rows");
+            con.close();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return isSuccess;
+    }
+
+    public boolean batchUpdate(List<EmpRow> rows) {
+        boolean isSuccess = false;
+        try {
+            Connection con = new CPConnection().getConnection();
+            con.setAutoCommit(false); // Disable auto-commit
+            con.setAutoCommit(false); // Disable auto-commit
+            String sql = "UPDATE rougga_emp_table SET "
+                    + "id_emp = ?, emp_name = ?, nb_t = ?, nb_tt = ?, nb_a = ?, nb_tl1 = ?, "
+                    + "nb_sa = ?, perApT = ?, PERTL1pt = ?, perSApT = ?, avgSec_A = ?, "
+                    + "nb_ca = ?, percapt = ?, avgSec_T = ?, nb_ct = ?, perctpt = ?, "
+                    + "date = to_date(?,'YYYY-MM-DD HH24:MI:SS'), id_agence = ? "
+                    + "WHERE id = ?";
+
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            for (EmpRow row : rows) {
+                pstmt.setString(1, row.getUserId());
+                pstmt.setString(2, row.getUserName());
+                pstmt.setLong(3, row.getNbT());
+                pstmt.setLong(4, row.getNbTt());
+                pstmt.setLong(5, row.getNbA());
+                pstmt.setLong(6, row.getNbTl1());
+                pstmt.setLong(7, row.getNbSa());
+                pstmt.setDouble(8, row.getPerApT());
+                pstmt.setDouble(9, row.getPerTl1Pt());
+                pstmt.setDouble(10, row.getPerSaPt());
+                pstmt.setDouble(11, row.getAvgSecA());
+                pstmt.setLong(12, row.getNbCa());
+                pstmt.setDouble(13, row.getPerCapt());
+                pstmt.setDouble(14, row.getAvgSecT());
+                pstmt.setLong(15, row.getNbCt());
+                pstmt.setDouble(16, row.getPerCtPt());
+                pstmt.setString(17, row.getDate());
+                pstmt.setString(18, row.getAgenceId());
+                pstmt.setString(19, row.getId().toString());
+                pstmt.addBatch(); // Add to batch
+            }
+
+            int[] batchResults = pstmt.executeBatch(); // Execute batch
+            con.commit();// Commit transaction
+            isSuccess = batchResults.length == rows.size();
+            logger.info("batchUpdate: updated " + batchResults.length + " rows");
+            con.close();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return isSuccess;
+    }
+
     // 
     public EmpRow getTotaleRowByAgence(String id_agence, String date1, String date2) {
         EmpRow row = new EmpRow();

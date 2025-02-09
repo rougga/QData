@@ -68,6 +68,8 @@ public class CfgHandler {
     public static final String PAGE_TCH_REPORT = "/" + APP + "/report/tch.jsp";
 
     //API URL
+    
+    //tables
     public static String API_GBL_TABLE_JSON = APP_NODE + "/getgbltable";
     public static String API_EMP_TABLE_JSON = APP_NODE + "/getemptable";
     public static String API_EMPSER_TABLE_JSON = APP_NODE + "/getempsertable";
@@ -76,7 +78,19 @@ public class CfgHandler {
     public static String API_GLA_TABLE_JSON = APP_NODE + "/getglatable";
     public static String API_GLT_TABLE_JSON = APP_NODE + "/getglttable";
     public static String API_TCH_TABLE_JSON = APP_NODE + "/gettchtable";
+    
+    public static String API_THT_TABLE_JSON = APP_NODE + "/getthttable";
+    
+    public static String API_THTT_TABLE_JSON = APP_NODE + "/getthtttable";
+    
+    public static String API_THA_TABLE_JSON = APP_NODE + "/getthatable";
+    
+    public static String API_THSA_TABLE_JSON = APP_NODE + "/getthsatable";
+    
+    
     public static String API_CHECK_STATUS = APP_NODE + "/onlinecheck";
+    public static String API_CIBLE_TABLE_JSON = APP_NODE + "/getcibles";
+    public static String API_WAITING_TICKETS_JSON = APP_NODE + "/getwaitingtickets";
     //Pars
     private Properties prop = null;
     private String url;
@@ -133,7 +147,14 @@ public class CfgHandler {
                 + "&date2=" + date2;
         return url;
     }
-
+    
+    public static String prepareJsonUrl(String host, int port, String apiPoint) {
+        String url = "http://" + host
+                + ":" + port
+                + "/" + apiPoint;
+        return url;
+    }
+    
     public String getPropertie(String name) throws IOException {
 
         prop = new Properties();

@@ -184,7 +184,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
-                                    <button type="submit" class="btn appBg text-white hover" id="dbAddButton">Ajouter</button>
+                                    <button type="button" class="btn appBg text-white hover" id="dbAddButton">Ajouter</button>
                                 </div>
                             </form>
                         </div>

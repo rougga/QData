@@ -1,10 +1,5 @@
 package ma.rougga.qdata.controller;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,51 +7,44 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import ma.rougga.qdata.CPConnection;
 import ma.rougga.qdata.CfgHandler;
-import ma.rougga.qdata.PgConnection;
 import ma.rougga.qdata.modal.Agence;
 import ma.rougga.qdata.modal.Cible;
+import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 public class CibleController {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AgenceController.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CibleController.class);
+    AgenceController ac = new AgenceController();
 
     public CibleController() {
     }
 
     public List<Cible> getAll() {
-        try {
-            List<Cible> cibles = new ArrayList();
-            Connection con = new CPConnection().getConnection();
-            ResultSet r = con.createStatement().executeQuery("select * from rougga_cibles;");
-            while (r.next()) {
-                Cible cible = new Cible();
-                cible.setService_id(r.getString("service_id"));
-                cible.setService_name(r.getString("service_name"));
-                cible.setCibleA(0);
-                cible.setCibleT(0);
-                cible.setAgence_id(UUID.fromString(r.getString("agence_id")));
-                cibles.add(cible);
+        List<Cible> cibles = new ArrayList<>();
+        String sql = "SELECT * FROM rougga_cibles order by agence_id";
+        try (Connection con = new CPConnection().getConnection(); PreparedStatement pstmt = con.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                cibles.add(new Cible(
+                        rs.getString("service_id"),
+                        rs.getString("service_name"),
+                        UUID.fromString(rs.getString("agence_id")),
+                        rs.getLong("cible_a"),
+                        rs.getLong("cible_t"),
+                        rs.getDouble("cible_per")
+                ));
             }
             con.close();
-            return cibles;
+
         } catch (SQLException e) {
             logger.error(e.getMessage());
-            return null;
         }
+        return cibles;
     }
 
     public Cible getOne(String serviceId, String agenceId) {
@@ -107,38 +95,127 @@ public class CibleController {
         }
     }
 
-//    public int addCible(Cible c) {
-//        try {
-//            PgConnection con = new PgConnection();
-//            PreparedStatement p = con.getStatement().getConnection().prepareStatement("insert into cible values(?,?,?,?,?);");
-//            p.setString(1, c.getBiz_type_id());
-//            p.setString(2, c.getDb_id().toString());
-//            p.setDouble(3, c.getCibleA());
-//            p.setDouble(4, c.getCibleT());
-//            p.setFloat(5, c.getdCible());
-//            p.execute();
-//            con.closeConnection();
-//            return 1;
-//
-//        } catch (Exception ex) {
-//            Logger.getLogger(CibleController.class.getName()).log(Level.SEVERE, null, ex);
-//            return 0;
-//        }
-//    }
 
-//    public boolean deleteById(String id, UUID db_id) {
-//        try {
-//            PgConnection con = new PgConnection();
-//            PreparedStatement p = con.getStatement().getConnection().prepareStatement("delete from cible where biz_type_id=? and db_id=? ;");
-//            p.setString(1, id);
-//            p.setString(2, db_id.toString());
-//            p.execute();
-//            con.closeConnection();
-//            return true;
-//
-//        } catch (ClassNotFoundException | SQLException ex) {
-//            Logger.getLogger(CibleController.class.getName()).log(Level.SEVERE, null, ex);
-//            return false;
-//        }
-//    }
+    public boolean addCible(Cible cible) {
+        String sql = "INSERT INTO rougga_cibles (service_id, service_name, cible_a, cible_t, cible_per, agence_id) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection con = new CPConnection().getConnection(); PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            pstmt.setString(1, cible.getService_id());
+            pstmt.setString(2, cible.getService_name());
+            pstmt.setLong(3, cible.getCibleA());
+            pstmt.setLong(4, cible.getCibleT());
+            pstmt.setDouble(5, cible.getCiblePer());
+            pstmt.setString(6, cible.getAgence_id().toString());
+
+            int rowsInserted = pstmt.executeUpdate();
+            if (rowsInserted > 0) {
+                con.close();
+                return true;
+            } else {
+                logger.info("A  row wasnt ADDED successfully!");
+                con.close();
+                return false;
+            }
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean updateCible(Cible cible) {
+        String sql = "UPDATE rougga_cibles SET service_name = ?, cible_a = ?, cible_t = ?, cible_per = ? "
+                + "WHERE service_id = ? AND agence_id = ?";
+        try (Connection con = new CPConnection().getConnection(); PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            pstmt.setString(1, cible.getService_name());
+            pstmt.setLong(2, cible.getCibleA());
+            pstmt.setLong(3, cible.getCibleT());
+            pstmt.setDouble(4, cible.getCiblePer());
+            pstmt.setString(5, cible.getService_id());
+            pstmt.setString(6, cible.getAgence_id().toString());
+
+            int rowsInserted = pstmt.executeUpdate();
+            if (rowsInserted > 0) {
+                con.close();
+                return true;
+            } else {
+                logger.info("A  row wasnt UPDATED successfully!");
+                con.close();
+                return false;
+            }
+
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return false;
+        }
+    }
+
+    //
+    public void updateFromJson() {
+        List<Agence> agences = ac.getAllAgence();
+        for (Agence a : agences) {
+            this.updateAgenceFromJson(a.getId().toString());
+        }
+    }
+
+    public boolean updateAgenceFromJson(String agenceId) {
+        boolean isDone = false;
+        Agence a = new Agence();
+        //validationg data
+        if (StringUtils.isBlank(agenceId)) {
+            logger.error("updateAgenceFromJson: id agence null;");
+            return false;
+        }
+        a = ac.getAgenceById(UUID.fromString(agenceId));
+        if (a != null) {
+            logger.info(" -- Updating " + a.getName() + "'s Cible Table ... ");
+            String url = CfgHandler.prepareJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_CIBLE_TABLE_JSON);
+            logger.info("URL = " + url + " - " + a.getName());
+            JSONObject json = UpdateController.getJsonFromUrl(url);
+
+            if (json != null) {
+                JSONArray result = (JSONArray) json.get("result");
+                for (Object s : result) {
+                    try {
+                        JSONObject service = (JSONObject) s;
+                        String id_service = service.get("service_id").toString();
+                        Cible row = this.getOne(id_service, agenceId);
+                        if (row != null) {
+                            row.setCibleA((long) service.get("cible_a"));
+                            row.setCibleT((long) service.get("cible_t"));
+                            row.setCiblePer((double) service.get("cible_per"));
+                            row.setService_id(id_service);
+                            row.setService_name(service.get("service_name").toString());
+                            row.setAgence_id(a.getId());
+                            this.updateCible(row);
+                        } else {
+                            row = new Cible();
+                            row.setCibleA((long) service.get("cible_a"));
+                            row.setCibleT((long) service.get("cible_t"));
+                            row.setCiblePer((double) service.get("cible_per"));
+                            row.setService_id(id_service);
+                            row.setService_name(service.get("service_name").toString());
+                            row.setAgence_id(a.getId());
+                            this.addCible(row);
+                        }
+                    } catch (NullPointerException e) {
+                        logger.error("updateAgenceFromJson: some json variables are null;");
+                    }
+                }
+                ac.setLastUpdate(a.getId());
+                isDone = true;
+            } else {
+                logger.error("updateAgenceFromJson: json null;");
+                return false;
+            }
+        } else {
+            logger.error("updateAgenceFromJson: no agence found;");
+        }
+
+        logger.info(" --  Cible Table Updated. ");
+        return isDone;
+    }
+
 }

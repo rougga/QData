@@ -14,6 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.servlet.http.HttpServletResponse;
+import ma.rougga.qdata.controller.AgenceController;
+import ma.rougga.qdata.controller.UpdateController;
+import ma.rougga.qdata.modal.Agence;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,7 +95,20 @@ public class Stats {
     }
 
     public long getWaitingTicket() {
-        return 0;
+
+        long waitingtickets = 0;
+
+        for (Agence a : new AgenceController().getAllAgence()) {
+            String url = CfgHandler.prepareJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_WAITING_TICKETS_JSON);
+            
+            JSONObject json = UpdateController.getJsonFromUrl(url);
+            if (json != null) {
+                long result = (long) json.get("waitingTickets");
+                waitingtickets += result;
+            }
+        }
+
+        return waitingtickets;
     }
 
     public Double getMaxWaitTime() {

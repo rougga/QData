@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ma.rougga.qdata.CfgHandler;
 import ma.rougga.qdata.controller.TitleController;
 import ma.rougga.qdata.handler.TitleHandler;
 import ma.rougga.qdata.modal.Title;
@@ -29,20 +30,20 @@ public class EditTitles extends HttpServlet {
                     String emp = request.getParameter("emp");
                     String empser = request.getParameter("empser");
                     String gch = request.getParameter("gch");
-                    String gchserv = request.getParameter("gchserv");
+                    String gchser = request.getParameter("gchser");
                     String gla = request.getParameter("gla");
-                    String glt = request.getParameter("glt");
-                    String apl = request.getParameter("apl");
+//                    String glt = request.getParameter("glt");
+//                    String apl = request.getParameter("apl");
                     String ndt = request.getParameter("ndt");
                     String ndtt = request.getParameter("ndtt");
                     String ndta = request.getParameter("ndta");
                     String ndtsa = request.getParameter("ndtsa");
-                    String cnx = request.getParameter("cnx");
-                    String remp = request.getParameter("remp");
-                    String sgch = request.getParameter("sgch");
-                    String ser = request.getParameter("ser");
-                    String tch = request.getParameter("tch");
-                    if (StringUtils.isNoneBlank(gbl, emp, empser, gch, gchserv, gla, glt, apl, ndt, ndtt, ndta, ndtsa, cnx, remp, sgch, ser)) {
+//                    String cnx = request.getParameter("cnx");
+//                    String remp = request.getParameter("remp");
+//                    String sgch = request.getParameter("sgch");
+//                    String ser = request.getParameter("ser");
+//                    String tch = request.getParameter("tch");
+                    if (StringUtils.isNoneBlank(gbl, emp, empser, gch, gchser, gla,  ndt, ndtt, ndta, ndtsa)) {
 
                         TitleController tc = new TitleController();
                         Title t = new Title();
@@ -58,17 +59,11 @@ public class EditTitles extends HttpServlet {
                         t = tc.getTitleByType("gch");
                         t.setValue(gch);
                         tc.updateTitle(t);
-                        t = tc.getTitleByType("gchserv");
-                        t.setValue(gchserv);
+                        t = tc.getTitleByType("gchser");
+                        t.setValue(gchser);
                         tc.updateTitle(t);
                         t = tc.getTitleByType("gla");
                         t.setValue(gla);
-                        tc.updateTitle(t);
-                        t = tc.getTitleByType("glt");
-                        t.setValue(glt);
-                        tc.updateTitle(t);
-                        t = tc.getTitleByType("apl");
-                        t.setValue(apl);
                         tc.updateTitle(t);
                         t = tc.getTitleByType("ndt");
                         t.setValue(ndt);
@@ -82,28 +77,13 @@ public class EditTitles extends HttpServlet {
                         t = tc.getTitleByType("ndtsa");
                         t.setValue(ndtsa);
                         tc.updateTitle(t);
-                        t = tc.getTitleByType("cnx");
-                        t.setValue(cnx);
-                        tc.updateTitle(t);
-                        t = tc.getTitleByType("remp");
-                        t.setValue(remp);
-                        tc.updateTitle(t);
-                        t = tc.getTitleByType("sgch");
-                        t.setValue(sgch);
-                        tc.updateTitle(t);
-                        t = tc.getTitleByType("ser");
-                        t.setValue(ser);
-                        tc.updateTitle(t);
-                        t = tc.getTitleByType("tch");
-                        t.setValue(tch);
-                        tc.updateTitle(t);
-                        response.sendRedirect("/QStates/setting/titles.jsp?err=" + URLEncoder.encode("Modifié", "UTF-8"));
+                        response.sendRedirect("/"+CfgHandler.APP+"/setting/titles.jsp?err=" + URLEncoder.encode("Modifié", "UTF-8"));
                     } else {
-                        response.sendRedirect("/QStates/setting/titles.jsp?err=" + URLEncoder.encode("une ou plusieurs entrées vides", "UTF-8"));
+                        response.sendRedirect("/"+CfgHandler.APP+"/setting/titles.jsp?err=" + URLEncoder.encode("une ou plusieurs entrées vides", "UTF-8"));
                     }
 
                 } else {
-                    response.sendRedirect("/QData/home.jsp");
+                    response.sendRedirect("/"+CfgHandler.APP+"/home.jsp");
                 }
             }
 

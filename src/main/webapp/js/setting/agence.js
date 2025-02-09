@@ -15,8 +15,15 @@ $(document).ready(function () {
 
         });
     }
-    
-    
+    $("#dbAddButton").on("click", function () {
+        let val = $("#zone").val();
+        if (val) {
+            $("#dbForm").submit();
+        } else {
+            alert("selectioner la zone !");
+        }
+    });
+
     $("#dbAdd").on("click", function () {
         $("#dbForm").attr("action", "/QData/AddDatabase");
         $("#exampleModalLabel").text("Ajouter une Agence:");

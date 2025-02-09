@@ -19,8 +19,9 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.LoggerFactory;
 
 public class UpdateController {
-    
+
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(UpdateController.class);
+
     public UpdateController() {
     }
 
@@ -73,6 +74,7 @@ public class UpdateController {
         isSuccessful = new GchSerTableController().restoreOldRowsByAgenceId(id_agence);
         isSuccessful = new GlaTableController().restoreOldRowsByAgenceId(id_agence);
         isSuccessful = new GltTableController().restoreOldRowsByAgenceId(id_agence);
+        isSuccessful = new CibleController().updateAgenceFromJson(id_agence.toString());
         // restore other tables
 
         return isSuccessful;
@@ -87,12 +89,13 @@ public class UpdateController {
         isDone = new GchSerTableController().updateAgenceFromJson(null, null, id_agence.toString());
         isDone = new GlaTableController().updateAgenceFromJson(null, null, id_agence.toString());
         isDone = new GltTableController().updateAgenceFromJson(null, null, id_agence.toString());
+        isDone = new CibleController().updateAgenceFromJson(id_agence.toString());
         // update other tables
-        
+
         return isDone;
     }
-    
-    public void update(){
+
+    public void update() {
         new GblTableController().updateFromJson(null, null);
         new EmpTableController().updateFromJson(null, null);
         new EmpSerTableController().updateFromJson(null, null);
@@ -100,22 +103,22 @@ public class UpdateController {
         new GchSerTableController().updateFromJson(null, null);
         new GlaTableController().updateFromJson(null, null);
         new GltTableController().updateFromJson(null, null);
-        
-        
+        new CibleController().updateFromJson();
+
         // update other tables
         logger.info("Globale update is Finished! .");
     }
-    
+
     public void restore() {
 
-         new GblTableController().restoreOldRowsForAllAgences();
-         new EmpTableController().restoreOldRowsForAllAgences();
-         new EmpSerTableController().restoreOldRowsForAllAgences();
-         new GchTableController().restoreOldRowsForAllAgences();
-         new GchSerTableController().restoreOldRowsForAllAgences();
-         new GlaTableController().restoreOldRowsForAllAgences();
-         new GltTableController().restoreOldRowsForAllAgences();
-       
+        new GblTableController().restoreOldRowsForAllAgences();
+        new EmpTableController().restoreOldRowsForAllAgences();
+        new EmpSerTableController().restoreOldRowsForAllAgences();
+        new GchTableController().restoreOldRowsForAllAgences();
+        new GchSerTableController().restoreOldRowsForAllAgences();
+        new GlaTableController().restoreOldRowsForAllAgences();
+        new GltTableController().restoreOldRowsForAllAgences();
+        new CibleController().updateFromJson();
         // restore other tables
         logger.info("Globale restore is Finished! .");
     }

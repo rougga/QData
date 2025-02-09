@@ -162,6 +162,132 @@ public class GltTableController {
         return row;
     }
 
+      public boolean batchInsert(List<GblRow> rows) {
+        boolean isSuccess = false;
+        try {
+            Connection con = new CPConnection().getConnection();
+            con.setAutoCommit(false); // Disable auto-commit
+            String sql = "INSERT INTO rougga_gbl_table ("
+                    + "id_service, "
+                    + "service_name, "
+                    + "nb_t, "
+                    + "nb_tt, "
+                    + "nb_a, "
+                    + "nb_tl1, "
+                    + "nb_sa, "
+                    + "perApT, "
+                    + "PERTL1pt, "
+                    + "perSApT, "
+                    + "avgSec_A, "
+                    + "nb_ca, "
+                    + "percapt, "
+                    + "avgSec_T, "
+                    + "nb_ct, "
+                    + "perctpt, "
+                    + "date, "
+                    + "id_agence,"
+                    + "id"
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, to_date(?,'YYYY-MM-DD HH24:MI:SS'), ?,?)";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            for (GblRow row : rows) {
+                pstmt.setString(1, row.getIdService());  // id_service
+                pstmt.setString(2, row.getServiceName());  // service_name
+                pstmt.setLong(3, row.getNbT());  // nb_t
+                pstmt.setLong(4, row.getNbTt());  // nb_tt
+                pstmt.setLong(5, row.getNbA());  // nb_a
+                pstmt.setLong(6, row.getNbTl1());  // nb_tl1
+                pstmt.setLong(7, row.getNbSa());  // nb_sa
+                pstmt.setDouble(8, row.getPerApT());  // perApT
+                pstmt.setDouble(9, row.getPertl1Pt());  // PERTL1pt
+                pstmt.setDouble(10, row.getPerSaPt());  // perSApT
+                pstmt.setDouble(11, row.getAvgSecA());  // avgSec_A
+                pstmt.setLong(12, row.getNbCa());  // nb_ca
+                pstmt.setDouble(13, row.getPercapt());  // percapt
+                pstmt.setDouble(14, row.getAvgSecT());  // avgSec_T
+                pstmt.setLong(15, row.getNbCt());  // nb_ct
+                pstmt.setDouble(16, row.getPerctPt());  // perctpt
+                pstmt.setString(17, row.getDate());  // date
+                pstmt.setString(18, row.getIdAgence());  // id_agence
+                pstmt.setString(19, row.getId().toString());  // id
+                pstmt.addBatch(); // Add to batch
+            }
+
+            int[] batchResults = pstmt.executeBatch(); // Execute batch
+            con.commit(); // Commit transaction
+            isSuccess = batchResults.length == rows.size();
+            logger.info("batchInsert: inserted " + batchResults.length + " rows");
+            con.close();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return isSuccess;
+    }
+
+    public boolean batchUpdate(List<GblRow> rows) {
+        boolean isSuccess = false;
+        try {
+            Connection con = new CPConnection().getConnection();
+            con.setAutoCommit(false); // Disable auto-commit
+            con.setAutoCommit(false); // Disable auto-commit
+            String sql = "UPDATE rougga_gbl_table SET "
+                    + "service_name = ?, "
+                    + "nb_t = ?, "
+                    + "nb_tt = ?, "
+                    + "nb_a = ?, "
+                    + "nb_tl1 = ?, "
+                    + "nb_sa = ?, "
+                    + "perApT = ?, "
+                    + "PERTL1pt = ?, "
+                    + "perSApT = ?, "
+                    + "avgSec_A = ?, "
+                    + "nb_ca = ?, "
+                    + "percapt = ?, "
+                    + "avgSec_T = ?, "
+                    + "nb_ct = ?, "
+                    + "perctpt = ?, "
+                    + "date = to_date(?,'YYYY-MM-DD HH24:MI:SS') ,"
+                    + "id_service = ?,"
+                    + "id_agence=?"
+                    + "WHERE id = ?;";
+
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            for (GblRow row : rows) {
+                pstmt.setString(1, row.getServiceName());  // service_name
+                pstmt.setLong(2, row.getNbT());  // nb_t
+                pstmt.setLong(3, row.getNbTt());  // nb_tt
+                pstmt.setLong(4, row.getNbA());  // nb_a
+                pstmt.setLong(5, row.getNbTl1());  // nb_tl1
+                pstmt.setLong(6, row.getNbSa());  // nb_sa
+                pstmt.setDouble(7, row.getPerApT());  // perApT
+                pstmt.setDouble(8, row.getPertl1Pt());  // PERTL1pt
+                pstmt.setDouble(9, row.getPerSaPt());  // perSApT
+                pstmt.setDouble(10, row.getAvgSecA());  // avgSec_A
+                pstmt.setLong(11, row.getNbCa());  // nb_ca
+                pstmt.setDouble(12, row.getPercapt());  // percapt
+                pstmt.setDouble(13, row.getAvgSecT());  // avgSec_T
+                pstmt.setLong(14, row.getNbCt());  // nb_ct
+                pstmt.setDouble(15, row.getPerctPt());  // perctpt
+                pstmt.setString(16, row.getDate());// date
+                pstmt.setString(17, row.getIdService());  // id_service
+                pstmt.setString(18, row.getIdAgence()); // id_agence
+                pstmt.setString(19, row.getId().toString()); // id
+                pstmt.addBatch(); // Add to batch
+            }
+
+            int[] batchResults = pstmt.executeBatch(); // Execute batch
+            con.commit();// Commit transaction
+            isSuccess = batchResults.length == rows.size();
+            logger.info("batchUpdate: updated " + batchResults.length + " rows");
+            con.close();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return isSuccess;
+    }
+
+    
     //
     public GltRow getTotaleRowByAgence(String agence_id, String date1, String date2) {
         GltRow row = new GltRow();
