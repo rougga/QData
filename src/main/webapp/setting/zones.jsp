@@ -47,14 +47,14 @@
                     }
                 %>
 
-                <div class="container" id="dbTbl">
+                <div class="container-lg" id="dbTbl">
                     <h1 class="text-white text_center pl-2">
                         Les Zones :
                         <span class=" float-right">
                             <a class="btn btn-success" id="dbAdd"><img src="/QData/img/icon/plus.png"> Ajouter</a>
                         </span>
                     </h1>
-                    <table class="table table-bordered table-light table-responsive-md border-dark"  id="dbTable">
+                    <table class="table table-light table-responsive-sm "  id="dbTable">
                         <thead class="appColor border-dark">
                             <tr>
                                 <th scope="col">Name</th>

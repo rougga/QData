@@ -13,6 +13,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ma.rougga.qdata.TableGenerator;
 import org.slf4j.LoggerFactory;
 
 import com.itextpdf.text.BaseColor;
@@ -44,7 +45,7 @@ public class ExportPdfController {
             String[] dbs) {
         System.err.println("Printing PDF...");
         try {
-            String filename = getRandomName() + ".pdf";
+            String filename = CfgHandler.getRandomName() + ".pdf";
             TableGenerator tbl = new TableGenerator();
             String title = new TitleHandler(request).getGblTitle() + " Du " + date1 + " Au " + date2;
             List<ArrayList> gtable = tbl.generateGblTable(date1, date2, dbs);
@@ -163,7 +164,7 @@ public class ExportPdfController {
             String[] dbs) {
         System.err.println("Printing PDF...");
         try {
-            String filename = getRandomName() + ".pdf";
+            String filename = CfgHandler.getRandomName() + ".pdf";
             TableGenerator tbl = new TableGenerator();
             String title = new TitleHandler(request).getEmpTitle() + " Du " + date1 + " Au " + date2;
             List<ArrayList> gtable = tbl.generateEmpTable(date1, date2, dbs);
@@ -282,7 +283,7 @@ public class ExportPdfController {
             String[] dbs) {
         System.err.println("Printing PDF...");
         try {
-            String filename = getRandomName() + ".pdf";
+            String filename = CfgHandler.getRandomName() + ".pdf";
             TableGenerator tbl = new TableGenerator();
             String title = new TitleHandler(request).getEmpSerTitle() + " Du " + date1 + " Au " + date2;
             List<ArrayList> gtable = tbl.generateEmpServiceTable(date1, date2, dbs);
@@ -401,7 +402,7 @@ public class ExportPdfController {
             String[] dbs) {
         System.err.println("Printing PDF...");
         try {
-            String filename = getRandomName() + ".pdf";
+            String filename = CfgHandler.getRandomName() + ".pdf";
             TableGenerator tbl = new TableGenerator();
             String title = new TitleHandler(request).getGchTitle() + " Du " + date1 + " Au " + date2;
             List<ArrayList> gtable = tbl.generateGchTable(date1, date2, dbs);
@@ -520,7 +521,7 @@ public class ExportPdfController {
             String[] dbs) {
         System.err.println("Printing PDF...");
         try {
-            String filename = getRandomName() + ".pdf";
+            String filename = CfgHandler.getRandomName() + ".pdf";
             TableGenerator tbl = new TableGenerator();
             String title = new TitleHandler(request).getGchServTitle() + " Du " + date1 + " Au " + date2;
             List<ArrayList> gtable = tbl.generateGchServiceTable(date1, date2, dbs);
@@ -639,7 +640,7 @@ public class ExportPdfController {
             String[] dbs) {
         System.err.println("Printing PDF...");
         try {
-            String filename = getRandomName() + ".pdf";
+            String filename = CfgHandler.getRandomName() + ".pdf";
             TableGenerator tbl = new TableGenerator();
             String title = new TitleHandler(request).getNdtTitle() + " Du " + date1 + " Au " + date2;
             List<ArrayList> gtable = tbl.generateNdtTable(date1, date2, dbs);
@@ -766,7 +767,7 @@ public class ExportPdfController {
             String[] dbs) {
         System.err.println("Printing PDF...");
         try {
-            String filename = getRandomName() + ".pdf";
+            String filename = CfgHandler.getRandomName() + ".pdf";
             TableGenerator tbl = new TableGenerator();
             String title = new TitleHandler(request).getNdttTitle() + " Du " + date1 + " Au " + date2;
             List<ArrayList> gtable = tbl.generateNdttTable(date1, date2, dbs);
@@ -893,7 +894,7 @@ public class ExportPdfController {
             String[] dbs) {
         System.err.println("Printing PDF...");
         try {
-            String filename = getRandomName() + ".pdf";
+            String filename = CfgHandler.getRandomName() + ".pdf";
             TableGenerator tbl = new TableGenerator();
             String title = new TitleHandler(request).getNdtaTitle() + " Du " + date1 + " Au " + date2;
             List<ArrayList> gtable = tbl.generateNdtaTable(date1, date2, dbs);
@@ -1020,7 +1021,7 @@ public class ExportPdfController {
             String[] dbs) {
         System.err.println("Printing PDF...");
         try {
-            String filename = getRandomName() + ".pdf";
+            String filename = CfgHandler.getRandomName() + ".pdf";
             TableGenerator tbl = new TableGenerator();
             String title = new TitleHandler(request).getNdtsaTitle() + " Du " + date1 + " Au " + date2;
             List<ArrayList> gtable = tbl.generateNdtsaTable(date1, date2, dbs);
@@ -1147,7 +1148,7 @@ public class ExportPdfController {
             String[] dbs) {
         System.err.println("Printing PDF...");
         try {
-            String filename = getRandomName() + ".pdf";
+            String filename = CfgHandler.getRandomName() + ".pdf";
             TableGenerator tbl = new TableGenerator();
             String title = new TitleHandler(request).getGlaTitle() + " Du " + date1 + " Au " + date2;
             List<ArrayList> gtable = tbl.generateGlaTable(date1, date2, dbs);
@@ -1281,7 +1282,7 @@ public class ExportPdfController {
             String[] dbs) {
         System.err.println("Printing PDF...");
         try {
-            String filename = getRandomName() + ".pdf";
+            String filename = CfgHandler.getRandomName() + ".pdf";
             TableGenerator tbl = new TableGenerator();
             String title = new TitleHandler(request).getGltTitle() + " Du " + date1 + " Au " + date2;
             List<ArrayList> gtable = tbl.generateGltTable(date1, date2, dbs);

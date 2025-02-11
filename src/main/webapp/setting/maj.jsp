@@ -41,7 +41,7 @@
                     }
                 %>
 
-                <div class="container" id="dbTbl">
+                <div class="container-lg" id="dbTbl">
                     <h1 class="text-white text-center">
                         MISE À JOUR GLOBALE :
                     </h1>
@@ -50,10 +50,10 @@
                             <span class="sr-only">Loading...</span>
                         </div>
                     </div>
-                    <div class="col-6 d-flex mt-4 flex-column mx-auto align-items-center">
+                    <div class="col-md-6 d-flex mt-4 flex-column mx-auto align-items-center">
                         <a class="btn btn-secondary m-1 majBtn" id="majNowBtn" href="/<%=CfgHandler.APP%>/update">
                             <i class="fa fa-cloud-download" aria-hidden="true"></i>
-                            <span>Forcer la Mise à jour d'aujourd'hui) maintenant</span>
+                            <span>Forcer la Mise à jour d'aujourd'hui maintenant</span>
                         </a>
                         <a class="btn btn-secondary m-1 majBtn" id="majTBtn"  href="/<%=CfgHandler.APP%>/restore" >
                             <i class="fa fa-cloud-download" aria-hidden="true"></i>

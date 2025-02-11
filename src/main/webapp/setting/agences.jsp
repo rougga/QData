@@ -48,7 +48,7 @@
                     }
                 %>
 
-                <div class="container" id="dbTbl">
+                <div class="container-lg" id="dbTbl">
                     <h1 class="text-white text_center pl-2">
                         Les agences :
                         <span class=" float-right">
@@ -56,7 +56,7 @@
 
                         </span>
                     </h1>
-                    <table class="table table-bordered table-light table-responsive-md border-dark"  id="dbTable">
+                    <table class="table table-light table-responsive-lg "  id="dbTable">
                         <thead class="appColor border-dark">
                             <tr>
                                 <th scope="col">Zone</th>

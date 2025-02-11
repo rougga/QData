@@ -6,13 +6,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.UUID;
-import ma.rougga.qdata.controller.report.EmpSerTableController;
-import ma.rougga.qdata.controller.report.EmpTableController;
-import ma.rougga.qdata.controller.report.GblTableController;
-import ma.rougga.qdata.controller.report.GchSerTableController;
-import ma.rougga.qdata.controller.report.GchTableController;
-import ma.rougga.qdata.controller.report.GlaTableController;
-import ma.rougga.qdata.controller.report.GltTableController;
+
+import ma.rougga.qdata.controller.report.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -52,14 +47,14 @@ public class UpdateController {
                 org.json.simple.JSONObject ob = (org.json.simple.JSONObject) parser.parse(response2.toString());
                 return ob;
             } else {
-                logger.error("GET request failed with Response Code: " + responseCode);
+                logger.error("GET request failed with Response Code: {}", responseCode);
             }
 
             // Disconnect
             connection.disconnect();
             return null;
         } catch (IOException | ParseException e) {
-            logger.error("UpdateController.getJsonFromUrl: " + e.getMessage());
+            logger.error("UpdateController.getJsonFromUrl: {}", e.getMessage());
             return null;
         }
     }
@@ -74,6 +69,10 @@ public class UpdateController {
         isSuccessful = new GchSerTableController().restoreOldRowsByAgenceId(id_agence);
         isSuccessful = new GlaTableController().restoreOldRowsByAgenceId(id_agence);
         isSuccessful = new GltTableController().restoreOldRowsByAgenceId(id_agence);
+        isSuccessful = new ThTTableController().restoreOldRowsByAgenceId(id_agence);
+        isSuccessful = new ThTTTableController().restoreOldRowsByAgenceId(id_agence);
+        isSuccessful = new ThATableController().restoreOldRowsByAgenceId(id_agence);
+        isSuccessful = new ThSATableController().restoreOldRowsByAgenceId(id_agence);
         isSuccessful = new CibleController().updateAgenceFromJson(id_agence.toString());
         // restore other tables
 
@@ -89,6 +88,10 @@ public class UpdateController {
         isDone = new GchSerTableController().updateAgenceFromJson(null, null, id_agence.toString());
         isDone = new GlaTableController().updateAgenceFromJson(null, null, id_agence.toString());
         isDone = new GltTableController().updateAgenceFromJson(null, null, id_agence.toString());
+        isDone = new ThTTableController().updateAgenceFromJson(null, null, id_agence.toString());
+        isDone = new ThTTTableController().updateAgenceFromJson(null, null, id_agence.toString());
+        isDone = new ThATableController().updateAgenceFromJson(null, null, id_agence.toString());
+        isDone = new ThSATableController().updateAgenceFromJson(null, null, id_agence.toString());
         isDone = new CibleController().updateAgenceFromJson(id_agence.toString());
         // update other tables
 
@@ -103,6 +106,10 @@ public class UpdateController {
         new GchSerTableController().updateFromJson(null, null);
         new GlaTableController().updateFromJson(null, null);
         new GltTableController().updateFromJson(null, null);
+        new ThTTableController().updateFromJson(null, null);
+        new ThTTTableController().updateFromJson(null, null);
+        new ThATableController().updateFromJson(null, null);
+        new ThSATableController().updateFromJson(null, null);
         new CibleController().updateFromJson();
 
         // update other tables
@@ -118,6 +125,10 @@ public class UpdateController {
         new GchSerTableController().restoreOldRowsForAllAgences();
         new GlaTableController().restoreOldRowsForAllAgences();
         new GltTableController().restoreOldRowsForAllAgences();
+        new ThTTableController().restoreOldRowsForAllAgences();
+        new ThTTTableController().restoreOldRowsForAllAgences();
+        new ThATableController().restoreOldRowsForAllAgences();
+        new ThSATableController().restoreOldRowsForAllAgences();
         new CibleController().updateFromJson();
         // restore other tables
         logger.info("Globale restore is Finished! .");

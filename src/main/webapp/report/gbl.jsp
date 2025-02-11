@@ -119,7 +119,9 @@
                                         for (GblRow service : services) {
                                 %>                      
                                 <tr class="" data-id="<%= agence.get("id_agence")%>">
-                                    <th scope="row" class="text-center text-wrap align-middle border-dark 0 db <%= agence.get("agence_name")%>" data-id="<%= agence.get("id_agence")%>"><%= agence.get("agence_name")%></th>
+                                    <th scope="row" class="text-center text-wrap align-middle border-dark 0 db <%= agence.get("agence_name")%>" data-id="<%= agence.get("id_agence")%>">
+                                        <%= agence.get("agence_name") %>
+                                    </th>
 
                                     <th class="col 1 text-center align-middle <%= service.getServiceName()%>" data-id="<%= service.getServiceName()%>"><%= service.getServiceName()%></th>
 

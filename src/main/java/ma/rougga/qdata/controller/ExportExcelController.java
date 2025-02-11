@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ma.rougga.qdata.TableGenerator;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,7 @@ public class ExportExcelController {
 
         try {
             XLSTransformer transformer = new XLSTransformer();
-            String filename = getRandomName() + ".xlsx";
+            String filename = CfgHandler.getRandomName() + ".xlsx";
             String path = new CfgHandler(request).getGblTempExcel();
             InputStream stream = new FileInputStream(new File(path));
             Map beans = new HashMap();
@@ -90,7 +91,7 @@ public class ExportExcelController {
 
         try {
             XLSTransformer transformer = new XLSTransformer();
-            String filename = getRandomName() + ".xlsx";
+            String filename = CfgHandler.getRandomName() + ".xlsx";
             String path = new CfgHandler(request).getEmpTempExcel();
             InputStream stream = new FileInputStream(new File(path));
             Map beans = new HashMap();
@@ -138,7 +139,7 @@ public class ExportExcelController {
 
         try {
             XLSTransformer transformer = new XLSTransformer();
-            String filename = getRandomName() + ".xlsx";
+            String filename = CfgHandler.getRandomName() + ".xlsx";
             String path = new CfgHandler(request).getEmpServTempExcel();
             InputStream stream = new FileInputStream(new File(path));
             Map beans = new HashMap();
@@ -186,7 +187,7 @@ public class ExportExcelController {
 
         try {
             XLSTransformer transformer = new XLSTransformer();
-            String filename = getRandomName() + ".xlsx";
+            String filename = CfgHandler.getRandomName() + ".xlsx";
             String path = new CfgHandler(request).getGchTempExcel();
             InputStream stream = new FileInputStream(new File(path));
             Map beans = new HashMap();
@@ -234,7 +235,7 @@ public class ExportExcelController {
 
         try {
             XLSTransformer transformer = new XLSTransformer();
-            String filename = getRandomName() + ".xlsx";
+            String filename = CfgHandler.getRandomName() + ".xlsx";
             String path = new CfgHandler(request).getGchServTempExcel();
             InputStream stream = new FileInputStream(new File(path));
             Map beans = new HashMap();
@@ -282,7 +283,7 @@ public class ExportExcelController {
 
         try {
             XLSTransformer transformer = new XLSTransformer();
-            String filename = getRandomName() + ".xlsx";
+            String filename = CfgHandler.getRandomName() + ".xlsx";
             String path = new CfgHandler(request).getNdtTempExcel();
             InputStream stream = new FileInputStream(new File(path));
             Map beans = new HashMap();
@@ -330,7 +331,7 @@ public class ExportExcelController {
             String[] dbs) {
         try {
             XLSTransformer transformer = new XLSTransformer();
-            String filename = getRandomName() + ".xlsx";
+            String filename = CfgHandler.getRandomName() + ".xlsx";
             String path = new CfgHandler(request).getNdtTempExcel();
             InputStream stream = new FileInputStream(new File(path));
             Map beans = new HashMap();
@@ -378,7 +379,7 @@ public class ExportExcelController {
             String[] dbs) {
         try {
             XLSTransformer transformer = new XLSTransformer();
-            String filename = getRandomName() + ".xlsx";
+            String filename = CfgHandler.getRandomName() + ".xlsx";
             String path = new CfgHandler(request).getNdtTempExcel();
             InputStream stream = new FileInputStream(new File(path));
             Map beans = new HashMap();
@@ -426,7 +427,7 @@ public class ExportExcelController {
             String[] dbs) {
         try {
             XLSTransformer transformer = new XLSTransformer();
-            String filename = getRandomName() + ".xlsx";
+            String filename = CfgHandler.getRandomName() + ".xlsx";
             String path = new CfgHandler(request).getNdtTempExcel();
             InputStream stream = new FileInputStream(new File(path));
             Map beans = new HashMap();
@@ -474,7 +475,7 @@ public class ExportExcelController {
             String[] dbs) {
         try {
             XLSTransformer transformer = new XLSTransformer();
-            String filename = getRandomName() + ".xlsx";
+            String filename = CfgHandler.getRandomName() + ".xlsx";
             String path = new CfgHandler(request).getGlaTempExcel();
             InputStream stream = new FileInputStream(new File(path));
             Map beans = new HashMap();
@@ -521,7 +522,7 @@ public class ExportExcelController {
             String[] dbs) {
         try {
             XLSTransformer transformer = new XLSTransformer();
-            String filename = getRandomName() + ".xlsx";
+            String filename = CfgHandler.getRandomName() + ".xlsx";
             String path = new CfgHandler(request).getGltTempExcel();
             InputStream stream = new FileInputStream(new File(path));
             Map beans = new HashMap();

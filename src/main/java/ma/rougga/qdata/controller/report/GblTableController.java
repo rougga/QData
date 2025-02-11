@@ -18,6 +18,7 @@ import ma.rougga.qdata.controller.AgenceController;
 import ma.rougga.qdata.controller.UpdateController;
 import ma.rougga.qdata.modal.Agence;
 import ma.rougga.qdata.modal.GblRow;
+import ma.rougga.qdata.modal.Zone;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -742,7 +743,12 @@ public class GblTableController {
             if (!services.isEmpty()) {
                 Map<String, Object> newAgence = new HashMap<>();
                 newAgence.put("id_agence", a.getId().toString());
-                newAgence.put("agence_name", a.getName());
+                String agenceName = a.getName();
+                Zone zone = ac.getAgenceZoneByAgenceId(a.getId());
+                if ( zone != null) {
+                    agenceName+= " (" + zone.getName() + ")";
+                }
+                newAgence.put("agence_name", agenceName);
                 newAgence.put("services", services);
                 result.add(newAgence);
             }

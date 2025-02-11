@@ -17,6 +17,7 @@ import ma.rougga.qdata.CfgHandler;
 import ma.rougga.qdata.controller.AgenceController;
 import ma.rougga.qdata.controller.UpdateController;
 import ma.rougga.qdata.modal.Agence;
+import ma.rougga.qdata.modal.Zone;
 import ma.rougga.qdata.modal.report.EmpSerRow;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
@@ -147,7 +148,7 @@ public class EmpSerTableController {
                         rs.getDouble("percapt"), rs.getLong("nb_ct"), rs.getDouble("perCtPt"),
                         CfgHandler.getFormatedDateAsString(CfgHandler.getFormatedDateAsDate(rs.getString("date"))));
             } else {
-                logger.info("No row found for id: " + id);
+                logger.info("No row found for id: {}", id);
             }
             con.close();
         } catch (SQLException e) {
@@ -167,7 +168,7 @@ public class EmpSerTableController {
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, to_date(?,'YYYY-MM-DD HH24:MI:SS'));";
             PreparedStatement pstmt = con.prepareStatement(sql);
 
-            for (GblRow row : rows) {
+            for (EmpSerRow row : rows) {
                 pstmt.setString(1, row.getId().toString());
                 pstmt.setString(2, row.getUserId());
                 pstmt.setString(3, row.getUserName());
@@ -195,7 +196,7 @@ public class EmpSerTableController {
             int[] batchResults = pstmt.executeBatch(); // Execute batch
             con.commit(); // Commit transaction
             isSuccess = batchResults.length == rows.size();
-            logger.info("batchInsert: inserted " + batchResults.length + " rows");
+            logger.info("batchInsert: inserted {} rows", batchResults.length);
             con.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -218,7 +219,7 @@ public class EmpSerTableController {
 
             PreparedStatement pstmt = con.prepareStatement(sql);
 
-            for (GblRow row : rows) {
+            for (EmpSerRow row : rows) {
                 pstmt.setString(1, row.getUserId());
                 pstmt.setString(2, row.getUserName());
                 pstmt.setString(3, row.getServiceId());
@@ -246,7 +247,7 @@ public class EmpSerTableController {
             int[] batchResults = pstmt.executeBatch(); // Execute batch
             con.commit();// Commit transaction
             isSuccess = batchResults.length == rows.size();
-            logger.info("batchUpdate: updated " + batchResults.length + " rows");
+            logger.info("batchUpdate: updated {} rows", batchResults.length);
             con.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -538,13 +539,9 @@ public class EmpSerTableController {
                         rs.getLong("nb_ct"),
                         rs.getDouble("perCtPt"),
                         CfgHandler.getFormatedDateAsString(CfgHandler.getFormatedDateAsDate(rs.getString("date"))));
-                logger.info("row found for date: " + date + " agence_id = "
-                        + id_agence
-                        + " id_emp = " + userId);
+                logger.info("row found for date: {} agence_id = {} id_emp = {}", date, id_agence, userId);
             } else {
-                logger.info("No row found for date: " + date + " agence_id = "
-                        + id_agence
-                        + " id_emp = " + userId);
+                logger.info("No row found for date: {} agence_id = {} id_emp = {}", date, id_agence, userId);
             }
 
             con.close();
@@ -581,10 +578,10 @@ public class EmpSerTableController {
         }
         a = ac.getAgenceById(UUID.fromString(agenceId));
         if (a != null) {
-            logger.info(" -- Updating " + a.getName() + "'s EMPSER Table ... ");
+            logger.info(" -- Updating {}'s EMPSER Table ... ", a.getName());
             String url = CfgHandler.prepareTableJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_EMPSER_TABLE_JSON,
                     date1, date2);
-            logger.info("URL = " + url + " - " + a.getName());
+            logger.info("URL = {} - {}", url, a.getName());
             JSONObject json = UpdateController.getJsonFromUrl(url);
 
             if (json != null) {
@@ -620,7 +617,7 @@ public class EmpSerTableController {
                                 row.setDate(CfgHandler.getFormatedDateAsString(CfgHandler.format.parse(date2)));
                                 //this.updateRow(row);
                                 rowsToUpdate.add(row);
-                                logger.info("EmpSerRow id: " + row.getId() + " found and updated ");
+                                logger.info("EmpSerRow id: {} found and updated ", row.getId());
                             } catch (ParseException ex) {
                                 logger.error(ex.getMessage());
                                 return false;
@@ -659,6 +656,10 @@ public class EmpSerTableController {
                         logger.error("updateAgenceFromJson: some json variables are null;");
                     }
                 }
+                // insert and update using batch processing
+                this.batchInsert(rowsToInsert);
+                this.batchUpdate(rowsToUpdate);
+                logger.info(" --  EmpSer Table for {} is Updated. ", a.getName());
                 ac.setLastUpdate(UUID.fromString(agenceId));
                 isDone = true;
             } else {
@@ -668,10 +669,7 @@ public class EmpSerTableController {
         } else {
             logger.error("updateAgenceFromJson: no agence found;");
         }
-        // insert and update using batch processing
-        this.batchInsert(rowsToInsert);
-        this.batchUpdate(rowsToUpdate);
-        logger.info(" --  EmpSer Table for " + a.getName() + " is Updated. ");
+
         return isDone;
     }
 
@@ -690,7 +688,12 @@ public class EmpSerTableController {
             if (!emps.isEmpty()) {
                 Map<String, Object> newAgence = new HashMap<>();
                 newAgence.put("id_agence", a.getId().toString());
-                newAgence.put("agence_name", a.getName());
+                String agenceName = a.getName();
+                Zone zone = ac.getAgenceZoneByAgenceId(a.getId());
+                if ( zone != null) {
+                    agenceName+= " (" + zone.getName() + ")";
+                }
+                newAgence.put("agence_name", agenceName);
                 newAgence.put("emps", emps);
                 result.add(newAgence);
             }

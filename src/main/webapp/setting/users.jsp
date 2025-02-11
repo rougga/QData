@@ -52,7 +52,7 @@
                 </script>
             </div>
             <div class="pt-4 mt-4">
-                <div class="container" id="userTbl">
+                <div class="container-lg" id="userTbl">
                     <%                    String err = request.getParameter("err");
                         if (err != "" && err != null) {
 

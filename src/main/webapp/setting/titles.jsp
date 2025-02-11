@@ -45,14 +45,14 @@
                     }
 
                 %>
-                <div class="container">
+                <div class="container-lg">
                     <h1 class="text-white text-center">Modifier les titre des tables:</h1>
                     <form id="ttlForm" action="/QData/EditTitles" method="POST" class="my-4 py-4" >
-                        <table class="table table-bordered table-light table-responsive-sm border-dark" id="dbTable">
+                        <table class="table  table-light table-responsive-sm" id="dbTable">
                             <thead class="appColor border-dark">
                                 <tr>
                                     <th scope="col" class="w-50 text-right">Rapport</th>
-                                    <th scope="col" class="w-50">Nom</th>
+                                    <th scope="col" class="w-50">Titre à afficher</th>
                                 </tr>
                             </thead>
                             <tbody class="font-weight-bold">

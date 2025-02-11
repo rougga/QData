@@ -54,7 +54,7 @@
                 <%
                     if (agence != null) {
                 %>
-                <div class="container" id="dbTbl">
+                <div class="container-lg" id="dbTbl">
                     <h1 class="text-white text-center">
                         Mise a jour de l'agence: <%= agence.getName()%>
                     </h1>
@@ -75,7 +75,7 @@
                             <i class="fa fa-cloud-download" aria-hidden="true"></i>
                             Mettre à jour toutes les données de l'agence
                         </a>
-                        <a class="btn btn-danger mt-5 col-4 " id=""  href="/<%=CfgHandler.APP%>/setting/agences.jsp" >
+                        <a class="btn btn-danger mt-5 col-md-4 " id=""  href="/<%=CfgHandler.APP%>/setting/agences.jsp" >
                             <i class="fa fa-arrow-left" aria-hidden="true"></i>
                             RETOURNER
                         </a>

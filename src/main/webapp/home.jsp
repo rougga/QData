@@ -53,7 +53,7 @@ Map chart= stat.getTotalDealChart();
                     }
                 %>
             </div>
-            <div class="d-flex justify-content-center px-4">
+            <div class="d-md-flex justify-content-center px-4 ">
                 <div class="col-12 col-md-6 mt-4 pt-4 min-hieght">
                     <div class="border border-white rounded p-2 min-hieght">
                         <h4 class="text-white mx-1 text-center">Pourcentage de ticket traité par Agence:</h4>

@@ -16,11 +16,14 @@ $(document).ready(function () {
         });
     }
     $("#dbAddButton").on("click", function () {
-        let val = $("#zone").val();
-        if (val) {
+        let zone = $("#zone").val();
+        let hote = $("#host").val();
+        let port = $("#port").val();
+        let name = $("#agence").val();
+        if (zone && hote && port && name) {
             $("#dbForm").submit();
         } else {
-            alert("selectioner la zone !");
+            alert("Remplir tous les champs !");
         }
     });
 
@@ -38,12 +41,13 @@ $(document).ready(function () {
     });
 
     $("table").on("click", ".dbEdit", function () {
+        let domain = $(this).parent().parent().children(".agenceHost").text();
         $("#dbForm").attr("action", "/QData/EditDatabase");
         $("#exampleModalLabel").text("Modifier l'Agence:");
         $("#agence").val($(this).parent().parent().children(".agenceName").text());
         $("#zone").val($(this).parent().parent().children(".agenceZone").attr("data-zone"));
-        $("#user").val($(this).parent().parent().children(".agenceUser").text());
-        $("#pass").val($(this).parent().parent().children(".agencePass").text());
+        $("#port").val(domain.split(":")[1]);
+        $("#host").val(domain.split(":")[0]);
         $("#id").val($(this).attr("data-id"));
         $("button:submit").text("Modifier");
         $("#dbModal").modal('toggle');

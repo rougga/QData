@@ -123,7 +123,7 @@
 
 
                                 <tr class="" data-id="<%= agence.get("agence_id")%>">
-                                    <th scope="row" class="text-center align-middle border-dark 0 db <%= agence.get("agence_name")%>" data-id="<%= agence.get("agence_id")%>"><%= agence.get("agence_name")%></th>
+                                    <th scope="row" class="text-center  text-wrap align-middle border-dark 0 db <%= agence.get("agence_name")%>" data-id="<%= agence.get("agence_id")%>"><%= agence.get("agence_name")%></th>
 
                                     <td class="text-left border-dark 1 <%= emp.getServiceName()%>" style=""><%= emp.getServiceName()%> </td>
 
