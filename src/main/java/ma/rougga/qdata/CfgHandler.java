@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +26,7 @@ import org.xml.sax.SAXException;
 
 public class CfgHandler {
 
-    //MetaData
+    // MetaData
     public static final String APP = "QData";
     public static final String VERSION = "6.0";
     public static final String COMPANY = "ROUGGA";
@@ -35,7 +36,7 @@ public class CfgHandler {
     public static final int APP_NODE_PORT = 8888;
     public static long AUTOUPDATE_REFRESHTIME = 10;
 
-    //Data
+    // Data
     private final String cfgFile = "\\cfg\\cfg.properties";
     private final String userFile = "\\cfg\\db\\users.xml";
     private final String cibleFile = "\\cfg\\db\\cible.xml";
@@ -43,7 +44,7 @@ public class CfgHandler {
     private final String dbFile = "\\cfg\\db\\db.xml";
     private final String titleFile = "\\cfg\\db\\title.xml";
 
-    //Excel
+    // Excel
     private final String tempxls = "\\cfg\\excel\\temp.xls";
     private final String gblTempExcel = "\\cfg\\excel\\gbltemp.xlsx";
     private final String empTempExcel = "\\cfg\\excel\\emptemp.xlsx";
@@ -54,7 +55,7 @@ public class CfgHandler {
     private final String glaTempExcel = "\\cfg\\excel\\glatemp.xlsx";
     private final String gltTempExcel = "\\cfg\\excel\\glttemp.xlsx";
 
-    //Pages
+    // Pages
     public static final String PAGE_HOME = "/" + APP + "/home.jsp";
     public static final String PAGE_REPORT = "/" + APP + "/report.jsp";
     public static final String PAGE_TASK = "/" + APP + "/setting/taches.jsp";
@@ -67,9 +68,9 @@ public class CfgHandler {
     public static final String PAGE_GLT_REPORT = "/" + APP + "/report/glt.jsp";
     public static final String PAGE_TCH_REPORT = "/" + APP + "/report/tch.jsp";
 
-    //API URL
     
-    //tables
+
+    // tables API URL
     public static String API_GBL_TABLE_JSON = APP_NODE + "/getgbltable";
     public static String API_EMP_TABLE_JSON = APP_NODE + "/getemptable";
     public static String API_EMPSER_TABLE_JSON = APP_NODE + "/getempsertable";
@@ -78,20 +79,16 @@ public class CfgHandler {
     public static String API_GLA_TABLE_JSON = APP_NODE + "/getglatable";
     public static String API_GLT_TABLE_JSON = APP_NODE + "/getglttable";
     public static String API_TCH_TABLE_JSON = APP_NODE + "/gettchtable";
-    
     public static String API_THT_TABLE_JSON = APP_NODE + "/getthttable";
-    
     public static String API_THTT_TABLE_JSON = APP_NODE + "/getthtttable";
-    
     public static String API_THA_TABLE_JSON = APP_NODE + "/getthatable";
-    
     public static String API_THSA_TABLE_JSON = APP_NODE + "/getthsatable";
-    
-    
+    //API
     public static String API_CHECK_STATUS = APP_NODE + "/onlinecheck";
     public static String API_CIBLE_TABLE_JSON = APP_NODE + "/getcibles";
     public static String API_WAITING_TICKETS_JSON = APP_NODE + "/getwaitingtickets";
-    //Pars
+
+    // Pars
     private Properties prop = null;
     private String url;
     private String appPath;
@@ -135,6 +132,10 @@ public class CfgHandler {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
+    public static String getRandomName() {
+        return (new SimpleDateFormat("yyyyMMddhhmmss")).format(new Date()) + (new Random()).nextInt(100000);
+    }
+
     public CfgHandler(HttpServletRequest r) throws FileNotFoundException, IOException {
         this.request = r;
     }
@@ -147,14 +148,14 @@ public class CfgHandler {
                 + "&date2=" + date2;
         return url;
     }
-    
+
     public static String prepareJsonUrl(String host, int port, String apiPoint) {
         String url = "http://" + host
                 + ":" + port
                 + "/" + apiPoint;
         return url;
     }
-    
+
     public String getPropertie(String name) throws IOException {
 
         prop = new Properties();
@@ -187,7 +188,8 @@ public class CfgHandler {
         return doc;
     }
 
-    public int getCibleA(String id) throws FileNotFoundException, IOException, ParserConfigurationException, SAXException {
+    public int getCibleA(String id)
+            throws FileNotFoundException, IOException, ParserConfigurationException, SAXException {
 
         int cibleA = 0;
         String path = getCibleFile();
@@ -207,7 +209,8 @@ public class CfgHandler {
         return cibleA;
     }
 
-    public int getCibleT(String id) throws FileNotFoundException, IOException, ParserConfigurationException, SAXException {
+    public int getCibleT(String id)
+            throws FileNotFoundException, IOException, ParserConfigurationException, SAXException {
 
         int cibleT = 0;
         String path = getCibleFile();

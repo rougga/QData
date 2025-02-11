@@ -18,6 +18,8 @@ import ma.rougga.qdata.controller.AgenceController;
 import ma.rougga.qdata.controller.UpdateController;
 import ma.rougga.qdata.modal.Agence;
 import ma.rougga.qdata.modal.report.EmpRow;
+import ma.rougga.qdata.modal.report.EmpSerRow;
+
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -556,6 +558,8 @@ public class EmpTableController {
     public boolean updateAgenceFromJson(String date1, String date2, String agenceId) {
         boolean isDone = false;
         Agence a = new Agence();
+        List<EmpSerRow> rowsToInsert = new ArrayList<>();
+        List<EmpSerRow> rowsToUpdate = new ArrayList<>();
         //validationg data
         if (StringUtils.isBlank(agenceId)) {
             logger.error("updateAgenceFromJson: id agence null;");
@@ -599,7 +603,8 @@ public class EmpTableController {
                                 row.setNbCt((long) emp.get("nb_ct"));
                                 row.setPerCtPt((Double) emp.get("perctpt"));
                                 row.setDate(CfgHandler.getFormatedDateAsString(CfgHandler.format.parse(date2)));
-                                this.updateRow(row);
+                                //this.updateRow(row);
+                                rowsToUpdate.add(row);
                                 logger.info("EmpRow id: " + row.getId() + " found and updated ");
                             } catch (ParseException ex) {
                                 logger.error(ex.getMessage());
@@ -628,7 +633,8 @@ public class EmpTableController {
                                         (long) emp.get("nb_ct"),
                                         (Double) emp.get("perctpt")
                                 );
-                                this.addRow(row);
+                               //this.addRow(row);
+                               rowsToInsert.add(row);
                             } catch (ParseException ex) {
                                 logger.error(ex.getMessage());
                             }
@@ -646,6 +652,9 @@ public class EmpTableController {
         } else {
             logger.error("updateAgenceFromJson: no agence found;");
         }
+        // insert and update using batch processing
+        this.batchInsert(rowsToInsert);
+        this.batchUpdate(rowsToUpdate);
         logger.info(" --  Emp Table for " + a.getName() + " is Updated. ");
         return isDone;
     }

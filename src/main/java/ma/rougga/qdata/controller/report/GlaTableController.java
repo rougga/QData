@@ -159,54 +159,38 @@ public class GlaTableController {
         return row;
     }
 
-      public boolean batchInsert(List<GblRow> rows) {
+    public boolean batchInsert(List<GlaRow> rows) {
         boolean isSuccess = false;
         try {
             Connection con = new CPConnection().getConnection();
             con.setAutoCommit(false); // Disable auto-commit
-            String sql = "INSERT INTO rougga_gbl_table ("
-                    + "id_service, "
-                    + "service_name, "
-                    + "nb_t, "
-                    + "nb_tt, "
-                    + "nb_a, "
-                    + "nb_tl1, "
-                    + "nb_sa, "
-                    + "perApT, "
-                    + "PERTL1pt, "
-                    + "perSApT, "
-                    + "avgSec_A, "
-                    + "nb_ca, "
-                    + "percapt, "
-                    + "avgSec_T, "
-                    + "nb_ct, "
-                    + "perctpt, "
-                    + "date, "
-                    + "id_agence,"
-                    + "id"
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, to_date(?,'YYYY-MM-DD HH24:MI:SS'), ?,?)";
+            String sql = "INSERT INTO rougga_gla_table ("
+                    + "id, date, agence_id, service_id, service_name, "
+                    + "s0_15, s15_30, s30_60, s60_90, s90_120, s120, "
+                    + "m0_5, m5_10, m10_20, m20_30, m30_45, m45_50, m50, total) "
+                    + "VALUES (?, to_date(?,'YYYY-MM-DD HH24:MI:SS'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = con.prepareStatement(sql);
 
-            for (GblRow row : rows) {
-                pstmt.setString(1, row.getIdService());  // id_service
-                pstmt.setString(2, row.getServiceName());  // service_name
-                pstmt.setLong(3, row.getNbT());  // nb_t
-                pstmt.setLong(4, row.getNbTt());  // nb_tt
-                pstmt.setLong(5, row.getNbA());  // nb_a
-                pstmt.setLong(6, row.getNbTl1());  // nb_tl1
-                pstmt.setLong(7, row.getNbSa());  // nb_sa
-                pstmt.setDouble(8, row.getPerApT());  // perApT
-                pstmt.setDouble(9, row.getPertl1Pt());  // PERTL1pt
-                pstmt.setDouble(10, row.getPerSaPt());  // perSApT
-                pstmt.setDouble(11, row.getAvgSecA());  // avgSec_A
-                pstmt.setLong(12, row.getNbCa());  // nb_ca
-                pstmt.setDouble(13, row.getPercapt());  // percapt
-                pstmt.setDouble(14, row.getAvgSecT());  // avgSec_T
-                pstmt.setLong(15, row.getNbCt());  // nb_ct
-                pstmt.setDouble(16, row.getPerctPt());  // perctpt
-                pstmt.setString(17, row.getDate());  // date
-                pstmt.setString(18, row.getIdAgence());  // id_agence
-                pstmt.setString(19, row.getId().toString());  // id
+            for (GlaRow row : rows) {
+                pstmt.setString(1, row.getId().toString());
+                pstmt.setString(2, row.getDate());
+                pstmt.setString(3, row.getAgenceId());
+                pstmt.setString(4, row.getServiceId());
+                pstmt.setString(5, row.getServiceName());
+                pstmt.setLong(6, row.getS0_15());
+                pstmt.setLong(7, row.getS15_30());
+                pstmt.setLong(8, row.getS30_60());
+                pstmt.setLong(9, row.getS60_90());
+                pstmt.setLong(10, row.getS90_120());
+                pstmt.setLong(11, row.getS120());
+                pstmt.setLong(12, row.getM0_5());
+                pstmt.setLong(13, row.getM5_10());
+                pstmt.setLong(14, row.getM10_20());
+                pstmt.setLong(15, row.getM20_30());
+                pstmt.setLong(16, row.getM30_45());
+                pstmt.setLong(17, row.getM45_50());
+                pstmt.setLong(18, row.getM50());
+                pstmt.setLong(19, row.getTotal());
                 pstmt.addBatch(); // Add to batch
             }
 
@@ -221,55 +205,40 @@ public class GlaTableController {
         return isSuccess;
     }
 
-    public boolean batchUpdate(List<GblRow> rows) {
+    public boolean batchUpdate(List<GlaRow> rows) {
         boolean isSuccess = false;
         try {
             Connection con = new CPConnection().getConnection();
             con.setAutoCommit(false); // Disable auto-commit
             con.setAutoCommit(false); // Disable auto-commit
-            String sql = "UPDATE rougga_gbl_table SET "
-                    + "service_name = ?, "
-                    + "nb_t = ?, "
-                    + "nb_tt = ?, "
-                    + "nb_a = ?, "
-                    + "nb_tl1 = ?, "
-                    + "nb_sa = ?, "
-                    + "perApT = ?, "
-                    + "PERTL1pt = ?, "
-                    + "perSApT = ?, "
-                    + "avgSec_A = ?, "
-                    + "nb_ca = ?, "
-                    + "percapt = ?, "
-                    + "avgSec_T = ?, "
-                    + "nb_ct = ?, "
-                    + "perctpt = ?, "
-                    + "date = to_date(?,'YYYY-MM-DD HH24:MI:SS') ,"
-                    + "id_service = ?,"
-                    + "id_agence=?"
-                    + "WHERE id = ?;";
+            String sql = "UPDATE rougga_gla_table SET "
+                    + "date = to_date(?,'YYYY-MM-DD HH24:MI:SS'), agence_id = ?, service_id = ?, service_name = ?, "
+                    + "s0_15 = ?, s15_30 = ?, s30_60 = ?, s60_90 = ?, s90_120 = ?, s120 = ?, "
+                    + "m0_5 = ?, m5_10 = ?, m10_20 = ?, m20_30 = ?, m30_45 = ?, m45_50 = ?, m50 = ?, total = ? "
+                    + "WHERE id = ?";
 
             PreparedStatement pstmt = con.prepareStatement(sql);
 
-            for (GblRow row : rows) {
-                pstmt.setString(1, row.getServiceName());  // service_name
-                pstmt.setLong(2, row.getNbT());  // nb_t
-                pstmt.setLong(3, row.getNbTt());  // nb_tt
-                pstmt.setLong(4, row.getNbA());  // nb_a
-                pstmt.setLong(5, row.getNbTl1());  // nb_tl1
-                pstmt.setLong(6, row.getNbSa());  // nb_sa
-                pstmt.setDouble(7, row.getPerApT());  // perApT
-                pstmt.setDouble(8, row.getPertl1Pt());  // PERTL1pt
-                pstmt.setDouble(9, row.getPerSaPt());  // perSApT
-                pstmt.setDouble(10, row.getAvgSecA());  // avgSec_A
-                pstmt.setLong(11, row.getNbCa());  // nb_ca
-                pstmt.setDouble(12, row.getPercapt());  // percapt
-                pstmt.setDouble(13, row.getAvgSecT());  // avgSec_T
-                pstmt.setLong(14, row.getNbCt());  // nb_ct
-                pstmt.setDouble(15, row.getPerctPt());  // perctpt
-                pstmt.setString(16, row.getDate());// date
-                pstmt.setString(17, row.getIdService());  // id_service
-                pstmt.setString(18, row.getIdAgence()); // id_agence
-                pstmt.setString(19, row.getId().toString()); // id
+            for (GlaRow row : rows) {
+                pstmt.setString(1, row.getDate());
+                pstmt.setString(2, row.getAgenceId());
+                pstmt.setString(3, row.getServiceId());
+                pstmt.setString(4, row.getServiceName());
+                pstmt.setLong(5, row.getS0_15());
+                pstmt.setLong(6, row.getS15_30());
+                pstmt.setLong(7, row.getS30_60());
+                pstmt.setLong(8, row.getS60_90());
+                pstmt.setLong(9, row.getS90_120());
+                pstmt.setLong(10, row.getS120());
+                pstmt.setLong(11, row.getM0_5());
+                pstmt.setLong(12, row.getM5_10());
+                pstmt.setLong(13, row.getM10_20());
+                pstmt.setLong(14, row.getM20_30());
+                pstmt.setLong(15, row.getM30_45());
+                pstmt.setLong(16, row.getM45_50());
+                pstmt.setLong(17, row.getM50());
+                pstmt.setLong(18, row.getTotal());
+                pstmt.setString(19, row.getId().toString());
                 pstmt.addBatch(); // Add to batch
             }
 
@@ -284,7 +253,6 @@ public class GlaTableController {
         return isSuccess;
     }
 
-    
     //
     public GlaRow getTotaleRowByAgence(String agence_id, String date1, String date2) {
         GlaRow row = new GlaRow();
@@ -306,9 +274,9 @@ public class GlaTableController {
 
             // Prepare statement
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, date1);  // Start date
-            pstmt.setString(2, date2);  // End date
-            pstmt.setString(3, agence_id);  // agence_id
+            pstmt.setString(1, date1); // Start date
+            pstmt.setString(2, date2); // End date
+            pstmt.setString(3, agence_id); // agence_id
 
             // Execute query
             ResultSet rs = pstmt.executeQuery();
@@ -378,10 +346,10 @@ public class GlaTableController {
                     + agenceCondition;
             // Prepare statement
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, date1);  // Start date
-            pstmt.setString(2, date2);  // End date
+            pstmt.setString(1, date1); // Start date
+            pstmt.setString(2, date2); // End date
 
-            //adding selected agences to preparedstatement
+            // adding selected agences to preparedstatement
             for (int i = 0; i < agences.length; i++) {
                 pstmt.setString(i + 3, agences[i]);
             }
@@ -439,9 +407,9 @@ public class GlaTableController {
 
             // Prepare statement
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, date1);  // Start date
-            pstmt.setString(2, date2);  // End date
-            pstmt.setString(3, agence_id);  // agence_id
+            pstmt.setString(1, date1); // Start date
+            pstmt.setString(2, date2); // End date
+            pstmt.setString(3, agence_id); // agence_id
 
             // Execute query
             ResultSet rs = pstmt.executeQuery();
@@ -449,7 +417,7 @@ public class GlaTableController {
             // Process result set
             while (rs.next()) {
                 GlaRow row = new GlaRow();
-                
+
                 row.setId(null);
                 row.setDate(null);
                 row.setAgenceId(agence_id);
@@ -473,9 +441,9 @@ public class GlaTableController {
             }
             if (emps.size() <= 0) {
                 con.close();
-                return emps; //if no rows exists return empty list
+                return emps; // if no rows exists return empty list
             }
-            emps.add(this.getTotaleRowByAgence(agence_id, date1, date2)); // adding subtotale row as a service 
+            emps.add(this.getTotaleRowByAgence(agence_id, date1, date2)); // adding subtotale row as a service
             con.close();
         } catch (SQLException e) {
             logger.error(e.getMessage());
@@ -540,7 +508,8 @@ public class GlaTableController {
         return row;
     }
 
-    //get GLA row between 2 dates and insert json result to database for every agency
+    // get GLA row between 2 dates and insert json result to database for every
+    // agency
     public void updateFromJson(String date1, String date2) {
         List<Agence> agences = ac.getAllAgence();
         for (Agence a : agences) {
@@ -548,11 +517,13 @@ public class GlaTableController {
         }
     }
 
-    //get GLA row between 2 dates and insert json result to database for one agency
+    // get GLA row between 2 dates and insert json result to database for one agency
     public boolean updateAgenceFromJson(String date1, String date2, String agenceId) {
         boolean isDone = false;
         Agence a = new Agence();
-        //validationg data
+        List<GblRow> rowsToInsert = new ArrayList<>();
+        List<GblRow> rowsToUpdate = new ArrayList<>();
+        // validationg data
         if (StringUtils.isBlank(agenceId)) {
             logger.error("updateAgenceFromJson: id agence null;");
             return false;
@@ -563,7 +534,8 @@ public class GlaTableController {
         a = ac.getAgenceById(UUID.fromString(agenceId));
         if (a != null) {
             logger.info(" -- Updating " + a.getName() + "'s GLA Table ... ");
-            String url = CfgHandler.prepareTableJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_GLA_TABLE_JSON, date1, date2);
+            String url = CfgHandler.prepareTableJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_GLA_TABLE_JSON, date1,
+                    date2);
             logger.info("URL = " + url + " - " + a.getName());
             JSONObject json = UpdateController.getJsonFromUrl(url);
 
@@ -597,7 +569,8 @@ public class GlaTableController {
                                 row.setM45_50((long) emp.get("m45_50"));
                                 row.setM50((long) emp.get("m50"));
                                 row.setTotal((long) emp.get("total"));
-                                this.updateRow(row);
+                                //this.updateRow(row);
+                                rowsToUpdate.add(row);
                                 logger.info("GlaRow id: " + row.getId() + " found and updated ");
                             } catch (ParseException ex) {
                                 logger.error(ex.getMessage());
@@ -625,7 +598,8 @@ public class GlaTableController {
                                 row.setM45_50((long) emp.get("m45_50"));
                                 row.setM50((long) emp.get("m50"));
                                 row.setTotal((long) emp.get("total"));
-                                this.addRow(row);
+                                //this.addRow(row);
+                                rowsToInsert.add(row);
                             } catch (ParseException ex) {
                                 logger.error(ex.getMessage());
                             }
@@ -643,11 +617,14 @@ public class GlaTableController {
         } else {
             logger.error("updateAgenceFromJson: no agence found;");
         }
+        // insert and update using batch processing
+        this.batchInsert(rowsToInsert);
+        this.batchUpdate(rowsToUpdate);
         logger.info(" --  GLA Table for " + a.getName() + " is Updated. ");
         return isDone;
     }
 
-    //returns whole GLA table for report page
+    // returns whole GLA table for report page
     public List<Map> getTableAsList(String date1, String date2, String[] agences) {
         List<Map> result = new ArrayList<>();
         date1 = (date1 == null) ? CfgHandler.format.format(new Date()) : date1;
@@ -669,7 +646,7 @@ public class GlaTableController {
 
         }
 
-        //adding totale
+        // adding totale
         if (!result.isEmpty()) {
             List<GlaRow> emps = new ArrayList<>();
             Map<String, Object> newAgence = new HashMap<>();
@@ -684,7 +661,7 @@ public class GlaTableController {
 
     }
 
-    //gets unique UUID after checking in GLA table
+    // gets unique UUID after checking in GLA table
     private UUID getUniquId() {
         UUID uniqueId = UUID.randomUUID();
         while (this.doesIdExist(uniqueId)) {
@@ -693,7 +670,7 @@ public class GlaTableController {
         return uniqueId;
     }
 
-    //checks if the id exists in GLA table
+    // checks if the id exists in GLA table
     private boolean doesIdExist(UUID uniqueId) {
         try {
             Connection con = new CPConnection().getConnection();
@@ -711,7 +688,7 @@ public class GlaTableController {
         }
     }
 
-    //restore old rows from the oldest date to now for all agencies
+    // restore old rows from the oldest date to now for all agencies
     public void restoreOldRowsForAllAgences() {
         for (Agence a : ac.getAllAgence()) {
             if (this.restoreOldRowsByAgenceId(a.getId())) {
@@ -723,7 +700,7 @@ public class GlaTableController {
         logger.info("restoreOldRowsForAllAgences: all agences's data restored!");
     }
 
-    //restore old rows from the oldest date to now for one agency
+    // restore old rows from the oldest date to now for one agency
     public boolean restoreOldRowsByAgenceId(UUID agence_id) {
         Agence a = ac.getAgenceById(agence_id);
         if (a == null) {
@@ -736,8 +713,7 @@ public class GlaTableController {
                 logger.info("Restoring GLA table data of "
                         + a.getName()
                         + " for date:"
-                        + CfgHandler.getFormatedDateAsString(oldestDate)
-                );
+                        + CfgHandler.getFormatedDateAsString(oldestDate));
                 this.updateAgenceFromJson(
                         CfgHandler.format.format(oldestDate),
                         CfgHandler.format.format(oldestDate),
@@ -754,7 +730,7 @@ public class GlaTableController {
             return false;
         }
 
-        //add error handling
+        // add error handling
         return true;
     }
 

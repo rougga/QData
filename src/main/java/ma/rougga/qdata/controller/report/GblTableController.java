@@ -618,76 +618,8 @@ public class GblTableController {
     //get gbl row between 2 dates and insert json result to database for every agency
     public void updateFromJson(String date1, String date2) {
         List<Agence> agences = ac.getAllAgence();
-        if (StringUtils.isAnyBlank(date1, date2)) {
-            date1 = date2 = CfgHandler.format.format(new Date());
-        }
-        if (agences != null) {
-
-            logger.info(" -- Updating GBL Tables ... ");
-            for (Agence a : agences) {
-                logger.info(" -- Updating GBL Table in " + a.getName());
-                String url = CfgHandler.prepareTableJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_GBL_TABLE_JSON, date1, date2);
-                logger.info("URL = " + url + " - " + a.getName());
-                JSONObject json = UpdateController.getJsonFromUrl(url);
-
-                if (json != null) {
-                    JSONArray result = (JSONArray) json.get("result");
-                    for (Object s : result) {
-                        JSONObject service = (JSONObject) s;
-                        JSONObject data = (JSONObject) service.get("data");
-                        String id_service = service.get("id").toString(),
-                                id_agence = a.getId().toString();
-                        GblRow row = this.getRowByDate(date2,
-                                id_agence,
-                                id_service);
-                        if (row != null) {
-                            row.setServiceName(service.get("name").toString());
-                            logger.info("Nb. T : " + row.getNbT() + " to " + service.get("nb_t"));
-                            row.setNbT((long) service.get("nb_t"));
-                            row.setNbTt((long) service.get("nb_tt"));
-                            row.setNbA((long) service.get("nb_a"));
-                            row.setNbTl1((long) service.get("nb_tl1"));
-                            row.setNbSa((long) service.get("nb_sa"));
-                            row.setPerApT((Double) service.get("perApT"));
-                            row.setPertl1Pt((Double) service.get("PERTL1pt"));
-                            row.setPerSaPt((Double) service.get("perSApT"));
-                            row.setAvgSecA((Double) service.get("avgSec_A"));
-                            row.setNbCa((long) service.get("nb_ca"));
-                            row.setPercapt((Double) service.get("percapt"));
-                            row.setAvgSecT((Double) service.get("avgSec_T"));
-                            row.setNbCt((long) service.get("nb_ct"));
-                            row.setPerctPt((Double) service.get("perctpt"));
-                            row.setDate(CfgHandler.getFormatedDateAsString(new Date()));
-                            this.updateRow(row);
-                        } else {
-                            row = new GblRow(
-                                    this.getUniquId(),
-                                    id_service,
-                                    service.get("name").toString(),
-                                    (long) service.get("nb_t"),
-                                    (long) service.get("nb_tt"),
-                                    (long) service.get("nb_a"),
-                                    (long) service.get("nb_tl1"),
-                                    (long) service.get("nb_sa"),
-                                    (Double) service.get("perApT"),
-                                    (Double) service.get("PERTL1pt"),
-                                    (Double) service.get("perSApT"),
-                                    (Double) service.get("avgSec_A"),
-                                    (long) service.get("nb_ca"),
-                                    (Double) service.get("percapt"),
-                                    (Double) service.get("avgSec_T"),
-                                    (long) service.get("nb_ct"),
-                                    (Double) service.get("perctpt"),
-                                    CfgHandler.getFormatedDateAsString(new Date()),
-                                    id_agence);
-                            this.addRow(row);
-                        }
-
-                    }
-                    ac.setLastUpdate(a.getId());
-                }
-            }
-            logger.info(" -- All GBL Tables Updated. ");
+        for (Agence a : agences) {
+            this.updateAgenceFromJson(date1, date2, a.getId().toString());
         }
     }
 

@@ -28,7 +28,7 @@ public class GchTableController {
 
     private static final Logger logger = LoggerFactory.getLogger(GchTableController.class);
     AgenceController ac = new AgenceController();
-    
+
     public GchTableController() {
     }
 
@@ -149,8 +149,7 @@ public class GchTableController {
                         rs.getDouble("avgSec_T"),
                         rs.getLong("nb_ct"),
                         rs.getDouble("perCtPt"),
-                        CfgHandler.getFormatedDateAsString(CfgHandler.getFormatedDateAsDate(rs.getString("date")))
-                );
+                        CfgHandler.getFormatedDateAsString(CfgHandler.getFormatedDateAsDate(rs.getString("date"))));
             } else {
                 logger.info("No row found for id: " + id);
             }
@@ -161,7 +160,6 @@ public class GchTableController {
         return row;
     }
 
-    
     public boolean deleteRowById(String id) {
         try (Connection con = new CPConnection().getConnection()) {
             String sql = "DELETE FROM rougga_gch_table WHERE id = ?";
@@ -182,55 +180,39 @@ public class GchTableController {
             return false;
         }
     }
-    
-      public boolean batchInsert(List<GblRow> rows) {
+
+    public boolean batchInsert(List<GchRow> rows) {
         boolean isSuccess = false;
         try {
             Connection con = new CPConnection().getConnection();
             con.setAutoCommit(false); // Disable auto-commit
-            String sql = "INSERT INTO rougga_gbl_table ("
-                    + "id_service, "
-                    + "service_name, "
-                    + "nb_t, "
-                    + "nb_tt, "
-                    + "nb_a, "
-                    + "nb_tl1, "
-                    + "nb_sa, "
-                    + "perApT, "
-                    + "PERTL1pt, "
-                    + "perSApT, "
-                    + "avgSec_A, "
-                    + "nb_ca, "
-                    + "percapt, "
-                    + "avgSec_T, "
-                    + "nb_ct, "
-                    + "perctpt, "
-                    + "date, "
-                    + "id_agence,"
-                    + "id"
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, to_date(?,'YYYY-MM-DD HH24:MI:SS'), ?,?)";
+            String sql = "INSERT INTO rougga_gch_table ("
+                    + "id, guichet_id, guichet_name, agence_id, nb_t, nb_tt, nb_a, nb_tl1, nb_sa, "
+                    + "perApT, perTl1Pt, perSaPt, avgSec_A, avgSec_T, nb_ca, percapt, nb_ct, perCtPt, date) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, to_timestamp(?,'YYYY-MM-DD HH24:MI:SS'))";
+
             PreparedStatement pstmt = con.prepareStatement(sql);
 
-            for (GblRow row : rows) {
-                pstmt.setString(1, row.getIdService());  // id_service
-                pstmt.setString(2, row.getServiceName());  // service_name
-                pstmt.setLong(3, row.getNbT());  // nb_t
-                pstmt.setLong(4, row.getNbTt());  // nb_tt
-                pstmt.setLong(5, row.getNbA());  // nb_a
-                pstmt.setLong(6, row.getNbTl1());  // nb_tl1
-                pstmt.setLong(7, row.getNbSa());  // nb_sa
-                pstmt.setDouble(8, row.getPerApT());  // perApT
-                pstmt.setDouble(9, row.getPertl1Pt());  // PERTL1pt
-                pstmt.setDouble(10, row.getPerSaPt());  // perSApT
-                pstmt.setDouble(11, row.getAvgSecA());  // avgSec_A
-                pstmt.setLong(12, row.getNbCa());  // nb_ca
-                pstmt.setDouble(13, row.getPercapt());  // percapt
-                pstmt.setDouble(14, row.getAvgSecT());  // avgSec_T
-                pstmt.setLong(15, row.getNbCt());  // nb_ct
-                pstmt.setDouble(16, row.getPerctPt());  // perctpt
-                pstmt.setString(17, row.getDate());  // date
-                pstmt.setString(18, row.getIdAgence());  // id_agence
-                pstmt.setString(19, row.getId().toString());  // id
+            for (GchRow row : rows) {
+                pstmt.setString(1, row.getId().toString());
+                pstmt.setString(2, row.getGuichetId());
+                pstmt.setString(3, row.getGuichetName());
+                pstmt.setString(4, row.getAgenceId());
+                pstmt.setLong(5, row.getNbT());
+                pstmt.setLong(6, row.getNbTt());
+                pstmt.setLong(7, row.getNbA());
+                pstmt.setLong(8, row.getNbTl1());
+                pstmt.setLong(9, row.getNbSa());
+                pstmt.setDouble(10, row.getPerApT());
+                pstmt.setDouble(11, row.getPerTl1Pt());
+                pstmt.setDouble(12, row.getPerSaPt());
+                pstmt.setDouble(13, row.getAvgSecA());
+                pstmt.setDouble(14, row.getAvgSecT());
+                pstmt.setLong(15, row.getNbCa());
+                pstmt.setDouble(16, row.getPerCapt());
+                pstmt.setLong(17, row.getNbCt());
+                pstmt.setDouble(18, row.getPerCtPt());
+                pstmt.setString(19, row.getDate());
                 pstmt.addBatch(); // Add to batch
             }
 
@@ -251,49 +233,34 @@ public class GchTableController {
             Connection con = new CPConnection().getConnection();
             con.setAutoCommit(false); // Disable auto-commit
             con.setAutoCommit(false); // Disable auto-commit
-            String sql = "UPDATE rougga_gbl_table SET "
-                    + "service_name = ?, "
-                    + "nb_t = ?, "
-                    + "nb_tt = ?, "
-                    + "nb_a = ?, "
-                    + "nb_tl1 = ?, "
-                    + "nb_sa = ?, "
-                    + "perApT = ?, "
-                    + "PERTL1pt = ?, "
-                    + "perSApT = ?, "
-                    + "avgSec_A = ?, "
-                    + "nb_ca = ?, "
-                    + "percapt = ?, "
-                    + "avgSec_T = ?, "
-                    + "nb_ct = ?, "
-                    + "perctpt = ?, "
-                    + "date = to_date(?,'YYYY-MM-DD HH24:MI:SS') ,"
-                    + "id_service = ?,"
-                    + "id_agence=?"
-                    + "WHERE id = ?;";
+            String sql = "UPDATE rougga_gch_table SET "
+                    + "guichet_id = ?, guichet_name = ?, agence_id = ?, nb_t = ?, nb_tt = ?, nb_a = ?, nb_tl1 = ?, nb_sa = ?, "
+                    + "perApT = ?, perTl1Pt = ?, perSaPt = ?, avgSec_A = ?, avgSec_T = ?, nb_ca = ?, percapt = ?, "
+                    + "nb_ct = ?, perCtPt = ?, date = to_timestamp(?,'YYYY-MM-DD HH24:MI:SS') "
+                    + "WHERE id = ?";
 
             PreparedStatement pstmt = con.prepareStatement(sql);
 
-            for (GblRow row : rows) {
-                pstmt.setString(1, row.getServiceName());  // service_name
-                pstmt.setLong(2, row.getNbT());  // nb_t
-                pstmt.setLong(3, row.getNbTt());  // nb_tt
-                pstmt.setLong(4, row.getNbA());  // nb_a
-                pstmt.setLong(5, row.getNbTl1());  // nb_tl1
-                pstmt.setLong(6, row.getNbSa());  // nb_sa
-                pstmt.setDouble(7, row.getPerApT());  // perApT
-                pstmt.setDouble(8, row.getPertl1Pt());  // PERTL1pt
-                pstmt.setDouble(9, row.getPerSaPt());  // perSApT
-                pstmt.setDouble(10, row.getAvgSecA());  // avgSec_A
-                pstmt.setLong(11, row.getNbCa());  // nb_ca
-                pstmt.setDouble(12, row.getPercapt());  // percapt
-                pstmt.setDouble(13, row.getAvgSecT());  // avgSec_T
-                pstmt.setLong(14, row.getNbCt());  // nb_ct
-                pstmt.setDouble(15, row.getPerctPt());  // perctpt
-                pstmt.setString(16, row.getDate());// date
-                pstmt.setString(17, row.getIdService());  // id_service
-                pstmt.setString(18, row.getIdAgence()); // id_agence
-                pstmt.setString(19, row.getId().toString()); // id
+            for (GchRow row : rows) {
+                pstmt.setString(1, row.getGuichetId());
+                pstmt.setString(2, row.getGuichetName());
+                pstmt.setString(3, row.getAgenceId());
+                pstmt.setLong(4, row.getNbT());
+                pstmt.setLong(5, row.getNbTt());
+                pstmt.setLong(6, row.getNbA());
+                pstmt.setLong(7, row.getNbTl1());
+                pstmt.setLong(8, row.getNbSa());
+                pstmt.setDouble(9, row.getPerApT());
+                pstmt.setDouble(10, row.getPerTl1Pt());
+                pstmt.setDouble(11, row.getPerSaPt());
+                pstmt.setDouble(12, row.getAvgSecA());
+                pstmt.setDouble(13, row.getAvgSecT());
+                pstmt.setLong(14, row.getNbCa());
+                pstmt.setDouble(15, row.getPerCapt());
+                pstmt.setLong(16, row.getNbCt());
+                pstmt.setDouble(17, row.getPerCtPt());
+                pstmt.setString(18, row.getDate());
+                pstmt.setString(19, row.getId().toString());
                 pstmt.addBatch(); // Add to batch
             }
 
@@ -308,10 +275,8 @@ public class GchTableController {
         return isSuccess;
     }
 
-    
-    
     //
-    
+
     public GchRow getTotaleRowByAgence(String id_agence, String date1, String date2) {
         GchRow row = new GchRow();
         try {
@@ -342,16 +307,16 @@ public class GchTableController {
 
             // Prepare statement
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, date1);  // Start date
-            pstmt.setString(2, date2);  // End date
-            pstmt.setString(3, id_agence);  // id_agence
+            pstmt.setString(1, date1); // Start date
+            pstmt.setString(2, date2); // End date
+            pstmt.setString(3, id_agence); // id_agence
 
             // Execute query
             ResultSet rs = pstmt.executeQuery();
 
             // Process result set
             if (rs.next()) {
-                row.setId(null);  // Setting `id` to null 
+                row.setId(null); // Setting `id` to null
                 row.setGuichetId(null);
                 row.setGuichetName(rs.getString("guichet_name"));
                 row.setNbT(rs.getLong("nb_t"));
@@ -368,7 +333,7 @@ public class GchTableController {
                 row.setAvgSecT(rs.getDouble("avgSec_T"));
                 row.setNbCt(rs.getLong("nb_ct"));
                 row.setPerCtPt(rs.getDouble("perctpt"));
-                row.setDate(null);  // Setting `date` to null since it's not in the query output
+                row.setDate(null); // Setting `date` to null since it's not in the query output
                 row.setAgenceId(rs.getString("agence_id"));
             }
             con.close();
@@ -426,10 +391,10 @@ public class GchTableController {
                     + agenceCondition;
             // Prepare statement
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, date1);  // Start date
-            pstmt.setString(2, date2);  // End date
+            pstmt.setString(1, date1); // Start date
+            pstmt.setString(2, date2); // End date
 
-            //adding selected agences to preparedstatement
+            // adding selected agences to preparedstatement
             for (int i = 0; i < agences.length; i++) {
                 pstmt.setString(i + 3, agences[i]);
             }
@@ -439,7 +404,7 @@ public class GchTableController {
 
             // Process result set
             if (rs.next()) {
-                row.setId(null);  // Set ID to null
+                row.setId(null); // Set ID to null
                 row.setGuichetName(rs.getString("guichet_name"));
                 row.setNbT(rs.getLong("nb_t"));
                 row.setNbTt(rs.getLong("nb_tt"));
@@ -455,7 +420,7 @@ public class GchTableController {
                 row.setAvgSecT(rs.getDouble("avgSec_T"));
                 row.setNbCt(rs.getLong("nb_ct"));
                 row.setPerCtPt(rs.getDouble("perctpt"));
-                row.setAgenceId(null);  // No id_agence provided in query output
+                row.setAgenceId(null); // No id_agence provided in query output
             }
             con.close();
         } catch (SQLException e) {
@@ -495,9 +460,9 @@ public class GchTableController {
 
             // Prepare statement
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, date1);  // Start date
-            pstmt.setString(2, date2);  // End date
-            pstmt.setString(3, id_agence);  // id_agence
+            pstmt.setString(1, date1); // Start date
+            pstmt.setString(2, date2); // End date
+            pstmt.setString(3, id_agence); // id_agence
 
             // Execute query
             ResultSet rs = pstmt.executeQuery();
@@ -505,7 +470,7 @@ public class GchTableController {
             // Process result set
             while (rs.next()) {
                 GchRow row = new GchRow();
-                row.setId(null);  // Set id to null 
+                row.setId(null); // Set id to null
                 row.setGuichetId(rs.getString("guichet_id"));
                 row.setGuichetName(rs.getString("guichet_name"));
                 row.setNbT(rs.getLong("nb_t"));
@@ -527,9 +492,9 @@ public class GchTableController {
             }
             if (emps.size() <= 0) {
                 con.close();
-                return emps; //if no rows exists return empty list
+                return emps; // if no rows exists return empty list
             }
-            emps.add(this.getTotaleRowByAgence(id_agence, date1, date2)); // adding subtotale row as a service 
+            emps.add(this.getTotaleRowByAgence(id_agence, date1, date2)); // adding subtotale row as a service
             con.close();
         } catch (SQLException e) {
             logger.error(e.getMessage());
@@ -576,8 +541,7 @@ public class GchTableController {
                         rs.getDouble("avgSec_T"),
                         rs.getLong("nb_ct"),
                         rs.getDouble("perctpt"),
-                        CfgHandler.getFormatedDateAsString(CfgHandler.getFormatedDateAsDate(rs.getString("date")))
-                );
+                        CfgHandler.getFormatedDateAsString(CfgHandler.getFormatedDateAsDate(rs.getString("date"))));
                 logger.info("row found for date: " + date + " agence_id = "
                         + id_agence
                         + " guichet_id = " + guichetId);
@@ -595,7 +559,8 @@ public class GchTableController {
         return row;
     }
 
-    //get emp row between 2 dates and insert json result to database for every agency
+    // get emp row between 2 dates and insert json result to database for every
+    // agency
     public void updateFromJson(String date1, String date2) {
         List<Agence> agences = ac.getAllAgence();
         for (Agence a : agences) {
@@ -603,11 +568,13 @@ public class GchTableController {
         }
     }
 
-    //get emp row between 2 dates and insert json result to database for one agency
+    // get emp row between 2 dates and insert json result to database for one agency
     public boolean updateAgenceFromJson(String date1, String date2, String agenceId) {
         boolean isDone = false;
         Agence a = new Agence();
-        //validationg data
+        List<GblRow> rowsToInsert = new ArrayList<>();
+        List<GblRow> rowsToUpdate = new ArrayList<>();
+        // validationg data
         if (StringUtils.isBlank(agenceId)) {
             logger.error("updateAgenceFromJson: id agence null;");
             return false;
@@ -618,7 +585,8 @@ public class GchTableController {
         a = ac.getAgenceById(UUID.fromString(agenceId));
         if (a != null) {
             logger.info(" -- Updating " + a.getName() + "'s GCH Table ... ");
-            String url = CfgHandler.prepareTableJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_GCH_TABLE_JSON, date1, date2);
+            String url = CfgHandler.prepareTableJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_GCH_TABLE_JSON, date1,
+                    date2);
             logger.info("URL = " + url + " - " + a.getName());
             JSONObject json = UpdateController.getJsonFromUrl(url);
 
@@ -650,7 +618,8 @@ public class GchTableController {
                                 row.setNbCt((long) emp.get("nb_ct"));
                                 row.setPerCtPt((Double) emp.get("perctpt"));
                                 row.setDate(CfgHandler.getFormatedDateAsString(CfgHandler.format.parse(date2)));
-                                this.updateRow(row);
+                                //this.updateRow(row);
+                                rowsToUpdate.add(row);
                                 logger.info("GchRow id: " + row.getId() + " found and updated ");
                             } catch (ParseException ex) {
                                 logger.error(ex.getMessage());
@@ -677,9 +646,9 @@ public class GchTableController {
                                         (Double) emp.get("avgSec_T"),
                                         (long) emp.get("nb_ct"),
                                         (Double) emp.get("perctpt"),
-                                        CfgHandler.getFormatedDateAsString(CfgHandler.format.parse(date2))
-                                );
-                                this.addRow(row);
+                                        CfgHandler.getFormatedDateAsString(CfgHandler.format.parse(date2)));
+                                //this.addRow(row);
+                                rowsToInsert.add(row);
                             } catch (ParseException ex) {
                                 logger.error(ex.getMessage());
                             }
@@ -697,11 +666,14 @@ public class GchTableController {
         } else {
             logger.error("updateAgenceFromJson: no agence found;");
         }
+        // insert and update using batch processing
+        this.batchInsert(rowsToInsert);
+        this.batchUpdate(rowsToUpdate);
         logger.info(" --  Gch Table for " + a.getName() + " is Updated. ");
         return isDone;
     }
 
-    //returns whole emp table for report page
+    // returns whole emp table for report page
     public List<Map> getTableAsList(String date1, String date2, String[] agences) {
         List<Map> result = new ArrayList<>();
         date1 = (date1 == null) ? CfgHandler.format.format(new Date()) : date1;
@@ -723,7 +695,7 @@ public class GchTableController {
 
         }
 
-        //adding totale
+        // adding totale
         if (!result.isEmpty()) {
             List<GchRow> emps = new ArrayList<>();
             Map<String, Object> newAgence = new HashMap<>();
@@ -738,7 +710,7 @@ public class GchTableController {
 
     }
 
-    //gets unique UUID after checking in gbl table
+    // gets unique UUID after checking in gbl table
     private UUID getUniquId() {
         UUID uniqueId = UUID.randomUUID();
         while (this.doesIdExist(uniqueId)) {
@@ -747,7 +719,7 @@ public class GchTableController {
         return uniqueId;
     }
 
-    //checks if the id exists in gbl table
+    // checks if the id exists in gbl table
     private boolean doesIdExist(UUID uniqueId) {
         try {
             Connection con = new CPConnection().getConnection();
@@ -765,7 +737,7 @@ public class GchTableController {
         }
     }
 
-    //restore old rows from the oldest date to now for all agencies
+    // restore old rows from the oldest date to now for all agencies
     public void restoreOldRowsForAllAgences() {
         for (Agence a : ac.getAllAgence()) {
             if (this.restoreOldRowsByAgenceId(a.getId())) {
@@ -777,7 +749,7 @@ public class GchTableController {
         logger.info("restoreOldRowsForAllAgences: all agences's data restored!");
     }
 
-    //restore old rows from the oldest date to now for one agency
+    // restore old rows from the oldest date to now for one agency
     public boolean restoreOldRowsByAgenceId(UUID id_agence) {
         Agence a = ac.getAgenceById(id_agence);
         if (a == null) {
@@ -789,8 +761,7 @@ public class GchTableController {
                 logger.info("Restoring GCH table data of "
                         + a.getName()
                         + " for date:"
-                        + CfgHandler.getFormatedDateAsString(oldestDate)
-                );
+                        + CfgHandler.getFormatedDateAsString(oldestDate));
                 this.updateAgenceFromJson(
                         CfgHandler.format.format(oldestDate),
                         CfgHandler.format.format(oldestDate),
@@ -804,9 +775,8 @@ public class GchTableController {
             return false;
         }
 
-        //add error handling
+        // add error handling
         return true;
     }
 
-    
 }
