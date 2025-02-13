@@ -67,6 +67,10 @@ public class CfgHandler {
     public static final String PAGE_GLA_REPORT = "/" + APP + "/report/gla.jsp";
     public static final String PAGE_GLT_REPORT = "/" + APP + "/report/glt.jsp";
     public static final String PAGE_TCH_REPORT = "/" + APP + "/report/tch.jsp";
+    public static final String PAGE_THT_REPORT = "/" + APP + "/report/tht.jsp";
+    public static final String PAGE_THTT_REPORT = "/" + APP + "/report/thtt.jsp";
+    public static final String PAGE_THA_REPORT = "/" + APP + "/report/tha.jsp";
+    public static final String PAGE_THSA_REPORT = "/" + APP + "/report/thsa.jsp";
 
     
 

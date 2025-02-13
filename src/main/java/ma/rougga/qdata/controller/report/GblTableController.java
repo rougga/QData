@@ -1,9 +1,14 @@
 package ma.rougga.qdata.controller.report;
 
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.Bidi;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,9 +33,73 @@ public class GblTableController {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(GblTableController.class);
 
+    private final String[] gblCols = new String[]{"Site", "Service", "Nb. Tickets", "Nb. Traités", "Nb. Absents", "Nb. Traités <1mn", "Nb. Sans affectation", "Absents/Nb. Tickets(%)", "Traités<1mn/Nb. Tickets(%)", "Sans affect/Nb. Tickets(%)", "Moyenne d'attente", ">Cible", "%Cible", "Moyenne Traitement", ">Cible", "%Cible"};
+
     AgenceController ac = new AgenceController();
 
     public GblTableController() {
+    }
+
+    public String[] getGblCols() {
+        return gblCols;
+    }
+
+    public Table getPdfTable(GblRow row, Table table, PdfFont cellFont, Cell c) {
+        String agenceName;
+
+        try {
+            agenceName = ac.getAgenceById(UUID.fromString(row.getIdAgence())).getName();
+        } catch (NullPointerException e) {
+            agenceName = row.getIdAgence();
+        }
+
+        c.add(new Paragraph(agenceName).setFont(cellFont));
+        table.addCell(c);
+
+        c.add(new Paragraph(row.getServiceName()).setFont(cellFont));
+        table.addCell(c);
+
+        c.add(new Paragraph(String.valueOf(row.getNbT())).setFont(cellFont));
+        table.addCell(c);
+
+        c.add(new Paragraph(String.valueOf(row.getNbTt())).setFont(cellFont));
+        table.addCell(c);
+
+        c.add(new Paragraph(String.valueOf(row.getNbA())).setFont(cellFont));
+        table.addCell(c);
+
+        c.add(new Paragraph(String.valueOf(row.getNbTl1())).setFont(cellFont));
+        table.addCell(c);
+
+        c.add(new Paragraph(String.valueOf(row.getNbSa())).setFont(cellFont));
+        table.addCell(c);
+        c.add(new Paragraph(String.valueOf(row.getPerApT()) + "%").setFont(cellFont));
+
+        table.addCell(c);
+        c.add(new Paragraph(String.valueOf(row.getPertl1Pt()) + "%").setFont(cellFont));
+
+        table.addCell(c);
+        c.add(new Paragraph(String.valueOf(row.getPerSaPt()) + "%").setFont(cellFont));
+
+        table.addCell(c);
+        c.add(new Paragraph(CfgHandler.getFormatedTimeFromSeconds(row.getAvgSecA())).setFont(cellFont));
+
+        table.addCell(c);
+        c.add(new Paragraph(String.valueOf(row.getNbCa())).setFont(cellFont));
+
+        table.addCell(c);
+        c.add(new Paragraph(String.valueOf(row.getPercapt()) + "%").setFont(cellFont));
+
+        table.addCell(c);
+        c.add(new Paragraph(CfgHandler.getFormatedTimeFromSeconds(row.getAvgSecT())).setFont(cellFont));
+
+        table.addCell(c);
+        c.add(new Paragraph(String.valueOf(row.getNbCt())).setFont(cellFont));
+
+        table.addCell(c);
+        c.add(new Paragraph(String.valueOf(row.getPerctPt()) + "%").setFont(cellFont));
+        table.addCell(c);
+        return table;
     }
 
     public boolean addRow(GblRow row) {
@@ -745,8 +814,8 @@ public class GblTableController {
                 newAgence.put("id_agence", a.getId().toString());
                 String agenceName = a.getName();
                 Zone zone = ac.getAgenceZoneByAgenceId(a.getId());
-                if ( zone != null) {
-                    agenceName+= " (" + zone.getName() + ")";
+                if (zone != null) {
+                    agenceName += " (" + zone.getName() + ")";
                 }
                 newAgence.put("agence_name", agenceName);
                 newAgence.put("services", services);

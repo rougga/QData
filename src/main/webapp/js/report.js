@@ -6,6 +6,10 @@ $(document).ready(function () {
         gch: ".0,.1,.2,.3,.4,.10,.13",
         gchser: ".0,.1,.2,.3,.4,.5,.11,.14",
         ndt: ".0,.1,.8,.9,.10,.11,.12,.13,.14,.15,.16,.17,.18",
+        tht: ".0,.1,.8,.9,.10,.11,.12,.13,.14,.15,.16,.17,.18",
+        thtt: ".0,.1,.8,.9,.10,.11,.12,.13,.14,.15,.16,.17,.18",
+        tha: ".0,.1,.8,.9,.10,.11,.12,.13,.14,.15,.16,.17,.18",
+        thsa: ".0,.1,.8,.9,.10,.11,.12,.13,.14,.15,.16,.17,.18",
         cnx: ".0,.1,.2,.3,.4,.5",
         remp: ".0,.1,.3,.10,.11,.12,.13,.14,.15",
         ser: ".0,.1,.2,.3,.4,.5,.6,.7,.8",
@@ -37,8 +41,17 @@ $(document).ready(function () {
             case "gchser":
                 $(colsToShow.gchser).show();
                 break;
-            case "ndt":
-                $(colsToShow.ndt).show();
+            case "tht":
+                $(colsToShow.tht).show();
+                break;
+            case "thtt":
+                $(colsToShow.thtt).show();
+                break;
+            case "tha":
+                $(colsToShow.tha).show();
+                break;
+            case "thsa":
+                $(colsToShow.thsa).show();
                 break;
             case "ndtt":
                 $(colsToShow.ndt).show();

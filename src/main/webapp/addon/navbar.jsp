@@ -40,10 +40,10 @@
                     <span class=""></span> TRANCHE HORAIRE
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownRe" >
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=ndt&d=d">NOMBRE DE TICKETS EDITÉS</a>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=ndtt&d=d">NOMBRE DE TICKETS TRAITÉS</a>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=ndta&d=d">NOMBRE DE TICKETS ABSENTS</a>
-                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_REPORT%>?type=ndtsa&d=d">NOMBRE DE TICKETS SANS AFFECTATION</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_THT_REPORT %>?d=d">NOMBRE DE TICKETS EDITÉS</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_THTT_REPORT %>?d=d">NOMBRE DE TICKETS TRAITÉS</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_THA_REPORT %>?d=d">NOMBRE DE TICKETS ABSENTS</a>
+                    <a class="dropdown-item font-weight-bold navHover d" href="<%=CfgHandler.PAGE_THSA_REPORT %>?d=d">NOMBRE DE TICKETS SANS AFFECTATION</a>
                 </div>
             </li> 
             <li class="nav-item" id="topics">

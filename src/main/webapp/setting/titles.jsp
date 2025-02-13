@@ -117,7 +117,7 @@
                                         Tranche horaire Nb. edités:
                                     </td>
                                     <td class="border-dark align-middle">
-                                        <input type="text" class="form-control border border-dark" id="nbt" name="ndt" required value="<%= tc.getTitleByType("ndt").getValue()%>">          
+                                        <input type="text" class="form-control border border-dark" id="nbt" name="ndt" required value="<%= tc.getTitleByType("tht").getValue()%>">          
                                     </td>
                                 </tr>
                                 <tr class="border-dark">
@@ -125,7 +125,7 @@
                                         Tranche horaire Nb. traités:
                                     </td>
                                     <td class="border-dark align-middle">
-                                        <input type="text" class="form-control border border-dark" id="nbtt" name="ndtt" required value="<%= tc.getTitleByType("ndtt").getValue()%>">           
+                                        <input type="text" class="form-control border border-dark" id="nbtt" name="ndtt" required value="<%= tc.getTitleByType("thtt").getValue()%>">           
                                     </td>
                                 </tr>
                                 <tr class="border-dark">
@@ -133,7 +133,7 @@
                                         Tranche horaire Nb. absents:
                                     </td>
                                     <td class="border-dark align-middle">
-                                        <input type="text" class="form-control border border-dark" id="nbta" name="ndta" required value="<%= tc.getTitleByType("ndta").getValue()%>">            
+                                        <input type="text" class="form-control border border-dark" id="nbta" name="ndta" required value="<%= tc.getTitleByType("tha").getValue()%>">            
                                     </td>
                                 </tr>
                                 <tr class="border-dark">
@@ -141,7 +141,7 @@
                                         Tranche horaire Nb. sans affectation:
                                     </td>
                                     <td class="border-dark align-middle">
-                                        <input type="text" class="form-control border border-dark" id="nbtsa" name="ndtsa" required value="<%= tc.getTitleByType("ndtsa").getValue()%>">           
+                                        <input type="text" class="form-control border border-dark" id="nbtsa" name="ndtsa" required value="<%= tc.getTitleByType("thsa").getValue()%>">           
                                     </td>
                                 </tr>
                             </tbody>
