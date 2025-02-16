@@ -1,3 +1,4 @@
+<%@page import="java.util.Objects"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="ma.rougga.qdata.controller.UtilisateurController"%>
 <%@page import="ma.rougga.qdata.modal.Agence"%>
@@ -38,17 +39,20 @@
                     <input type='checkbox'  class='mr-1 form-check-input ' id='selectAllZones'><span id='textSelect'><u>Toutes les agences</u></span>
                 </span>
                 <%
+
                     AgenceController ac = new AgenceController();
-                    Zone z = new UtilisateurController().getUtilisateurZoneByUsername(session.getAttribute("user").toString());
-                    List<Zone> zones = new ArrayList<Zone>();
-                    if (z == null) {
-                        zones = new ZoneController().getAllZones();
-                    } else {
-                        zones.add(z);
-                    }
-                    if (zones != null && !zones.isEmpty()) {
-                        for (Zone zone : zones) {
-                            List<Agence> dropdownAgences = ac.getAgencesByZone(zone.getId());
+                    Object username = session.getAttribute("user");
+                    if (username != null) {
+                        Zone z = new UtilisateurController().getUtilisateurZoneByUsername(session.getAttribute("user").toString());
+                        List<Zone> zones = new ArrayList<Zone>();
+                        if (z == null) {
+                            zones = new ZoneController().getAllZones();
+                        } else {
+                            zones.add(z);
+                        }
+                        if (zones != null && !zones.isEmpty()) {
+                            for (Zone zone : zones) {
+                                List<Agence> dropdownAgences = ac.getAgencesByZone(zone.getId());
                 %>           
                 <div class='dropdown-divider border-dark'></div>
                 <span class='dropdown-item font-weight-bold appHover  pl-2 zone'>
@@ -65,11 +69,12 @@
                     </span>
                     <%
                             }
-                            
+
                         }
                     %>
                 </span>
-                <%        
+                <%
+                            }
                         }
                     }
                 %>

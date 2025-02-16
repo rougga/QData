@@ -129,16 +129,8 @@ $(document).ready(function () {
     });
 
     $("#excel").on('click', function () {
-        $("#filterForm").attr("action", "./Print");
-        $("#format").val("excel");
-        $("#filterForm").submit();
-    });
-    $("#word").on('click', function () {
     });
     $("#pdf").on('click', function () {
-        $("#filterForm").attr("action", "./Print");
-        $("#format").val("pdf");
-        $("#filterForm").submit();
     });
     $("#plus").on('click', function () {
         if ($(this).text() === "PLUS >>") {
@@ -258,10 +250,14 @@ $(document).ready(function () {
         var date2 = filterDate(sessionStorage.getItem("date2"));
 
         var agencesLink = "";
+        let exportExcelURL = $("#excel").attr("href");
+        let exportPdfURL = $("#pdf").attr("href");
         for (i = 0; i < ids.length; i++) {
             agencesLink += "&agences=" + ids[i];
         }
         agencesLink += "&date1=" + date1 + "&date2=" + date2;
+        $("#excel").attr("href",exportExcelURL+agencesLink);
+        $("#pdf").attr("href",exportPdfURL+agencesLink);
         $.each($(".d"), function (i, v) {
             var link = $(v).attr("href");
             link = link.substring(0, link.indexOf("d=d") + 3);

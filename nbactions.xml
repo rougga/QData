@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-test</actionName>
+            <displayName>test</displayName>
+            <goals>
+                <goal>install:install-file</goal>
+                <goal>-Dfile=C:\Users\bouga\Downloads\typography-3.0.1.jar</goal>
+                <goal>-DgroupId=com.itextpdf</goal>
+                <goal>-DartifactId=typography</goal>
+                <goal>-Dversion=3.0.1</goal>
+                <goal>-Dpackaging=jar</goal>
+                <goal>-DgeneratePom=true</goal>
+            </goals>
+        </action>
+    </actions>

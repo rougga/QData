@@ -1,16 +1,10 @@
 package ma.rougga.qdata.api.report;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import ma.rougga.qdata.controller.ExportPdfController;
-import ma.rougga.qdata.controller.report.GblTableController;
 import org.slf4j.LoggerFactory;
 
 public class ExportPdf extends HttpServlet {
@@ -29,9 +23,9 @@ public class ExportPdf extends HttpServlet {
                 String[] dbs = request.getParameterValues("agences");
                 if (Objects.equals(type, "gbl")) {
 
-                    if (new ExportPdfController().exportGblPDF(response, request, date1, date2, dbs)) {
-                        response.sendRedirect("./report.jsp?type=" + type + "&date1=" + date1 + "&date2=" + date2 + "&err=Erreur%20lors%20de%20limpression");
-                    }
+//                    if (new ExportPdfController().exportGblPDF(response, request, date1, date2, dbs)) {
+//                        response.sendRedirect("./report.jsp?type=" + type + "&date1=" + date1 + "&date2=" + date2 + "&err=Erreur%20lors%20de%20limpression");
+//                    }
                 }//GBL
 
             }

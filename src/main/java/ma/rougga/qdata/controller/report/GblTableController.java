@@ -1,9 +1,6 @@
 package ma.rougga.qdata.controller.report;
 
-import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.layout.element.Cell;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Table;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,63 +41,63 @@ public class GblTableController {
         return gblCols;
     }
 
-    public Table getPdfTable(GblRow row, Table table, PdfFont cellFont, Cell c) {
-        String agenceName;
-
-        try {
-            agenceName = ac.getAgenceById(UUID.fromString(row.getIdAgence())).getName();
-        } catch (NullPointerException e) {
-            agenceName = row.getIdAgence();
-        }
-
-        c.add(new Paragraph(agenceName).setFont(cellFont));
-        table.addCell(c);
-
-        c.add(new Paragraph(row.getServiceName()).setFont(cellFont));
-        table.addCell(c);
-
-        c.add(new Paragraph(String.valueOf(row.getNbT())).setFont(cellFont));
-        table.addCell(c);
-
-        c.add(new Paragraph(String.valueOf(row.getNbTt())).setFont(cellFont));
-        table.addCell(c);
-
-        c.add(new Paragraph(String.valueOf(row.getNbA())).setFont(cellFont));
-        table.addCell(c);
-
-        c.add(new Paragraph(String.valueOf(row.getNbTl1())).setFont(cellFont));
-        table.addCell(c);
-
-        c.add(new Paragraph(String.valueOf(row.getNbSa())).setFont(cellFont));
-        table.addCell(c);
-        c.add(new Paragraph(String.valueOf(row.getPerApT()) + "%").setFont(cellFont));
-
-        table.addCell(c);
-        c.add(new Paragraph(String.valueOf(row.getPertl1Pt()) + "%").setFont(cellFont));
-
-        table.addCell(c);
-        c.add(new Paragraph(String.valueOf(row.getPerSaPt()) + "%").setFont(cellFont));
-
-        table.addCell(c);
-        c.add(new Paragraph(CfgHandler.getFormatedTimeFromSeconds(row.getAvgSecA())).setFont(cellFont));
-
-        table.addCell(c);
-        c.add(new Paragraph(String.valueOf(row.getNbCa())).setFont(cellFont));
-
-        table.addCell(c);
-        c.add(new Paragraph(String.valueOf(row.getPercapt()) + "%").setFont(cellFont));
-
-        table.addCell(c);
-        c.add(new Paragraph(CfgHandler.getFormatedTimeFromSeconds(row.getAvgSecT())).setFont(cellFont));
-
-        table.addCell(c);
-        c.add(new Paragraph(String.valueOf(row.getNbCt())).setFont(cellFont));
-
-        table.addCell(c);
-        c.add(new Paragraph(String.valueOf(row.getPerctPt()) + "%").setFont(cellFont));
-        table.addCell(c);
-        return table;
-    }
+//    public Table getPdfTable(GblRow row, Table table, PdfFont cellFont, Cell c) {
+//        String agenceName;
+//
+//        try {
+//            agenceName = ac.getAgenceById(UUID.fromString(row.getIdAgence())).getName();
+//        } catch (NullPointerException e) {
+//            agenceName = row.getIdAgence();
+//        }
+//
+//        c.add(new Paragraph(agenceName).setFont(cellFont));
+//        table.addCell(c);
+//
+//        c.add(new Paragraph(row.getServiceName()).setFont(cellFont));
+//        table.addCell(c);
+//
+//        c.add(new Paragraph(String.valueOf(row.getNbT())).setFont(cellFont));
+//        table.addCell(c);
+//
+//        c.add(new Paragraph(String.valueOf(row.getNbTt())).setFont(cellFont));
+//        table.addCell(c);
+//
+//        c.add(new Paragraph(String.valueOf(row.getNbA())).setFont(cellFont));
+//        table.addCell(c);
+//
+//        c.add(new Paragraph(String.valueOf(row.getNbTl1())).setFont(cellFont));
+//        table.addCell(c);
+//
+//        c.add(new Paragraph(String.valueOf(row.getNbSa())).setFont(cellFont));
+//        table.addCell(c);
+//        c.add(new Paragraph(String.valueOf(row.getPerApT()) + "%").setFont(cellFont));
+//
+//        table.addCell(c);
+//        c.add(new Paragraph(String.valueOf(row.getPertl1Pt()) + "%").setFont(cellFont));
+//
+//        table.addCell(c);
+//        c.add(new Paragraph(String.valueOf(row.getPerSaPt()) + "%").setFont(cellFont));
+//
+//        table.addCell(c);
+//        c.add(new Paragraph(CfgHandler.getFormatedTimeFromSeconds(row.getAvgSecA())).setFont(cellFont));
+//
+//        table.addCell(c);
+//        c.add(new Paragraph(String.valueOf(row.getNbCa())).setFont(cellFont));
+//
+//        table.addCell(c);
+//        c.add(new Paragraph(String.valueOf(row.getPercapt()) + "%").setFont(cellFont));
+//
+//        table.addCell(c);
+//        c.add(new Paragraph(CfgHandler.getFormatedTimeFromSeconds(row.getAvgSecT())).setFont(cellFont));
+//
+//        table.addCell(c);
+//        c.add(new Paragraph(String.valueOf(row.getNbCt())).setFont(cellFont));
+//
+//        table.addCell(c);
+//        c.add(new Paragraph(String.valueOf(row.getPerctPt()) + "%").setFont(cellFont));
+//        table.addCell(c);
+//        return table;
+//    }
 
     public boolean addRow(GblRow row) {
         try {
