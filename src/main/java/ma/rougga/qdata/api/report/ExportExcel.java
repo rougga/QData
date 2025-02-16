@@ -1,4 +1,3 @@
-
 package ma.rougga.qdata.api.report;
 
 import java.io.IOException;
@@ -12,6 +11,7 @@ import org.slf4j.LoggerFactory;
 public class ExportExcel extends HttpServlet {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ExportExcel.class);
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -31,6 +31,44 @@ public class ExportExcel extends HttpServlet {
                     if (new ExportExcelController().exportEmpExcel(response, request, date1, date2, dbs)) {
                         response.sendRedirect("./emp.jsp?date1=" + date1 + "&date2=" + date2 + "&err=Erreur%20lors%20de%20limpression");
                     }
+                } else if (Objects.equals(type, "empser")) {
+                    if (new ExportExcelController().exportEmpSerExcel(response, request, date1, date2, dbs)) {
+                        response.sendRedirect("./empser.jsp?date1=" + date1 + "&date2=" + date2 + "&err=Erreur%20lors%20de%20limpression");
+                    }
+                } else if (Objects.equals(type, "gch")) {
+                    if (new ExportExcelController().exportGchExcel(response, request, date1, date2, dbs)) {
+                        response.sendRedirect("./gch.jsp?date1=" + date1 + "&date2=" + date2 + "&err=Erreur%20lors%20de%20limpression");
+                    }
+                } else if (Objects.equals(type, "gchser")) {
+                    if (new ExportExcelController().exportGchSerExcel(response, request, date1, date2, dbs)) {
+                        response.sendRedirect("./gchser.jsp?date1=" + date1 + "&date2=" + date2 + "&err=Erreur%20lors%20de%20limpression");
+                    }
+                } else if (Objects.equals(type, "gla")) {
+                    if (new ExportExcelController().exportGlaExcel(response, request, date1, date2, dbs)) {
+                        response.sendRedirect("./gla.jsp?date1=" + date1 + "&date2=" + date2 + "&err=Erreur%20lors%20de%20limpression");
+                    }
+                } else if (Objects.equals(type, "glt")) {
+                    if (new ExportExcelController().exportGltExcel(response, request, date1, date2, dbs)) {
+                        response.sendRedirect("./glt.jsp?date1=" + date1 + "&date2=" + date2 + "&err=Erreur%20lors%20de%20limpression");
+                    }
+                } else if (Objects.equals(type, "tht")) {
+                    if (new ExportExcelController().exportThTExcel(response, request, date1, date2, dbs)) {
+                        response.sendRedirect("./tht.jsp?date1=" + date1 + "&date2=" + date2 + "&err=Erreur%20lors%20de%20limpression");
+                    }
+                } else if (Objects.equals(type, "thtt")) {
+                    if (new ExportExcelController().exportThTTExcel(response, request, date1, date2, dbs)) {
+                        response.sendRedirect("./thtt.jsp?date1=" + date1 + "&date2=" + date2 + "&err=Erreur%20lors%20de%20limpression");
+                    }
+                } else if (Objects.equals(type, "tha")) {
+                    if (new ExportExcelController().exportThAExcel(response, request, date1, date2, dbs)) {
+                        response.sendRedirect("./tha.jsp?date1=" + date1 + "&date2=" + date2 + "&err=Erreur%20lors%20de%20limpression");
+                    }
+                } else if (Objects.equals(type, "thsa")) {
+                    if (new ExportExcelController().exportThSAExcel(response, request, date1, date2, dbs)) {
+                        response.sendRedirect("./thsa.jsp?date1=" + date1 + "&date2=" + date2 + "&err=Erreur%20lors%20de%20limpression");
+                    }
+                } else {
+                    response.sendRedirect("./home.jsp?date1=" + date1 + "&date2=" + date2 + "&err=Erreur%20lors%20de%20limpression");
                 }
 
             }
@@ -39,5 +77,4 @@ public class ExportExcel extends HttpServlet {
         }
     }
 
-    
 }

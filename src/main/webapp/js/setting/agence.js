@@ -8,9 +8,13 @@ $(document).ready(function () {
                 $stat.html("<span class='text-center bg-success text-white p-1'>Online</span>");
 
                 $(".updateBtn[data-id='" + $stat.attr("data-id") + "']").removeClass("disabled");
+                $(".mng[data-id='" + $stat.attr("data-id") + "']").removeClass("disabled");
+                $(".qstates[data-id='" + $stat.attr("data-id") + "']").removeClass("disabled");
             } else {
                 $stat.html("<span class='text-center bg-danger text-white p-1'>Offline</span>");
                 $(".updateBtn[data-id='" + $stat.attr("data-id") + "']").addClass("disabled");
+                $(".mng[data-id='" + $stat.attr("data-id") + "']").addClass("disabled");
+                $(".qstates[data-id='" + $stat.attr("data-id") + "']").addClass("disabled");
             }
 
         });

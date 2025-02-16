@@ -100,10 +100,10 @@
                                 </td>
                                 <td class="border-dark align-middle"><%= table.get(i).getLastupdated_at()%></td>
                                 <td class="border-dark align-middle">
-                                    <a class="btn qstates-bg text-white  m-0" href="http://<%= host%>/QStates/" target="_blank">
+                                    <a class="btn qstates-bg text-white qstates m-0" data-id="<%= table.get(i).getId()%>" href="http://<%= host%>/<%= CfgHandler.APP_NODE %>/" target="_blank" title="aller à la page QStates">
                                         <i class="fa fa-external-link-square" aria-hidden="true"></i>
                                     </a>
-                                    <a class="btn btn-secondary text-white  m-0" href="http://<%= host%>/mng/" target="_blank">
+                                    <a class="btn btn-secondary text-white mng m-0" data-id="<%= table.get(i).getId()%>" href="http://<%= host%>/mng/" target="_blank" title="Aller à la page de gestion">
                                         <i class="fa fa-cog" aria-hidden="true"></i>
                                     </a>
                                     <a class="btn btn-secondary m-0 updateBtn" data-id="<%= table.get(i).getId()%>" href="/QData/setting/update.jsp?id_agence=<%= table.get(i).getId()%>" title="Mise à jour">

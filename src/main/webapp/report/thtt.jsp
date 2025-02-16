@@ -313,14 +313,15 @@
                 </script>
                 <div>
                     <div class='div-wrapper d-flex justify-content-center align-items-center p-2'>
-                        <a type='button' class='btn btn-success m-2' id='excel' href="/<%=CfgHandler.APP%>/exportexcel?type=<%= type%>&date1=<%= date1%>&date2=<%= date2%>&agence_id=">
+                        <a type='button' class='btn btn-success m-2' id='excel' href="/<%=CfgHandler.APP%>/exportexcel?type=<%= type%>">
                             <img src='/<%=CfgHandler.APP%>/img/icon/excel.png'/>
                             Excel
                         </a>
-                        <a type='button' class='btn btn-danger m-2' id='pdf' href="/<%=CfgHandler.APP%>/exportpdf?type=<%= type%>&date1=<%= date1%>&date2=<%= date2%>&agence_id=" >
+                            <!-- comment 
+                        <a type='button' class='btn btn-danger m-2' id='pdf' href="/<%=CfgHandler.APP%>/exportpdf?type=<%= type%>" >
                             <img src='/<%=CfgHandler.APP%>/img/icon/pdf.png'/>
                             PDF
-                        </a>
+                        </a>-->
                     </div>
                 </div>
             </div>

@@ -171,10 +171,11 @@
                             <img src='/<%=CfgHandler.APP%>/img/icon/excel.png'/>
                             Excel
                         </a>
+                         <!-- comment 
                         <a type='button' class='btn btn-danger m-2' id='pdf' href="/<%=CfgHandler.APP%>/exportpdf?type=<%= type%>" >
                             <img src='/<%=CfgHandler.APP%>/img/icon/pdf.png'/>
                             PDF
-                        </a>
+                        </a>-->
                     </div>
                 </div>
             </div>
