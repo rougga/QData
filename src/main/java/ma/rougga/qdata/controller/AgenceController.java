@@ -272,6 +272,16 @@ public class AgenceController {
         }
         return dbs;
     }
+    
+    public static String getAgencesURLFromStringArray(String[] agences) {
+        String agencesURLQuery ="";
+        if (agences != null) {
+            for (String a : agences) {
+                agencesURLQuery += "&agences="+a;
+            }
+        }
+        return agencesURLQuery;
+    }
 
     public String[] putAgencesToStringArray(List<Agence> dbs) {
 

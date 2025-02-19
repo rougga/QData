@@ -16,6 +16,7 @@ public class CPConnection {
     private static final String PASSWORD = "honyi123";
 
     static {
+        try{
         HikariConfig config = new HikariConfig();
         config.setDriverClassName(DRIVER);
         config.setJdbcUrl(CONNECTIONSTRING);
@@ -29,6 +30,9 @@ public class CPConnection {
         config.setMaxLifetime(1800000); //30 min
         config.setAutoCommit(true);
         dataSource = new HikariDataSource(config);
+        }catch(Exception e){
+            System.err.println(e.getMessage());
+        }
     }
 
     public static DataSource getDataSource() {
