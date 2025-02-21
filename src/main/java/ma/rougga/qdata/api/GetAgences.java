@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import ma.rougga.qdata.JsonGenerator;
-import ma.rougga.qdata.TableGenerator;
 
 public class GetAgences extends HttpServlet {
 

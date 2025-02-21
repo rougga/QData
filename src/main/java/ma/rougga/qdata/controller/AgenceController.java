@@ -3,7 +3,6 @@ package ma.rougga.qdata.controller;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +41,7 @@ public class AgenceController {
             }
             con.close();
             return agences;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
             return null;
         }
@@ -61,7 +60,7 @@ public class AgenceController {
             }
             con.close();
             return agences;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(AgenceController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             return null;
         }
@@ -128,7 +127,7 @@ public class AgenceController {
                 con.close();
                 return null;
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
             return null;
         }
@@ -142,7 +141,7 @@ public class AgenceController {
             p.execute();
             con.close();
             return 1;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
             return 0;
         }
@@ -207,7 +206,7 @@ public class AgenceController {
             p.setString(2, id_zone.toString());
             p.execute();
             con.close();
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
         }
     }
@@ -234,7 +233,7 @@ public class AgenceController {
                 this.setZone(id_agence, id_zone);
             }
 
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
         }
     }
@@ -254,7 +253,7 @@ public class AgenceController {
                 con.close();
                 return null;
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
             return null;
         }

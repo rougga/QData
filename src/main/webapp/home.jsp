@@ -11,10 +11,7 @@
 <%@page import="ma.rougga.qdata.PgConnection"%>
 <%@page import="java.sql.Connection"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
-Stats stat=new Stats();
-Map chart= stat.getTotalDealChart();
-%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -41,8 +38,11 @@ Map chart= stat.getTotalDealChart();
             <div>
                 <%@include file="./addon/navbar.jsp" %>
             </div>
+            <%                Stats stat = new Stats();
+                Map chart = stat.getTotalDealChart();
+            %>
             <div>
-                                    <%                    String err = request.getParameter("err");
+                <%                    String err = request.getParameter("err");
                     if (err != "" && err != null) {
 
                 %>
@@ -63,11 +63,11 @@ Map chart= stat.getTotalDealChart();
                         var ctx = document.getElementById('myChart').getContext('2d');
                         var myChart = new Chart(ctx, {
                             type: 'doughnut',
-                            data : {
-                                labels: <%= chart.get("lables") %>,
+                            data: {
+                                labels: <%= chart.get("lables")%>,
                                 datasets: [{
                                         label: '# of Votes',
-                                        data: <%= chart.get("data") %>,
+                                        data: <%= chart.get("data")%>,
                                         backgroundColor: [
                                             'rgba(255, 99, 132, 0.2)',
                                             'rgba(54, 162, 235, 0.2)',
@@ -88,12 +88,12 @@ Map chart= stat.getTotalDealChart();
                                     }]
                             },
                             options: {
-                                    legend: {
-                                        labels: {
-                                            fontColor: 'lightgrey'
-                                        }
+                                legend: {
+                                    labels: {
+                                        fontColor: 'lightgrey'
                                     }
-                            }       
+                                }
+                            }
                         });
                     </script>
 
@@ -183,30 +183,29 @@ Map chart= stat.getTotalDealChart();
             </div>
         </div>
         <script>
-             var filterDate = function(date) {
-                if (date){
-                     return date;
-                }
-             else{
-                return moment().format("YYYY-MM-DD");
+            var filterDate = function (date) {
+                if (date) {
+                    return date;
+                } else {
+                    return moment().format("YYYY-MM-DD");
                 }
             };
-             var updateLinks = function(){
+            var updateLinks = function () {
                 var ids = JSON.parse(sessionStorage.getItem("dbs"));
                 var date1 = filterDate(sessionStorage.getItem("date1"));
-                var date2 =filterDate(sessionStorage.getItem("date2")); 
-                var agencesLink ="";
-                if(ids){ 
-                    for(i=0;i<ids.length;i++){
-                        agencesLink+= "&agences="+ids[i];
+                var date2 = filterDate(sessionStorage.getItem("date2"));
+                var agencesLink = "";
+                if (ids) {
+                    for (i = 0; i < ids.length; i++) {
+                        agencesLink += "&agences=" + ids[i];
                     }
                 }
-                agencesLink+="&date1="+date1+"&date2="+date2;
-                $.each($(".d"),function(i,v) {
-                    var link=$(v).attr("href");
-                    link= link.substring(0,link.indexOf("d=d")+3);
-                    link+=agencesLink;
-                    $(v).attr("href",link);
+                agencesLink += "&date1=" + date1 + "&date2=" + date2;
+                $.each($(".d"), function (i, v) {
+                    var link = $(v).attr("href");
+                    link = link.substring(0, link.indexOf("d=d") + 3);
+                    link += agencesLink;
+                    $(v).attr("href", link);
                 });
                 console.log(ids);
             };

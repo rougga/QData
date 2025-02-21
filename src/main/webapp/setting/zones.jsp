@@ -9,6 +9,7 @@
 <%
     if (!Objects.equals(session.getAttribute("grade"), "adm")) {
         response.sendRedirect("/"+CfgHandler.APP+"/home.jsp?err="+ URLEncoder.encode("vous avez besoin des privilèges d'administrateur", "UTF-8"));
+        return;
     }
 
 %>

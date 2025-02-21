@@ -6,16 +6,6 @@
 <%@page import="ma.rougga.qdata.controller.AgenceController"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
-    String id_agence = request.getParameter("id_agence");
-    Agence agence = new Agence();
-    AgenceController ac = new AgenceController();
-    if (StringUtils.isNotBlank(id_agence)) {
-        agence = ac.getAgenceById(UUID.fromString(id_agence));
-    }
-
-
-%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -39,6 +29,17 @@
                     $("#home").removeClass("active");
                 </script>
             </div>
+
+            <%
+                String id_agence = request.getParameter("id_agence");
+                Agence agence = new Agence();
+                AgenceController ac = new AgenceController();
+                if (StringUtils.isNotBlank(id_agence)) {
+                    agence = ac.getAgenceById(UUID.fromString(id_agence));
+                }
+
+
+            %>
             <div class="mt-4 pt-4">
                 <%    String err = request.getParameter("err");
                     if (err != "" && err != null) {

@@ -3,6 +3,7 @@
 <%
     if (Objects.equals(session.getAttribute("user"), null)) {
         response.sendRedirect("/QData/index.jsp");
+        return;
     }
 %>
 <nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #14b6fa;">

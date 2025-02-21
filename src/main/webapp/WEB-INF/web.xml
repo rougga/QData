@@ -104,6 +104,14 @@
         <servlet-name>ZoneAPI</servlet-name>
         <servlet-class>ma.rougga.qdata.api.ZoneAPI</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AgencesAPI</servlet-name>
+        <servlet-class>ma.rougga.qdata.api.AgencesAPI</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GblAPI</servlet-name>
+        <servlet-class>ma.rougga.qdata.api.GblAPI</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Settings</servlet-name>
         <url-pattern>/Settings</url-pattern>
@@ -151,10 +159,6 @@
     <servlet-mapping>
         <servlet-name>DeleteCible</servlet-name>
         <url-pattern>/DeleteCible</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ZoneAPI</servlet-name>
-        <url-pattern>/zones</url-pattern>
     </servlet-mapping>
     <error-page>
         <!-- Missing login -->
@@ -237,6 +241,18 @@
     <servlet-mapping>
         <servlet-name>ExportExcel</servlet-name>
         <url-pattern>/exportexcel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ZoneAPI</servlet-name>
+        <url-pattern>/api/zones</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AgencesAPI</servlet-name>
+        <url-pattern>/api/agences</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GblAPI</servlet-name>
+        <url-pattern>/api/gbl</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

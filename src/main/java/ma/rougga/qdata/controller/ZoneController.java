@@ -3,14 +3,10 @@ package ma.rougga.qdata.controller;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import ma.rougga.qdata.CPConnection;
-import ma.rougga.qdata.PgConnection;
 import ma.rougga.qdata.modal.Zone;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +31,7 @@ public class ZoneController {
             }
             con.close();
             return zones;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
             return null;
         }
@@ -97,7 +93,7 @@ public class ZoneController {
                 con.close();
                 return null;
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
             return null;
         }
@@ -112,7 +108,7 @@ public class ZoneController {
             con.close();
             return true;
 
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
             return false;
         }
@@ -133,7 +129,7 @@ public class ZoneController {
                 con.close();
                 return agenceCount;
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
             return 0;
         }
