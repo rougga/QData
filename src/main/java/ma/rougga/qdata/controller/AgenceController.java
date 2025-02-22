@@ -193,7 +193,10 @@ public class AgenceController {
         Agence a = this.getAgenceById(id);
         if (a != null) {
             a.setLastupdated_at(CfgHandler.getFormatedDateAsString(new Date()));
-            a.setName(this.getBranchName(id));
+            String name = this.getBranchName(id);
+            if (name != null) {
+                a.setName(name);
+            }
             this.editAgence(a);
         }
     }
@@ -271,12 +274,12 @@ public class AgenceController {
         }
         return dbs;
     }
-    
+
     public static String getAgencesURLFromStringArray(String[] agences) {
-        String agencesURLQuery ="";
+        String agencesURLQuery = "";
         if (agences != null) {
             for (String a : agences) {
-                agencesURLQuery += "&agences="+a;
+                agencesURLQuery += "&agences=" + a;
             }
         }
         return agencesURLQuery;
@@ -314,7 +317,7 @@ public class AgenceController {
     }
 
     private String getBranchName(UUID id) {
-        String BRANCH_NAME = "BORNE ?";
+        String BRANCH_NAME = null;
         Agence a = this.getAgenceById(id);
         if (a != null) {
             StringBuilder sb = new StringBuilder("http://");
@@ -324,9 +327,9 @@ public class AgenceController {
             sb.append("/getname");
 
             JSONObject result = UpdateController.getJsonFromUrl(sb.toString());
-            if (result!= null) {
+            if (result != null) {
                 if (result.get("name") != null) {
-                  BRANCH_NAME  = (String) result.get("name");
+                    BRANCH_NAME = (String) result.get("name");
                 } else {
                     logger.error("getBranchName: name not found in json");
                 }

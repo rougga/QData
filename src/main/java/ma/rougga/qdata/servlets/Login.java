@@ -2,6 +2,7 @@ package ma.rougga.qdata.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,41 +24,33 @@ public class Login extends HttpServlet {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             String err = "";
-            boolean isFound = false;
-            boolean pwFalse = true;
             PasswordAuthentication pa = new PasswordAuthentication();
             UtilisateurController uc = new UtilisateurController();
             if (StringUtils.isNoneBlank(username, password)) {
-                String hashedPass;
                 username = username.trim().toLowerCase();
                 Utilisateur u = uc.getUtilisateurByUsername(username);
-                if (u != null) {
-                    isFound = true;
-                    if (pa.authenticate(password.toCharArray(), u.getPassword())) {
-                        request.getSession().setAttribute("user", username);
-                        request.getSession().setAttribute("grade", u.getGrade());
-                        response.sendRedirect("./home.jsp");
-                        pwFalse = false;
-                    }
+                if (u == null) {
+                    response.sendRedirect("/QData/index.jsp?err=" + URLEncoder.encode("1", "UTF-8"));
+                    return;
                 }
-
-                if (!isFound) {
-                    err = "1";
-                    response.sendRedirect("/QData/index.jsp?err=" + err);
+                if (pa.authenticate(password.toCharArray(), u.getPassword())) {
+                    request.getSession().setAttribute("user", username);
+                    request.getSession().setAttribute("grade", u.getGrade());
+                    response.sendRedirect("./home.jsp");
+                    return;
                 } else {
-                    if (pwFalse) {
-                        err = "2";
-                        response.sendRedirect("/QData/index.jsp?err=" + err);
-                    }
+                    err = "2";
+                    response.sendRedirect("/QData/index.jsp?err=" + err);
+                    return;
                 }
-
-                out.println("<br>" + err + "<br>");
 
             } else {
-                response.sendRedirect("/QData/index.jsp?err=" + "");
+                response.sendRedirect("/QData/index.jsp?err=" + URLEncoder.encode("un champ est vide", "UTF-8"));
+                return;
             }
         } catch (Exception e) {
-            response.sendRedirect("/QData/index.jsp?err=" + e.getMessage());
+            response.sendRedirect("/QData/index.jsp?err=" + URLEncoder.encode("Erreur! ", "UTF-8") + e.getMessage());
+            return;
         }
     }
 
