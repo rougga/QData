@@ -2,7 +2,13 @@ QData or Off_Report
 
 central Statics app for QStates
 
-![01](https://github.com/user-attachments/assets/2537dfb0-8a0c-4a77-99cc-70c5dc4700d6)
-![2](https://github.com/user-attachments/assets/900154ae-7914-4f94-accb-0fec6c3a8498)
-![3](https://github.com/user-attachments/assets/fa62a659-98c8-49aa-84da-0b2cf506f159)
-![4](https://github.com/user-attachments/assets/2706b356-cb1c-4140-bee7-7e8c4596b8a2)
+SCREENSHOTS:
+![index](https://github.com/user-attachments/assets/b95a2f0c-bc2d-43ca-9c73-c6d8e790e481)
+![home](https://github.com/user-attachments/assets/5cbb81d6-f57e-47f4-896e-58e14f15502b)
+![gbl](https://github.com/user-attachments/assets/16c9e25d-1af3-4986-a51d-6ebe1ff3bfef)
+![trhT](https://github.com/user-attachments/assets/c0fe0ad4-1a90-45e3-94a2-fb4ef94db025)
+![zones](https://github.com/user-attachments/assets/046a53e2-4bf4-4132-868f-8dd7cce0c2be)
+![agences](https://github.com/user-attachments/assets/56366d5a-8933-4764-a567-60d7921ed40f)
+![titles](https://github.com/user-attachments/assets/f91e62ed-744e-45b9-a111-7e9022188f43)
+![mag](https://github.com/user-attachments/assets/b743b123-1111-4a79-9734-699e5b9f25b1)
+
