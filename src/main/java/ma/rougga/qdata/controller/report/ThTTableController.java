@@ -603,7 +603,7 @@ public class ThTTableController {
                 row.setH23(rs.getLong("h23"));
                 emps.add(row);
             }
-            if (emps.size() <= 0) {
+            if (emps.size() == 0) {
                 con.close();
                 return emps; // if no rows exists return empty list
             }
@@ -684,7 +684,9 @@ public class ThTTableController {
     public void updateFromJson(String date1, String date2) {
         List<Agence> agences = ac.getAllAgence();
         for (Agence a : agences) {
-            this.updateAgenceFromJson(date1, date2, a.getId().toString());
+            if (ac.isOnlineJson(a.getId())) {
+                this.updateAgenceFromJson(date1, date2, a.getId().toString());
+            }
         }
     }
 

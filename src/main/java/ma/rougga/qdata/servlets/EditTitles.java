@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import ma.rougga.qdata.CfgHandler;
 import ma.rougga.qdata.controller.TitleController;
-import ma.rougga.qdata.handler.TitleHandler;
 import ma.rougga.qdata.modal.Title;
 import org.apache.commons.lang3.StringUtils;
 

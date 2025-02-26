@@ -69,7 +69,7 @@ public class GlaTableController {
                 return false;
             }
         } catch (SQLException e) {
-            logger.error("Error inserting row into rougga_gla_table: " + e.getMessage());
+            logger.error("Error inserting row into rougga_gla_table: {}", e.getMessage());
             return false;
         }
     }
@@ -113,7 +113,7 @@ public class GlaTableController {
                 return false;
             }
         } catch (SQLException e) {
-            logger.error("Error updating row in rougga_gla_table: " + e.getMessage());
+            logger.error("Error updating row in rougga_gla_table: {}", e.getMessage());
             return false;
         }
     }
@@ -149,12 +149,12 @@ public class GlaTableController {
                 row.setM50(rs.getLong("m50"));
                 row.setTotal(rs.getLong("total"));
             } else {
-                logger.info("No row found for id: " + id);
+                logger.info("No row found for id: {}", id);
             }
             con.close();
 
         } catch (SQLException e) {
-            logger.error("Error retrieving row from rougga_gla_table: " + e.getMessage());
+            logger.error("Error retrieving row from rougga_gla_table: {}", e.getMessage());
         }
 
         return row;
@@ -198,7 +198,7 @@ public class GlaTableController {
             int[] batchResults = pstmt.executeBatch(); // Execute batch
             con.commit(); // Commit transaction
             isSuccess = batchResults.length == rows.size();
-            logger.info("batchInsert: inserted " + batchResults.length + " rows");
+            logger.info("batchInsert: inserted {} rows", batchResults.length);
             con.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -246,7 +246,7 @@ public class GlaTableController {
             int[] batchResults = pstmt.executeBatch(); // Execute batch
             con.commit();// Commit transaction
             isSuccess = batchResults.length == rows.size();
-            logger.info("batchUpdate: updated " + batchResults.length + " rows");
+            logger.info("batchUpdate: updated {} rows", batchResults.length);
             con.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -316,7 +316,7 @@ public class GlaTableController {
         GlaRow row = new GlaRow();
         try {
             // Establish connection
-            if (agences == null || agences.length <= 0) {
+            if (agences == null || agences.length == 0) {
                 agences = ac.putAgencesToStringArray(ac.getAllAgence());
             }
 
@@ -440,7 +440,7 @@ public class GlaTableController {
                 row.setTotal(rs.getLong("total"));
                 emps.add(row);
             }
-            if (emps.size() <= 0) {
+            if (emps.size() == 0) {
                 con.close();
                 return emps; // if no rows exists return empty list
             }
@@ -492,13 +492,9 @@ public class GlaTableController {
                 row.setM45_50(rs.getLong("m45_50"));
                 row.setM50(rs.getLong("m50"));
                 row.setTotal(rs.getLong("total"));
-                logger.info("row found for date: " + date + " agence_id = "
-                        + agenceId
-                        + " service_id = " + serviceId);
+                logger.info("row found for date: {} agence_id = {} service_id = {}", date, agenceId, serviceId);
             } else {
-                logger.info("No row found for date: " + date + " agence_id = "
-                        + agenceId
-                        + " service_id = " + serviceId);
+                logger.info("No row found for date: {} agence_id = {} service_id = {}", date, agenceId, serviceId);
             }
 
             con.close();
@@ -514,7 +510,10 @@ public class GlaTableController {
     public void updateFromJson(String date1, String date2) {
         List<Agence> agences = ac.getAllAgence();
         for (Agence a : agences) {
-            this.updateAgenceFromJson(date1, date2, a.getId().toString());
+            
+            if (ac.isOnlineJson(a.getId())) {
+                this.updateAgenceFromJson(date1, date2, a.getId().toString());
+            }
         }
     }
 
@@ -534,10 +533,10 @@ public class GlaTableController {
         }
         a = ac.getAgenceById(UUID.fromString(agenceId));
         if (a != null) {
-            logger.info(" -- Updating " + a.getName() + "'s GLA Table ... ");
+            logger.info(" -- Updating {}'s GLA Table ... ", a.getName());
             String url = CfgHandler.prepareTableJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_GLA_TABLE_JSON, date1,
                     date2);
-            logger.info("URL = " + url + " - " + a.getName());
+            logger.info("URL = {} - {}", url, a.getName());
             JSONObject json = UpdateController.getJsonFromUrl(url);
 
             if (json != null) {
@@ -572,7 +571,7 @@ public class GlaTableController {
                                 row.setTotal((long) emp.get("total"));
                                 //this.updateRow(row);
                                 rowsToUpdate.add(row);
-                                logger.info("GlaRow id: " + row.getId() + " found and updated ");
+                                logger.info("GlaRow id: {} found and updated ", row.getId());
                             } catch (ParseException ex) {
                                 logger.error(ex.getMessage());
                                 return false;
@@ -621,7 +620,7 @@ public class GlaTableController {
         // insert and update using batch processing
         this.batchInsert(rowsToInsert);
         this.batchUpdate(rowsToUpdate);
-        logger.info(" --  GLA Table for " + a.getName() + " is Updated. ");
+        logger.info(" --  GLA Table for {} is Updated. ", a.getName());
         return isDone;
     }
 
@@ -700,7 +699,7 @@ public class GlaTableController {
             if (this.restoreOldRowsByAgenceId(a.getId())) {
 
             } else {
-                logger.error("restoreOldRowsForAllAgences: Couldn't restore data for " + a.getName());
+                logger.error("restoreOldRowsForAllAgences: Couldn't restore data for {}", a.getName());
             }
         }
         logger.info("restoreOldRowsForAllAgences: all agences's data restored!");
@@ -716,10 +715,7 @@ public class GlaTableController {
         Date oldestDate = ac.getOldesTicketDate(a.getId());
         if (oldestDate != null) {
             while (new Date().compareTo(oldestDate) > 0) {
-                logger.info("Restoring GLA table data of "
-                        + a.getName()
-                        + " for date:"
-                        + CfgHandler.getFormatedDateAsString(oldestDate));
+                logger.info("Restoring GLA table data of {} for date:{}", a.getName(), CfgHandler.getFormatedDateAsString(oldestDate));
                 this.updateAgenceFromJson(
                         CfgHandler.format.format(oldestDate),
                         CfgHandler.format.format(oldestDate),
@@ -729,8 +725,7 @@ public class GlaTableController {
                 c.add(Calendar.DATE, 1);
                 oldestDate = c.getTime();
             }
-            logger.info("Resored GLA table data of "
-                    + a.getName());
+            logger.info("Resored GLA table data of {}", a.getName());
         } else {
             logger.error("restoreOldRowsByAgenceId: oldest ticket date not found!");
             return false;

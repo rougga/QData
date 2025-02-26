@@ -9,7 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import ma.rougga.qdata.CfgHandler;
+
 import ma.rougga.qdata.controller.AgenceController;
 import ma.rougga.qdata.modal.Agence;
 import org.apache.commons.lang3.StringUtils;

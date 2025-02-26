@@ -18,7 +18,6 @@ import ma.rougga.qdata.controller.AgenceController;
 import ma.rougga.qdata.controller.UpdateController;
 import ma.rougga.qdata.modal.Agence;
 import ma.rougga.qdata.modal.Zone;
-import ma.rougga.qdata.modal.report.EmpSerRow;
 import ma.rougga.qdata.modal.report.GchSerRow;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
@@ -73,7 +72,7 @@ public class GchSerTableController {
                 return false;
             }
         } catch (SQLException e) {
-            logger.error("Error inserting row: " + e.getMessage());
+            logger.error("Error inserting row: {}", e.getMessage());
             return false;
         }
     }
@@ -120,7 +119,7 @@ public class GchSerTableController {
                 return false;
             }
         } catch (SQLException e) {
-            logger.error("Error updating row: " + e.getMessage());
+            logger.error("Error updating row: {}", e.getMessage());
             return false;
         }
     }
@@ -158,11 +157,11 @@ public class GchSerTableController {
                 row.setPerCtPt(rs.getDouble("perCtPt"));
                 row.setDate(CfgHandler.getFormatedDateAsString(CfgHandler.getFormatedDateAsDate(rs.getString("date"))));
             } else {
-                logger.info("No row found for id: " + id);
+                logger.info("No row found for id: {}", id);
             }
             con.close();
         } catch (SQLException e) {
-            logger.error("Error retrieving row: " + e.getMessage());
+            logger.error("Error retrieving row: {}", e.getMessage());
         }
         return row;
     }
@@ -208,7 +207,7 @@ public class GchSerTableController {
             int[] batchResults = pstmt.executeBatch(); // Execute batch
             con.commit(); // Commit transaction
             isSuccess = batchResults.length == rows.size();
-            logger.info("batchInsert: inserted " + batchResults.length + " rows");
+            logger.info("batchInsert: inserted {} rows", batchResults.length);
             con.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -259,7 +258,7 @@ public class GchSerTableController {
             int[] batchResults = pstmt.executeBatch(); // Execute batch
             con.commit();// Commit transaction
             isSuccess = batchResults.length == rows.size();
-            logger.info("batchUpdate: updated " + batchResults.length + " rows");
+            logger.info("batchUpdate: updated {} rows", batchResults.length);
             con.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -343,7 +342,7 @@ public class GchSerTableController {
         GchSerRow row = new GchSerRow();
         try {
             // Establish connection
-            if (agences == null || agences.length <= 0) {
+            if (agences == null || agences.length == 0) {
                 agences = ac.putAgencesToStringArray(ac.getAllAgence());
             }
 
@@ -495,7 +494,7 @@ public class GchSerTableController {
                 row.setDate(null);
                 emps.add(row);
             }
-            if (emps.size() <= 0) {
+            if (emps.size() == 0) {
                 con.close();
                 return emps; // if no rows exists return empty list
             }
@@ -551,13 +550,9 @@ public class GchSerTableController {
                 row.setPerCtPt(rs.getDouble("perCtPt"));
                 row.setDate(CfgHandler.getFormatedDateAsString(CfgHandler.getFormatedDateAsDate(rs.getString("date"))));
 
-                logger.info("row found for date: " + date + " agence_id = "
-                        + id_agence
-                        + " guichet_id = " + guichetId);
+                logger.info("row found for date: {} agence_id = {} guichet_id = {}", date, id_agence, guichetId);
             } else {
-                logger.info("No row found for date: " + date + " agence_id = "
-                        + id_agence
-                        + " guichet_id = " + guichetId);
+                logger.info("No row found for date: {} agence_id = {} guichet_id = {}", date, id_agence, guichetId);
             }
 
             con.close();
@@ -573,7 +568,9 @@ public class GchSerTableController {
     public void updateFromJson(String date1, String date2) {
         List<Agence> agences = ac.getAllAgence();
         for (Agence a : agences) {
-            this.updateAgenceFromJson(date1, date2, a.getId().toString());
+            if (ac.isOnlineJson(a.getId())) {
+                this.updateAgenceFromJson(date1, date2, a.getId().toString());
+            }
         }
     }
 
@@ -594,10 +591,10 @@ public class GchSerTableController {
         }
         a = ac.getAgenceById(UUID.fromString(agenceId));
         if (a != null) {
-            logger.info(" -- Updating " + a.getName() + "'s GCHSER Table ... ");
+            logger.info(" -- Updating {}'s GCHSER Table ... ", a.getName());
             String url = CfgHandler.prepareTableJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_GCHSER_TABLE_JSON,
                     date1, date2);
-            logger.info("URL = " + url + " - " + a.getName());
+            logger.info("URL = {} - {}", url, a.getName());
             JSONObject json = UpdateController.getJsonFromUrl(url);
 
             if (json != null) {
@@ -635,7 +632,7 @@ public class GchSerTableController {
                                 row.setDate(CfgHandler.getFormatedDateAsString(CfgHandler.format.parse(date2)));
                                 //this.updateRow(row);
                                 rowsToUpdate.add(row);
-                                logger.info("GchSerRow id: " + row.getId() + " found and updated ");
+                                logger.info("GchSerRow id: {} found and updated ", row.getId());
                             } catch (ParseException ex) {
                                 logger.error(ex.getMessage());
                                 return false;
@@ -686,7 +683,7 @@ public class GchSerTableController {
         // insert and update using batch processing
         this.batchInsert(rowsToInsert);
         this.batchUpdate(rowsToUpdate);
-        logger.info(" --  GchSer Table for " + a.getName() + " is Updated. ");
+        logger.info(" --  GchSer Table for {} is Updated. ", a.getName());
         return isDone;
     }
 
@@ -765,7 +762,7 @@ public class GchSerTableController {
             if (this.restoreOldRowsByAgenceId(a.getId())) {
 
             } else {
-                logger.error("restoreOldRowsForAllAgences: Couldn't restore data for " + a.getName());
+                logger.error("restoreOldRowsForAllAgences: Couldn't restore data for {}", a.getName());
             }
         }
         logger.info("restoreOldRowsForAllAgences: all agences's data restored!");
@@ -781,10 +778,7 @@ public class GchSerTableController {
         Date oldestDate = ac.getOldesTicketDate(a.getId());
         if (oldestDate != null) {
             while (new Date().compareTo(oldestDate) > 0) {
-                logger.info("Restoring GCHSER table data of "
-                        + a.getName()
-                        + " for date:"
-                        + CfgHandler.getFormatedDateAsString(oldestDate));
+                logger.info("Restoring GCHSER table data of {} for date:{}", a.getName(), CfgHandler.getFormatedDateAsString(oldestDate));
                 this.updateAgenceFromJson(
                         CfgHandler.format.format(oldestDate),
                         CfgHandler.format.format(oldestDate),
@@ -794,8 +788,7 @@ public class GchSerTableController {
                 c.add(Calendar.DATE, 1);
                 oldestDate = c.getTime();
             }
-            logger.info("Resored GCHSER table data of "
-                    + a.getName());
+            logger.info("Resored GCHSER table data of {}", a.getName());
         } else {
             logger.error("restoreOldRowsByAgenceId: oldest ticket date not found!");
             return false;

@@ -331,7 +331,7 @@ public class EmpSerTableController {
         EmpSerRow row = new EmpSerRow();
         try {
             // Establish connection
-            if (agences == null || agences.length <= 0) {
+            if (agences == null || agences.length == 0) {
                 agences = ac.putAgencesToStringArray(ac.getAllAgence());
             }
 
@@ -484,7 +484,7 @@ public class EmpSerTableController {
 
                 emps.add(row);
             }
-            if (emps.size() <= 0) {
+            if (emps.size() == 0) {
                 con.close();
                 return emps; // if no rows exists return empty list
             }
@@ -557,7 +557,9 @@ public class EmpSerTableController {
     public void updateFromJson(String date1, String date2) {
         List<Agence> agences = ac.getAllAgence();
         for (Agence a : agences) {
-            this.updateAgenceFromJson(date1, date2, a.getId().toString());
+            if (ac.isOnlineJson(a.getId())) {
+                this.updateAgenceFromJson(date1, date2, a.getId().toString());
+            }
         }
     }
 
@@ -690,8 +692,8 @@ public class EmpSerTableController {
                 newAgence.put("id_agence", a.getId().toString());
                 String agenceName = a.getName();
                 Zone zone = ac.getAgenceZoneByAgenceId(a.getId());
-                if ( zone != null) {
-                    agenceName+= " (" + zone.getName() + ")";
+                if (zone != null) {
+                    agenceName += " (" + zone.getName() + ")";
                 }
                 newAgence.put("agence_name", agenceName);
                 newAgence.put("emps", emps);
@@ -748,7 +750,7 @@ public class EmpSerTableController {
             if (this.restoreOldRowsByAgenceId(a.getId())) {
 
             } else {
-                logger.error("restoreOldRowsForAllAgences: Couldn't restore data for " + a.getName());
+                logger.error("restoreOldRowsForAllAgences: Couldn't restore data for {}", a.getName());
             }
         }
         logger.info("restoreOldRowsForAllAgences: all agences's data restored!");
@@ -764,10 +766,7 @@ public class EmpSerTableController {
         Date oldestDate = ac.getOldesTicketDate(a.getId());
         if (oldestDate != null) {
             while (new Date().compareTo(oldestDate) > 0) {
-                logger.info("Restoring EMPSER table data of "
-                        + a.getName()
-                        + " for date:"
-                        + CfgHandler.getFormatedDateAsString(oldestDate));
+                logger.info("Restoring EMPSER table data of {} for date:{}", a.getName(), CfgHandler.getFormatedDateAsString(oldestDate));
                 this.updateAgenceFromJson(
                         CfgHandler.format.format(oldestDate),
                         CfgHandler.format.format(oldestDate),
@@ -777,8 +776,7 @@ public class EmpSerTableController {
                 c.add(Calendar.DATE, 1);
                 oldestDate = c.getTime();
             }
-            logger.info("Resored EMPSER table data of "
-                    + a.getName());
+            logger.info("Resored EMPSER table data of {}", a.getName());
         } else {
             logger.error("restoreOldRowsByAgenceId: oldest ticket date not found!");
             return false;

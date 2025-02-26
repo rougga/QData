@@ -30,7 +30,6 @@ public class UpdateController {
             connection.setRequestProperty("Accept-Charset", "UTF-8");
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/json");
-
             // Check response code
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -53,7 +52,10 @@ public class UpdateController {
             // Disconnect
             connection.disconnect();
             return null;
-        } catch (IOException | ParseException e) {
+        } catch (IOException e) {
+            logger.error("Agence OFFLINE {}", e.getMessage());
+            return null;
+        }catch (ParseException e) {
             logger.error("UpdateController.getJsonFromUrl: {}", e.getMessage());
             return null;
         }

@@ -6,7 +6,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import ma.rougga.qdata.controller.AgenceController;
+
 import ma.rougga.qdata.controller.UpdateController;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +20,7 @@ public class Listener implements ServletContextListener {
         public void run() {
             logger.info("-- "+CfgHandler.APP+" v"+CfgHandler.VERSION+" Today Data Update Starting.....");
             new UpdateController().update();
-            logger.info("-- Last Updated: " + new Date().toString());
+            logger.info("-- Last Updated: {}", new Date().toString());
         }
     };
 

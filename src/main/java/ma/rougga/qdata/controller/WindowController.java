@@ -1,16 +1,5 @@
 package ma.rougga.qdata.controller;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.List;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import ma.rougga.qdata.PgConnection;
-import ma.rougga.qdata.PgMultiConnection;
-import ma.rougga.qdata.modal.Agence;
-import ma.rougga.qdata.modal.Window;
-
 public class WindowController {
 //
 //    public int clearTable(UUID id) {

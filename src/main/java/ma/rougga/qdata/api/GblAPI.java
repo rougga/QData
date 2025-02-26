@@ -15,7 +15,6 @@ import ma.rougga.qdata.CfgHandler;
 import ma.rougga.qdata.controller.AgenceController;
 import ma.rougga.qdata.controller.report.GblTableController;
 import ma.rougga.qdata.modal.Agence;
-import org.apache.commons.lang3.StringUtils;
 
 public class GblAPI extends HttpServlet {
 

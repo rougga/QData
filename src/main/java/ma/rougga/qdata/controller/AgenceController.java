@@ -1,5 +1,10 @@
 package ma.rougga.qdata.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,10 +16,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import ma.rougga.qdata.CPConnection;
 import ma.rougga.qdata.CfgHandler;
-import ma.rougga.qdata.PgConnection;
 import ma.rougga.qdata.modal.Agence;
 import ma.rougga.qdata.modal.Zone;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.LoggerFactory;
 
 public class AgenceController {
@@ -153,13 +159,47 @@ public class AgenceController {
             String url = "http://" + a.getHost()
                     + ":" + a.getPort()
                     + "/" + CfgHandler.API_CHECK_STATUS;
-            System.out.println("URL = " + url);
             JSONObject json = UpdateController.getJsonFromUrl(url);
             if (json != null) {
                 String result = json.get("isOnline").toString();
                 return Boolean.parseBoolean(result);
             }
             return false;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isOnline(UUID id) {
+        Agence a = getAgenceById(id);
+        if (a != null) {
+            try {
+                // Create a URL object
+                String urlString = "http://" + a.getHost()
+                        + ":" + a.getPort()
+                        + "/" + CfgHandler.API_CHECK_STATUS;
+                URL url = new URL(urlString);
+
+                // Open connection
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestProperty("Accept-Charset", "UTF-8");
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.setConnectTimeout(3000);
+                // Check response code
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    connection.disconnect();
+                    return true;
+                } else {
+                    logger.error("Online check failed with Response Code: {}", responseCode);
+                    connection.disconnect();
+                    return false;
+                }
+            } catch (IOException e) {
+                logger.error("{} IS OFFLINE", a.getName());
+                return false;
+            }
         } else {
             return false;
         }
@@ -308,7 +348,7 @@ public class AgenceController {
 
             JSONObject result = UpdateController.getJsonFromUrl(sb.toString());
             String oldesTicketDate = (String) result.get("oldestDate");
-            logger.info("OldestTicketDate in agence:" + a.getName() + " is " + oldesTicketDate);
+            logger.info("OldestTicketDate in agence:{} is {}", a.getName(), oldesTicketDate);
             return CfgHandler.getFormatedDateAsDate(oldesTicketDate);
         } else {
             logger.error("getOldestTicketDate: agence not found");

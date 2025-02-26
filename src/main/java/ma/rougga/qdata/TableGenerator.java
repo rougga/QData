@@ -20,7 +20,6 @@ import ma.rougga.qdata.controller.AgenceController;
 import ma.rougga.qdata.controller.CibleController;
 import ma.rougga.qdata.controller.UtilisateurController;
 import ma.rougga.qdata.controller.ZoneController;
-import ma.rougga.qdata.controller.report.GblTableController;
 import ma.rougga.qdata.handler.TitleHandler;
 import ma.rougga.qdata.modal.Agence;
 import ma.rougga.qdata.modal.Cible;
@@ -6636,7 +6635,7 @@ public class TableGenerator {
     }
 
     public void setChartLables(String[] col, int start, int end) {
-        if (col.length <= 0) {
+        if (col.length == 0) {
             this.chartLables = "[]";
         } else {
             this.chartLables = "[";
@@ -6649,7 +6648,7 @@ public class TableGenerator {
     }
 
     public void setChartLables2(String[] col, int start, int end, int jump) {
-        if (col.length <= 0) {
+        if (col.length == 0) {
             this.chartLables = "[]";
         } else {
             this.chartLables = "[";

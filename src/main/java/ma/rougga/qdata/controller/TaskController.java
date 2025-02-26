@@ -1,17 +1,6 @@
 package ma.rougga.qdata.controller;
 
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import ma.rougga.qdata.PgConnection;
-import ma.rougga.qdata.modal.Task;
-
 public class TaskController {
 
     public TaskController() {

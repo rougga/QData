@@ -19,7 +19,6 @@ import ma.rougga.qdata.controller.UpdateController;
 import ma.rougga.qdata.modal.Agence;
 import ma.rougga.qdata.modal.Zone;
 import ma.rougga.qdata.modal.report.EmpRow;
-import ma.rougga.qdata.modal.report.EmpSerRow;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
@@ -159,7 +158,7 @@ public class EmpTableController {
                         rs.getDouble("perctpt")
                 );
             } else {
-                logger.info("No row found for id: " + id);
+                logger.info("No row found for id: {}", id);
             }
             con.close();
 
@@ -207,7 +206,7 @@ public class EmpTableController {
             int[] batchResults = pstmt.executeBatch(); // Execute batch
             con.commit(); // Commit transaction
             isSuccess = batchResults.length == rows.size();
-            logger.info("batchInsert: inserted " + batchResults.length + " rows");
+            logger.info("batchInsert: inserted {} rows", batchResults.length);
             con.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -256,7 +255,7 @@ public class EmpTableController {
             int[] batchResults = pstmt.executeBatch(); // Execute batch
             con.commit();// Commit transaction
             isSuccess = batchResults.length == rows.size();
-            logger.info("batchUpdate: updated " + batchResults.length + " rows");
+            logger.info("batchUpdate: updated {} rows", batchResults.length);
             con.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -336,7 +335,7 @@ public class EmpTableController {
         EmpRow row = new EmpRow();
         try {
             // Establish connection
-            if (agences == null || agences.length <= 0) {
+            if (agences == null || agences.length == 0) {
                 agences = ac.putAgencesToStringArray(ac.getAllAgence());
             }
 
@@ -477,7 +476,7 @@ public class EmpTableController {
                 row.setAgenceId(id_agence);
                 emps.add(row);
             }
-            if (emps.size() <= 0) {
+            if (emps.size() == 0) {
                 con.close();
                 return emps; //if no rows exists return empty list
             }
@@ -530,13 +529,9 @@ public class EmpTableController {
                         rs.getLong("nb_ct"),
                         rs.getDouble("perctpt")
                 );
-                logger.info("row found for date: " + date + " id_agence = "
-                        + id_agence
-                        + " id_emp = " + userId);
+                logger.info("row found for date: {} id_agence = {} id_emp = {}", date, id_agence, userId);
             } else {
-                logger.info("No row found for date: " + date + " id_agence = "
-                        + id_agence
-                        + " id_emp = " + userId);
+                logger.info("No row found for date: {} id_agence = {} id_emp = {}", date, id_agence, userId);
             }
 
             con.close();
@@ -551,7 +546,9 @@ public class EmpTableController {
     public void updateFromJson(String date1, String date2) {
         List<Agence> agences = ac.getAllAgence();
         for (Agence a : agences) {
-            this.updateAgenceFromJson(date1, date2, a.getId().toString());
+            if (ac.isOnlineJson(a.getId())) {
+                this.updateAgenceFromJson(date1, date2, a.getId().toString());
+            }
         }
     }
 
@@ -571,9 +568,9 @@ public class EmpTableController {
         }
         a = ac.getAgenceById(UUID.fromString(agenceId));
         if (a != null) {
-            logger.info(" -- Updating " + a.getName() + "'s EMP Table ... ");
+            logger.info(" -- Updating {}'s EMP Table ... ", a.getName());
             String url = CfgHandler.prepareTableJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_EMP_TABLE_JSON, date1, date2);
-            logger.info("URL = " + url + " - " + a.getName());
+            logger.info("URL = {} - {}", url, a.getName());
             JSONObject json = UpdateController.getJsonFromUrl(url);
 
             if (json != null) {
@@ -606,7 +603,7 @@ public class EmpTableController {
                                 row.setDate(CfgHandler.getFormatedDateAsString(CfgHandler.format.parse(date2)));
                                 //this.updateRow(row);
                                 rowsToUpdate.add(row);
-                                logger.info("EmpRow id: " + row.getId() + " found and updated ");
+                                logger.info("EmpRow id: {} found and updated ", row.getId());
                             } catch (ParseException ex) {
                                 logger.error(ex.getMessage());
                                 return false;
@@ -656,7 +653,7 @@ public class EmpTableController {
         // insert and update using batch processing
         this.batchInsert(rowsToInsert);
         this.batchUpdate(rowsToUpdate);
-        logger.info(" --  Emp Table for " + a.getName() + " is Updated. ");
+        logger.info(" --  Emp Table for {} is Updated. ", a.getName());
         return isDone;
     }
 
@@ -735,7 +732,7 @@ public class EmpTableController {
             if (this.restoreOldRowsByAgenceId(a.getId())) {
 
             } else {
-                logger.error("restoreOldRowsForAllAgences: Couldn't restore data for " + a.getName());
+                logger.error("restoreOldRowsForAllAgences: Couldn't restore data for {}", a.getName());
             }
         }
         logger.info("restoreOldRowsForAllAgences: all agences's data restored!");
@@ -751,11 +748,7 @@ public class EmpTableController {
         Date oldestDate = ac.getOldesTicketDate(a.getId());
         if (oldestDate != null) {
             while (new Date().compareTo(oldestDate) > 0) {
-                logger.info("Restoring EMP table data of "
-                        + a.getName()
-                        + " for date:"
-                        + CfgHandler.getFormatedDateAsString(oldestDate)
-                );
+                logger.info("Restoring EMP table data of {} for date:{}", a.getName(), CfgHandler.getFormatedDateAsString(oldestDate));
                 this.updateAgenceFromJson(
                         CfgHandler.format.format(oldestDate),
                         CfgHandler.format.format(oldestDate),
@@ -765,8 +758,7 @@ public class EmpTableController {
                 c.add(Calendar.DATE, 1);
                 oldestDate = c.getTime();
             }
-            logger.info("Resored EMP table data of "
-                    + a.getName());
+            logger.info("Resored EMP table data of {}", a.getName());
         } else {
             logger.error("restoreOldRowsByAgenceId: oldest ticket date not found!");
             return false;

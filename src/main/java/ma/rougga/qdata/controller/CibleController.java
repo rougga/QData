@@ -156,7 +156,9 @@ public class CibleController {
     public void updateFromJson() {
         List<Agence> agences = ac.getAllAgence();
         for (Agence a : agences) {
-            this.updateAgenceFromJson(a.getId().toString());
+            if (ac.isOnlineJson(a.getId())) {
+                this.updateAgenceFromJson(a.getId().toString());
+            }
         }
     }
 
@@ -170,9 +172,9 @@ public class CibleController {
         }
         a = ac.getAgenceById(UUID.fromString(agenceId));
         if (a != null) {
-            logger.info(" -- Updating " + a.getName() + "'s Cible Table ... ");
+            logger.info(" -- Updating {}'s Cible Table ... ", a.getName());
             String url = CfgHandler.prepareJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_CIBLE_TABLE_JSON);
-            logger.info("URL = " + url + " - " + a.getName());
+            logger.info("URL = {} - {}", url, a.getName());
             JSONObject json = UpdateController.getJsonFromUrl(url);
 
             if (json != null) {
