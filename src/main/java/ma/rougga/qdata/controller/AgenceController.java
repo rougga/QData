@@ -185,7 +185,7 @@ public class AgenceController {
                 connection.setRequestProperty("Accept-Charset", "UTF-8");
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("Accept", "application/json");
-                connection.setConnectTimeout(3000);
+                connection.setConnectTimeout(5000);
                 // Check response code
                 int responseCode = connection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -203,6 +203,55 @@ public class AgenceController {
         } else {
             return false;
         }
+    }
+
+    public JSONObject getAgenceInfoJson(UUID id) {
+        Agence a = getAgenceById(id);
+        if (a != null) {
+            try {
+                // Create a URL object
+                String urlString = "http://" + a.getHost()
+                        + ":" + a.getPort()
+                        + "/" + CfgHandler.API_CHECK_STATUS;
+                URL url = new URL(urlString);
+
+                // Open connection
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestProperty("Accept-Charset", "UTF-8");
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.setConnectTimeout(10000);
+                // Check response code
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+                    StringBuilder response2 = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response2.append(line);
+                    }
+                    reader.close();
+                    //simple json
+                    JSONParser parser = new JSONParser();
+                    JSONObject ob = (JSONObject) parser.parse(response2.toString());
+                    connection.disconnect();
+                    return ob;
+                } else {
+                    logger.error("Online check failed with Response Code: {}", responseCode);
+                    connection.disconnect();
+                    return null;
+                }
+            } catch (IOException e) {
+                logger.error("{} IS OFFLINE", a.getName());
+                
+            } catch (ParseException ex) {
+                logger.error(ex.getMessage());
+            }
+            return null;
+        } else {
+            return null;
+        }
+
     }
 
     public int updateName(UUID id, String name) {
