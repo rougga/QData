@@ -174,6 +174,26 @@
         <error-code>405</error-code>
         <location>/addon/error/error404.jsp</location>
     </error-page>
+    <error-page>
+        <!-- Missing login -->
+        <error-code>401</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <!-- Forbidden directory listing -->
+        <error-code>403</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <!-- Uncaught exception -->
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <!-- Unsupported servlet method -->
+        <error-code>503</error-code>
+        <location>/error.jsp</location>
+    </error-page>
     <servlet-mapping>
         <servlet-name>GetAgenceStatus</servlet-name>
         <url-pattern>/GetAgenceStatus</url-pattern>
