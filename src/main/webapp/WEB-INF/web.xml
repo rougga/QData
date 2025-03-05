@@ -112,6 +112,10 @@
         <servlet-name>GblAPI</servlet-name>
         <servlet-class>ma.rougga.qdata.api.GblAPI</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UpdateAjax</servlet-name>
+        <servlet-class>ma.rougga.qdata.api.update.UpdateAjax</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Settings</servlet-name>
         <url-pattern>/Settings</url-pattern>
@@ -161,16 +165,6 @@
         <url-pattern>/DeleteCible</url-pattern>
     </servlet-mapping>
     <error-page>
-        <!-- Missing login -->
-        <error-code>401</error-code>
-        <location>/error.jsp</location>
-    </error-page>
-    <error-page>
-        <!-- Forbidden directory listing -->
-        <error-code>403</error-code>
-        <location>/error.jsp</location>
-    </error-page>
-    <error-page>
         <!-- Missing resource -->
         <error-code>404</error-code>
         <location>/addon/error/error404.jsp</location>
@@ -179,16 +173,6 @@
         <!-- Missing resource -->
         <error-code>405</error-code>
         <location>/addon/error/error404.jsp</location>
-    </error-page>
-    <error-page>
-        <!-- Uncaught exception -->
-        <error-code>500</error-code>
-        <location>/error.jsp</location>
-    </error-page>
-    <error-page>
-        <!-- Unsupported servlet method -->
-        <error-code>503</error-code>
-        <location>/error.jsp</location>
     </error-page>
     <servlet-mapping>
         <servlet-name>GetAgenceStatus</servlet-name>
@@ -253,6 +237,10 @@
     <servlet-mapping>
         <servlet-name>GblAPI</servlet-name>
         <url-pattern>/api/gbl</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateAjax</servlet-name>
+        <url-pattern>/updateajax</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

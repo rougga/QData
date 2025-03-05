@@ -104,11 +104,12 @@ public class UpdateController {
         new GblTableController().updateFromJson(null, null);
         new EmpTableController().updateFromJson(null, null);
         new EmpSerTableController().updateFromJson(null, null);
-        new GchTableController().updateFromJson(null, null);
-        new GchSerTableController().updateFromJson(null, null);
         new GlaTableController().updateFromJson(null, null);
         new GltTableController().updateFromJson(null, null);
         new ThTTableController().updateFromJson(null, null);
+        //
+        new GchTableController().updateFromJson(null, null);
+        new GchSerTableController().updateFromJson(null, null);
         new ThTTTableController().updateFromJson(null, null);
         new ThATableController().updateFromJson(null, null);
         new ThSATableController().updateFromJson(null, null);

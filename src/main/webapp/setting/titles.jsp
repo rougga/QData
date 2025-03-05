@@ -1,6 +1,5 @@
 <%@page import="ma.rougga.qdata.controller.TitleController"%>
 <%@page import="java.net.URLEncoder"%>
-<%@page import="ma.rougga.qdata.handler.TitleHandler"%>
 <%@page import="ma.rougga.qdata.modal.Agence"%>
 <%@page import="java.util.List"%>
 <%@page import="ma.rougga.qdata.controller.AgenceController"%>

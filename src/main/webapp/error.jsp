@@ -1,13 +1,12 @@
 <%@page import="javax.swing.text.TabExpander"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
-<%@page import="main.Stats"%>
-<%@page import="main.TableGenerator"%>
+
 <%@page import="java.util.Date"%>
-<%@page import="main.CfgHandler"%>
+
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>
-<%@page import="main.PgConnection"%>
+
 <%@page import="java.sql.Connection"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

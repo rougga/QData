@@ -6,8 +6,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import ma.rougga.qdata.api.update.UpdateThread1;
+import ma.rougga.qdata.api.update.UpdateThread2;
 
-import ma.rougga.qdata.controller.UpdateController;
 import org.slf4j.LoggerFactory;
 
 public class Listener implements ServletContextListener {
@@ -15,13 +16,13 @@ public class Listener implements ServletContextListener {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Listener.class);
     
     private static volatile ScheduledExecutorService executor;
-    static final Runnable myRunnable = new Runnable() {
-        @Override
-        public void run() {
-            logger.info("-- "+CfgHandler.APP+" v"+CfgHandler.VERSION+" Today Data Update Starting.....");
-            new UpdateController().update();
-            logger.info("-- Last Updated: {}", new Date().toString());
-        }
+    
+    
+    static final Runnable myRunnable = () -> {
+        logger.info("-- "+CfgHandler.APP+" v"+CfgHandler.VERSION+" Today Data Update Starting.....");
+        new UpdateThread1().start();
+        new UpdateThread2().start();
+        logger.info("-- Last Updated: {}", new Date().toString());
     };
 
     @Override

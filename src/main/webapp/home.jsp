@@ -3,7 +3,6 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="ma.rougga.qdata.Stats"%>
-<%@page import="ma.rougga.qdata.TableGenerator"%>
 <%@page import="java.util.Date"%>
 <%@page import="ma.rougga.qdata.CfgHandler"%>
 <%@page import="java.sql.SQLException"%>
@@ -53,8 +52,17 @@
                     }
                 %>
             </div>
-            <div class="d-md-flex justify-content-center px-4 ">
-                <div class="col-12 col-md-6 mt-4 pt-4 min-hieght">
+            <div class="d-md-flex justify-content-center mt-2">
+                <button  class="btn btn-success" id="majNowBtn">
+                    <img src="./img/icon/reload.png" class="" >
+                    Forcer la Mise à jour d'aujourd'hui maintenant
+                </button>
+                <div class="spinner-border loadingSpinner text-white" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <div class="d-md-flex justify-content-center px-4  mt-4">
+                <div class="col-12 col-md-6 min-hieght">
                     <div class="border border-white rounded p-2 min-hieght">
                         <h4 class="text-white mx-1 text-center">Pourcentage de ticket traité par Agence:</h4>
                         <canvas id="myChart"  height=""></canvas>
@@ -98,7 +106,7 @@
                     </script>
 
                 </div>
-                <div class="col-12 col-md-6 mt-4 pt-4 min-hieght">
+                <div class="col-12 col-md-6 min-hieght">
                     <form class="text-white border border-white rounded min-hieght" >
 
                         <h4 class="text-center"><img src="./img/agence.png" class="img-fluid mx-auto my-3"> TOTALE d'aujourd'hui
@@ -209,7 +217,36 @@
                 });
                 console.log(ids);
             };
-            updateLinks();
+            history.replaceState({page: 1}, 'title', "?err=");
+            function initLoader() {
+                $("#majNowBtn").addClass("disabled");
+                $("#majNowBtn").removeClass("btn-success").addClass("btn-dark");
+                $(".loadingSpinner").removeClass("d-none").addClass("d-flex");
+                console.log("loading");
+            }
+            function removeLoader() {
+                $("#majNowBtn").removeClass("disabled");
+                $("#majNowBtn").removeClass("btn-dark").addClass("btn-success");
+                $(".loadingSpinner").removeClass("d-flex").addClass("d-none");
+            }
+            $(".majBtn").on("click", function () {
+                initLoader();
+            });
+            $(document).ready(function () {
+                removeLoader();
+                updateLinks();
+                
+                $("#majNowBtn").on('click', function () {
+                    initLoader();
+                    $.get("/QData/updateajax", function (data) {
+                        removeLoader();
+                    });
+                });
+                
+            });
+            
+            
+            
         </script>
     </body>
 </html>
