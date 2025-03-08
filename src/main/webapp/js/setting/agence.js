@@ -3,12 +3,12 @@ $(document).ready(function () {
     for (let i = 0; i < $status.length; i++) {
         let $stat = $($status[i]);
         $.get("/QData/GetAgenceStatus", {id: $stat.attr("data-id")}, function (data) {
-            if (data.status) {
+            if (data.isOnline) {
                 let version = data.version;
                 if (!version) {
                     version = "0.0";
                 }
-                $stat.html("<span class='text-center bg-success text-white p-1'>Online</span><span class='text-center bg-secondary text-white p-1'>v"+version+"</span>");
+                $stat.html("<span class='text-center bg-success text-white p-1'>Online</span><span class='text-center bg-secondary text-white p-1'>v" + version + "</span>");
 
                 $(".updateBtn[data-id='" + $stat.attr("data-id") + "']").removeClass("disabled");
                 $(".mng[data-id='" + $stat.attr("data-id") + "']").removeClass("disabled");

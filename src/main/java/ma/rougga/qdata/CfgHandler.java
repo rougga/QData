@@ -91,6 +91,7 @@ public class CfgHandler {
     public static String API_CHECK_STATUS = APP_NODE + "/onlinecheck";
     public static String API_CIBLE_TABLE_JSON = APP_NODE + "/getcibles";
     public static String API_WAITING_TICKETS_JSON = APP_NODE + "/getwaitingtickets";
+    public static String API_AGENCE = APP_NODE + "/agence";
 
     // Pars
     private Properties prop = null;

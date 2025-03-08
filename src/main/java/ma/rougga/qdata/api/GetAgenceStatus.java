@@ -16,8 +16,9 @@ public class GetAgenceStatus extends HttpServlet {
 
         try {
             PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json");
+            req.setCharacterEncoding("UTF-8");
             String id = req.getParameter("id");
             if (StringUtils.isBlank(id)) {
                 JSONObject all = new JSONObject();
@@ -25,10 +26,12 @@ public class GetAgenceStatus extends HttpServlet {
                 all.put("error", "blank id");
                 out.print(all);
             } else {
-                boolean status = new AgenceController().isOnline(UUID.fromString(id));
-                JSONObject all = new JSONObject();
-                all.put("status", status);
-                out.print(all);
+                AgenceController ac = new AgenceController();
+//                boolean status = ac.isOnline(UUID.fromString(id));
+                JSONObject agence = ac.getAgenceInfoJson(UUID.fromString(id));
+//                JSONObject all = new JSONObject();
+//                all.put("status", agence);
+                out.print(agence);
             }
 
         } catch (Exception ex) {

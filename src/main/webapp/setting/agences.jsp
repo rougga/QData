@@ -76,11 +76,9 @@
                                 if (table != null) {
                                     for (int i = 0; i < table.size(); i++) {
                                         Zone z = ac.getAgenceZoneByAgenceId(table.get(i).getId());
-                                        String zoneName, id_zone;
-                                        if (z == null) {
-                                            zoneName = "--";
-                                            id_zone = "";
-                                        } else {
+                                        String zoneName="--";
+                                        String id_zone="";
+                                        if (z != null) {
                                             zoneName = z.getName();
                                             id_zone = z.getId().toString();
                                         }

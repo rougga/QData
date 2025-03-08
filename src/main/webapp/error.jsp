@@ -15,14 +15,14 @@
         <meta charset="utf-8"/>
         <title>QData</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/png" href="./img/favicon-32x32.png">
-        <script src="./js/jquery.js"></script>
-        <link href="./css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <script src="./js/bootstrap.bundle.min.js"></script>
-        <script src="./js/Chart.min.js"></script>
-        <link href="./css/Chart.min.css" rel="stylesheet" type="text/css"/>
-        <link href="./css/body.css" rel="stylesheet" type="text/css"/>
-        <link href="./css/navbar.css" rel="stylesheet" type="text/css"/>
+        <link rel="icon" type="image/png" href="/<%= CfgHandler.APP%>/img/favicon-32x32.png">
+        <script src="/<%= CfgHandler.APP%>/js/jquery.js"></script>
+        <link href="/<%= CfgHandler.APP%>/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <script src="/<%= CfgHandler.APP%>/js/bootstrap.bundle.min.js"></script>
+        <script src="/<%= CfgHandler.APP%>/js/Chart.min.js"></script>
+        <link href="/<%= CfgHandler.APP%>/css/Chart.min.css" rel="stylesheet" type="text/css"/>
+        <link href="/<%= CfgHandler.APP%>/css/body.css" rel="stylesheet" type="text/css"/>
+        <link href="/<%= CfgHandler.APP%>/css/navbar.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <div class="">

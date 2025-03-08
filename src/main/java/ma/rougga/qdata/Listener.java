@@ -8,6 +8,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import ma.rougga.qdata.api.update.UpdateThread1;
 import ma.rougga.qdata.api.update.UpdateThread2;
+import ma.rougga.qdata.api.update.UpdateThread3;
 
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +23,7 @@ public class Listener implements ServletContextListener {
         logger.info("-- "+CfgHandler.APP+" v"+CfgHandler.VERSION+" Today Data Update Starting.....");
         new UpdateThread1().start();
         new UpdateThread2().start();
+        new UpdateThread3().start();
         logger.info("-- Last Updated: {}", new Date().toString());
     };
 

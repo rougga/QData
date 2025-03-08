@@ -18,6 +18,7 @@ import ma.rougga.qdata.CPConnection;
 import ma.rougga.qdata.CfgHandler;
 import ma.rougga.qdata.modal.Agence;
 import ma.rougga.qdata.modal.Zone;
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -212,7 +213,7 @@ public class AgenceController {
                 // Create a URL object
                 String urlString = "http://" + a.getHost()
                         + ":" + a.getPort()
-                        + "/" + CfgHandler.API_CHECK_STATUS;
+                        + "/" + CfgHandler.API_AGENCE;
                 URL url = new URL(urlString);
 
                 // Open connection
@@ -243,7 +244,7 @@ public class AgenceController {
                 }
             } catch (IOException e) {
                 logger.error("{} IS OFFLINE", a.getName());
-                
+
             } catch (ParseException ex) {
                 logger.error(ex.getMessage());
             }
@@ -305,25 +306,28 @@ public class AgenceController {
 
     public void editZone(UUID id_agence, UUID id_zone) {
         try {
+            Zone z = this.getAgenceZoneByAgenceId(id_agence);
+            if (z == null) {
+                this.setZone(id_agence, id_zone);
+                return;
+            }
             Connection con = new CPConnection().getConnection();
-            if (this.getAgenceZoneByAgenceId(id_agence) != null) {
-                String SQL = "";
-                PreparedStatement p;
-                if (id_zone != null) {
-                    SQL = "update rougga_agence_zone set id_zone=? where  id_agence=?;";
-                    p = con.prepareStatement(SQL);
-                    p.setString(2, id_agence.toString());
-                    p.setString(1, id_zone.toString());
-                } else {
-                    SQL = "delete from rougga_agence_zone where id_agence=?";
-                    p = con.prepareStatement(SQL);
-                    p.setString(1, id_agence.toString());
-                }
+            String SQL = "";
+            PreparedStatement p;
+            if (id_zone == null) {
+                SQL = "delete from rougga_agence_zone where id_agence=?";
+                p = con.prepareStatement(SQL);
+                p.setString(1, id_agence.toString());
                 p.execute();
                 con.close();
-            } else {
-                this.setZone(id_agence, id_zone);
+                return;
             }
+            SQL = "update rougga_agence_zone set id_zone=? where  id_agence=?;";
+            p = con.prepareStatement(SQL);
+            p.setString(2, id_agence.toString());
+            p.setString(1, id_zone.toString());
+            p.execute();
+            con.close();
 
         } catch (Exception ex) {
             logger.error(ex.getMessage());
@@ -331,6 +335,9 @@ public class AgenceController {
     }
 
     public Zone getAgenceZoneByAgenceId(UUID id_agence) {
+        if (id_agence == null) {
+            return null;
+        }
         try {
             Zone a;
             Connection con = new CPConnection().getConnection();
@@ -341,10 +348,10 @@ public class AgenceController {
                 a = new ZoneController().getZoneById(UUID.fromString(r.getString("id_zone")));
                 con.close();
                 return a;
-            } else {
-                con.close();
-                return null;
             }
+            con.close();
+            return null;
+
         } catch (Exception ex) {
             logger.error(ex.getMessage());
             return null;

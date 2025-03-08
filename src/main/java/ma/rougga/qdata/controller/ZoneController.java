@@ -89,10 +89,10 @@ public class ZoneController {
                 );
                 con.close();
                 return a;
-            } else {
-                con.close();
-                return null;
             }
+            con.close();
+            return null;
+
         } catch (Exception ex) {
             logger.error(ex.getMessage());
             return null;
