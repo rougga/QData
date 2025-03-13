@@ -66,8 +66,8 @@ return String.format("%02d:%02d:%02d", hours, minutes, seconds);
                             <tr>
                                 <th scope="col">Site</th>
                                 <th scope="col">Service</th>
-                                <th scope="col">Cible d'attente</th>
-                                <th scope="col">Cible de traitement</th>
+                                <th scope="col">Cible d'attente (sec)</th>
+                                <th scope="col">Cible de traitement (sec)</th>
                                 <th scope="col">depasse cible %</th>
                             </tr>
                         </thead>

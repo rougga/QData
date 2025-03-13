@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import ma.rougga.qdata.controller.AgenceController;
 import ma.rougga.qdata.controller.UpdateController;
 import ma.rougga.qdata.modal.Agence;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,20 +94,22 @@ public class Stats {
     }
 
     public long getWaitingTicket() {
-
         long waitingtickets = 0;
-
-        for (Agence a : new AgenceController().getAllAgence()) {
-            String url = CfgHandler.prepareJsonUrl(a.getHost(), a.getPort(), CfgHandler.API_WAITING_TICKETS_JSON);
-            
-            JSONObject json = UpdateController.getJsonFromUrl(url);
-            if (json != null) {
-                long result = (long) json.get("waitingTickets");
-                waitingtickets += result;
+        try {
+            Connection con = new CPConnection().getConnection();
+            String SQL = "SELECT SUM(nb_sa) "
+                    + "FROM rougga_gbl_table  "
+                    + "WHERE TO_DATE(TO_CHAR(date, 'YYYY-MM-DD'), 'YYYY-MM-DD') = CURRENT_DATE;";
+            ResultSet r = con.createStatement().executeQuery(SQL);
+            if (r.next()) {
+                waitingtickets = r.getLong(1);
             }
+            con.close();
+            return waitingtickets;
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return waitingtickets;
         }
-
-        return waitingtickets;
     }
 
     public Double getMaxWaitTime() {

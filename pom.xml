@@ -5,7 +5,7 @@
 
     <groupId>ma.rougga</groupId>
     <artifactId>QData</artifactId>
-    <version>6.0</version>
+    <version>6.1</version>
     <packaging>war</packaging>
 
     <name>QData</name>

@@ -568,7 +568,7 @@ public class GchSerTableController {
     public void updateFromJson(String date1, String date2) {
         List<Agence> agences = ac.getAllAgence();
         for (Agence a : agences) {
-            if (ac.isOnlineJson(a.getId())) {
+            if (ac.isOnline(a.getId())) {
                 this.updateAgenceFromJson(date1, date2, a.getId().toString());
             }
         }

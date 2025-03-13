@@ -48,7 +48,11 @@
                 </div>
             </li> 
             <li class="nav-item" id="topics">
-                <a class="nav-link font-weight-bold" href="javascript:alert('QData v<%= CfgHandler.VERSION %>');">
+                <a class="nav-link font-weight-bold" href="javascript:alert('
+                   Application realisé par <%= CfgHandler.CLIENT %> \n
+                   QData v<%= CfgHandler.VERSION %> \n
+                   Pour plus d\'informations appelez: 0600000000
+                   ');">
                     <span class="far fa-file-alt"></span> Aide
                 </a>
             </li> 

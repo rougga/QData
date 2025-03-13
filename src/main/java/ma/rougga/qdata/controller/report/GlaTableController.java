@@ -511,7 +511,7 @@ public class GlaTableController {
         List<Agence> agences = ac.getAllAgence();
         for (Agence a : agences) {
             
-            if (ac.isOnlineJson(a.getId())) {
+            if (ac.isOnline(a.getId())) {
                 this.updateAgenceFromJson(date1, date2, a.getId().toString());
             }
         }

@@ -35,7 +35,7 @@ public class AgenceController {
         try {
             List<Agence> agences = new ArrayList();
             Connection con = new CPConnection().getConnection();
-            ResultSet r = con.createStatement().executeQuery("select * from rougga_agences order by name;");
+            ResultSet r = con.createStatement().executeQuery("select * from rougga_agences where status=1 order by name;");
             while (r.next()) {
                 Agence a = new Agence();
                 a.setId(UUID.fromString(r.getString("id")));
@@ -221,7 +221,7 @@ public class AgenceController {
                 connection.setRequestProperty("Accept-Charset", "UTF-8");
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("Accept", "application/json");
-                connection.setConnectTimeout(10000);
+                connection.setConnectTimeout(5000);
                 // Check response code
                 int responseCode = connection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {

@@ -3,7 +3,8 @@ $(document).ready(function () {
     for (let i = 0; i < $status.length; i++) {
         let $stat = $($status[i]);
         $.get("/QData/GetAgenceStatus", {id: $stat.attr("data-id")}, function (data) {
-            if (data.isOnline) {
+            //data is null
+            if (data) {
                 let version = data.version;
                 if (!version) {
                     version = "0.0";

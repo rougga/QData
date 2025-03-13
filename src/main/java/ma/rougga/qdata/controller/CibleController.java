@@ -156,7 +156,7 @@ public class CibleController {
     public void updateFromJson() {
         List<Agence> agences = ac.getAllAgence();
         for (Agence a : agences) {
-            if (ac.isOnlineJson(a.getId())) {
+            if (ac.isOnline(a.getId())) {
                 this.updateAgenceFromJson(a.getId().toString());
             }
         }

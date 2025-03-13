@@ -77,20 +77,48 @@
                                         label: '# of Votes',
                                         data: <%= chart.get("data")%>,
                                         backgroundColor: [
-                                            'rgba(255, 99, 132, 0.2)',
-                                            'rgba(54, 162, 235, 0.2)',
-                                            'rgba(255, 206, 86, 0.2)',
-                                            'rgba(75, 192, 192, 0.2)',
-                                            'rgba(153, 102, 255, 0.2)',
-                                            'rgba(255, 159, 64, 0.2)'
+                                            "rgba(34, 198, 156, 1)", "rgba(87, 123, 240, 1)", "rgba(222, 98, 75, 1)",
+                                            "rgba(190, 245, 60, 1)", "rgba(47, 56, 244, 1)", "rgba(115, 222, 134, 1)",
+                                            "rgba(255, 99, 132, 1)", "rgba(24, 144, 255, 1)", "rgba(255, 205, 86, 1)",
+                                            "rgba(75, 192, 192, 1)", "rgba(153, 102, 255, 1)", "rgba(255, 159, 64, 1)",
+                                            "rgba(241, 90, 90, 1)", "rgba(50, 168, 82, 1)", "rgba(139, 69, 19, 1)",
+                                            "rgba(244, 127, 49, 1)", "rgba(69, 105, 144, 1)", "rgba(255, 235, 59, 1)",
+                                            "rgba(13, 71, 161, 1)", "rgba(126, 87, 194, 1)", "rgba(0, 150, 136, 1)",
+                                            "rgba(255, 87, 34, 1)", "rgba(66, 165, 245, 1)", "rgba(142, 36, 170, 1)",
+                                            "rgba(191, 54, 12, 1)", "rgba(85, 139, 47, 1)", "rgba(156, 39, 176, 1)",
+                                            "rgba(255, 111, 0, 1)", "rgba(0, 230, 118, 1)", "rgba(131, 0, 78, 1)",
+                                            "rgba(218, 165, 32, 1)", "rgba(205, 220, 57, 1)", "rgba(63, 81, 181, 1)",
+                                            "rgba(33, 150, 243, 1)", "rgba(216, 27, 96, 1)", "rgba(103, 58, 183, 1)",
+                                            "rgba(233, 30, 99, 1)", "rgba(76, 175, 80, 1)", "rgba(255, 23, 68, 1)",
+                                            "rgba(3, 169, 244, 1)", "rgba(255, 193, 7, 1)", "rgba(121, 85, 72, 1)",
+                                            "rgba(183, 28, 28, 1)", "rgba(38, 50, 56, 1)", "rgba(0, 188, 212, 1)",
+                                            "rgba(197, 17, 98, 1)", "rgba(124, 179, 66, 1)", "rgba(255, 138, 101, 1)",
+                                            "rgba(25, 118, 210, 1)", "rgba(0, 105, 92, 1)", "rgba(156, 204, 101, 1)",
+                                            "rgba(216, 67, 21, 1)", "rgba(84, 110, 122, 1)", "rgba(41, 182, 246, 1)",
+                                            "rgba(27, 94, 32, 1)", "rgba(255, 171, 64, 1)", "rgba(213, 0, 0, 1)",
+                                            "rgba(66, 73, 91, 1)", "rgba(186, 104, 200, 1)", "rgba(0, 77, 64, 1)"
                                         ],
                                         borderColor: [
-                                            'rgba(255, 99, 132, 1)',
-                                            'rgba(54, 162, 235, 1)',
-                                            'rgba(255, 206, 86, 1)',
-                                            'rgba(75, 192, 192, 1)',
-                                            'rgba(153, 102, 255, 1)',
-                                            'rgba(255, 159, 64, 1)'
+                                            "rgba(34, 198, 156, 1)", "rgba(87, 123, 240, 1)", "rgba(222, 98, 75, 1)",
+                                            "rgba(190, 245, 60, 1)", "rgba(47, 56, 244, 1)", "rgba(115, 222, 134, 1)",
+                                            "rgba(255, 99, 132, 1)", "rgba(24, 144, 255, 1)", "rgba(255, 205, 86, 1)",
+                                            "rgba(75, 192, 192, 1)", "rgba(153, 102, 255, 1)", "rgba(255, 159, 64, 1)",
+                                            "rgba(241, 90, 90, 1)", "rgba(50, 168, 82, 1)", "rgba(139, 69, 19, 1)",
+                                            "rgba(244, 127, 49, 1)", "rgba(69, 105, 144, 1)", "rgba(255, 235, 59, 1)",
+                                            "rgba(13, 71, 161, 1)", "rgba(126, 87, 194, 1)", "rgba(0, 150, 136, 1)",
+                                            "rgba(255, 87, 34, 1)", "rgba(66, 165, 245, 1)", "rgba(142, 36, 170, 1)",
+                                            "rgba(191, 54, 12, 1)", "rgba(85, 139, 47, 1)", "rgba(156, 39, 176, 1)",
+                                            "rgba(255, 111, 0, 1)", "rgba(0, 230, 118, 1)", "rgba(131, 0, 78, 1)",
+                                            "rgba(218, 165, 32, 1)", "rgba(205, 220, 57, 1)", "rgba(63, 81, 181, 1)",
+                                            "rgba(33, 150, 243, 1)", "rgba(216, 27, 96, 1)", "rgba(103, 58, 183, 1)",
+                                            "rgba(233, 30, 99, 1)", "rgba(76, 175, 80, 1)", "rgba(255, 23, 68, 1)",
+                                            "rgba(3, 169, 244, 1)", "rgba(255, 193, 7, 1)", "rgba(121, 85, 72, 1)",
+                                            "rgba(183, 28, 28, 1)", "rgba(38, 50, 56, 1)", "rgba(0, 188, 212, 1)",
+                                            "rgba(197, 17, 98, 1)", "rgba(124, 179, 66, 1)", "rgba(255, 138, 101, 1)",
+                                            "rgba(25, 118, 210, 1)", "rgba(0, 105, 92, 1)", "rgba(156, 204, 101, 1)",
+                                            "rgba(216, 67, 21, 1)", "rgba(84, 110, 122, 1)", "rgba(41, 182, 246, 1)",
+                                            "rgba(27, 94, 32, 1)", "rgba(255, 171, 64, 1)", "rgba(213, 0, 0, 1)",
+                                            "rgba(66, 73, 91, 1)", "rgba(186, 104, 200, 1)", "rgba(0, 77, 64, 1)"
                                         ],
                                         borderWidth: 1
                                     }]
@@ -110,9 +138,6 @@
                     <form class="text-white border border-white rounded min-hieght" >
 
                         <h4 class="text-center"><img src="./img/agence.png" class="img-fluid mx-auto my-3"> TOTALE d'aujourd'hui
-                            <div class='spinner-grow text-white' role='status'>
-                                <span class='sr-only'>Chargement...</span>
-                            </div>
                         </h4>
                         <div class="form-group d-flex justify-content-center align-items-center flex-md-row flex-column mx-auto">
                             <label for="validationDefaultUsername" class="col-12 col-md-5 text-md-right">Tickets édités:</label>
@@ -235,18 +260,18 @@
             $(document).ready(function () {
                 removeLoader();
                 updateLinks();
-                
+
                 $("#majNowBtn").on('click', function () {
                     initLoader();
                     $.get("/QData/updateajax", function (data) {
                         removeLoader();
                     });
                 });
-                
+
             });
-            
-            
-            
+
+
+
         </script>
     </body>
 </html>
