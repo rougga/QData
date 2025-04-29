@@ -29,6 +29,12 @@ public class GetAgenceStatus extends HttpServlet {
                 AgenceController ac = new AgenceController();
 //                boolean status = ac.isOnline(UUID.fromString(id));
                 JSONObject agence = ac.getAgenceInfoJson(UUID.fromString(id));
+                if (agence == null) {
+                    JSONObject all = new JSONObject();
+                    all.put("status", "false");
+                    out.print(all);
+                    return;
+                }
 //                JSONObject all = new JSONObject();
 //                all.put("status", agence);
                 out.print(agence);
